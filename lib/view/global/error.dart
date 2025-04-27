@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../common/utils.dart';
+import '../../main.dart';
 import '../home/home.dart';
 
 
@@ -8,7 +10,7 @@ class ErrorMessage extends StatelessWidget
   const ErrorMessage({
     super.key,
     this.message,
-    this.textColor = Colors.white
+    this.textColor = Utils.white
   });
   final String? message;
   final Color textColor;
@@ -34,7 +36,7 @@ class ErrorMessage extends StatelessWidget
               Text(message!, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15),),
           ],
           Text(
-            'Veuillez vérifier votre connexion Internet et reessayer.',
+            'Veuillez vérifier votre connexion Internet et réessayer.',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 15,
@@ -42,7 +44,7 @@ class ErrorMessage extends StatelessWidget
             ),
           ),
           Text(
-            "Si la erreur persiste, merci de contacter les développeurs sur PlayStore",
+            "Si l'erreur persiste, merci de contacter les développeurs sur PlayStore",
             textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 15,
@@ -53,9 +55,10 @@ class ErrorMessage extends StatelessWidget
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const Home()),
+                  MaterialPageRoute(builder: (context) => const Main()),
                 );
               },
+              color: Colors.white,
               icon: const Icon(Icons.refresh)
           )
         ],

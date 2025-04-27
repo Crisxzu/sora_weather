@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:weather_app/common/utils.dart';
-import 'package:weather_app/providers/body.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/home/home.dart';
 
