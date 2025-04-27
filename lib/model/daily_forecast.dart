@@ -1,9 +1,9 @@
 import 'condition.dart';
 
 class DailyForecast {
-  final double minTemp;
-  final double maxTemp;
-  final double humidity;
+  final int minTemp;
+  final int maxTemp;
+  final int humidity;
   final int timestamp;
   final Condition condition;
 
@@ -17,9 +17,9 @@ class DailyForecast {
 
   factory DailyForecast.fromJson(Map<String, dynamic> json) {
     return DailyForecast(
-      minTemp: json['min_temp'].toDouble(),
-      maxTemp: json['max_temp'].toDouble(),
-      humidity: json['humidity'].toDouble(),
+      minTemp: json['min_temp'].toDouble().round(),
+      maxTemp: json['max_temp'].toDouble().round(),
+      humidity: json['humidity'].toDouble().round(),
       timestamp: json['timestamp'],
       condition: Condition.fromJson(json['condition']),
     );

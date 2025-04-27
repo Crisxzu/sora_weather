@@ -5,6 +5,7 @@ import 'package:provider/single_child_widget.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/home/home.dart';
+import 'package:weather_app/view/home/widgets/position.dart';
 
 
 Future main() async {
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           //
           // This works for code too, not just values: Most code changes can be
           // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent, brightness: Brightness.dark),
           useMaterial3: true,
         ),
         home: const Main(),
@@ -67,12 +68,15 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
 
+
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: Utils.white,
         elevation: 0,
+        title: const PositionView(),
       ),
       drawer: Drawer(),
       body: Home(),

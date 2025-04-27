@@ -1,5 +1,5 @@
 {
-  "last_updated": 1745671500,
+  "last_updated": 1745763300,
   "source": "Weather API",
   "source_link": "https://www.weatherapi.com/",
   "location": {
@@ -9,276 +9,305 @@
     "lat": 7.3075,
     "lon": -3.7264,
     "tz_id": "Africa/Abidjan",
-    "localtime_epoch": 1745671647,
-    "localtime": "2025-04-26 12:47"
+    "localtime_epoch": 1745763465,
+    "localtime": "2025-04-27 14:17"
   },
   "current": {
-    "temp": 34.3,
-    "min_temp": 22.9,
-    "max_temp": 35.6,
+    "temp": 36.1,
+    "min_temp": 23.1,
+    "max_temp": 36.2,
     "is_day": true,
-    "feels_like": 38.5,
+    "feels_like": 39.9,
     "condition": {
       "code": 1003,
-      "text": "Partly Cloudy"
+      "text": "Partly Cloudy",
+      "icon": 116
     }
   },
   "next_24h": [
     {
-      "temp": 34.3,
-      "humidity": 47.0,
-      "timestamp": 1745668800,
+      "temp": 36.1,
+      "humidity": 39.0,
+      "timestamp": 1745762400,
       "condition": {
         "code": 1003,
-        "text": "Partly Cloudy"
+        "text": "Partly Cloudy",
+        "icon": 116
       }
     },
     {
-      "temp": 35.1,
-      "humidity": 44.0,
-      "timestamp": 1745672400,
-      "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
-      }
-    },
-    {
-      "temp": 35.5,
-      "humidity": 42.0,
-      "timestamp": 1745676000,
-      "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
-      }
-    },
-    {
-      "temp": 35.6,
-      "humidity": 41.0,
-      "timestamp": 1745679600,
-      "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
-      }
-    },
-    {
-      "temp": 34.9,
-      "humidity": 42.0,
-      "timestamp": 1745683200,
-      "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
-      }
-    },
-    {
-      "temp": 33.2,
-      "humidity": 49.0,
-      "timestamp": 1745686800,
+      "temp": 34.7,
+      "humidity": 43.0,
+      "timestamp": 1745766000,
       "condition": {
         "code": 1000,
-        "text": "Sunny"
+        "text": "Sunny",
+        "icon": 113
       }
     },
     {
-      "temp": 30.9,
-      "humidity": 59.0,
-      "timestamp": 1745690400,
+      "temp": 32.9,
+      "humidity": 51.0,
+      "timestamp": 1745769600,
       "condition": {
         "code": 1000,
-        "text": "Sunny"
+        "text": "Sunny",
+        "icon": 113
       }
     },
     {
-      "temp": 28.7,
-      "humidity": 68.0,
-      "timestamp": 1745694000,
+      "temp": 32.4,
+      "humidity": 54.0,
+      "timestamp": 1745773200,
       "condition": {
         "code": 1000,
-        "text": "Clear"
+        "text": "Sunny",
+        "icon": 113
       }
     },
     {
-      "temp": 27.8,
-      "humidity": 73.0,
-      "timestamp": 1745697600,
+      "temp": 31.0,
+      "humidity": 60.0,
+      "timestamp": 1745776800,
       "condition": {
         "code": 1000,
-        "text": "Clear"
+        "text": "Sunny",
+        "icon": 113
       }
     },
     {
-      "temp": 27.4,
-      "humidity": 76.0,
-      "timestamp": 1745701200,
+      "temp": 27.7,
+      "humidity": 75.0,
+      "timestamp": 1745780400,
       "condition": {
-        "code": 1000,
-        "text": "Clear"
-      }
-    },
-    {
-      "temp": 26.7,
-      "humidity": 79.0,
-      "timestamp": 1745704800,
-      "condition": {
-        "code": 1000,
-        "text": "Clear"
-      }
-    },
-    {
-      "temp": 25.9,
-      "humidity": 83.0,
-      "timestamp": 1745708400,
-      "condition": {
-        "code": 1000,
-        "text": "Clear"
-      }
-    },
-    {
-      "temp": 25.3,
-      "humidity": 86.0,
-      "timestamp": 1745712000,
-      "condition": {
-        "code": 1000,
-        "text": "Clear"
-      }
-    },
-    {
-      "temp": 24.9,
-      "humidity": 88.0,
-      "timestamp": 1745715600,
-      "condition": {
-        "code": 1000,
-        "text": "Clear"
-      }
-    },
-    {
-      "temp": 24.6,
-      "humidity": 90.0,
-      "timestamp": 1745719200,
-      "condition": {
-        "code": 1000,
-        "text": "Clear"
-      }
-    },
-    {
-      "temp": 24.2,
-      "humidity": 92.0,
-      "timestamp": 1745722800,
-      "condition": {
-        "code": 1000,
-        "text": "Clear"
-      }
-    },
-    {
-      "temp": 24.4,
-      "humidity": 91.0,
-      "timestamp": 1745726400,
-      "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1063,
+        "text": "Patchy rain nearby",
+        "icon": 176
       }
     },
     {
       "temp": 24.7,
-      "humidity": 89.0,
-      "timestamp": 1745730000,
+      "humidity": 91.0,
+      "timestamp": 1745784000,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1243,
+        "text": "Moderate or heavy rain shower",
+        "icon": 356
       }
     },
     {
-      "temp": 24.0,
+      "temp": 24.2,
       "humidity": 93.0,
-      "timestamp": 1745733600,
+      "timestamp": 1745787600,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1240,
+        "text": "Light rain shower",
+        "icon": 353
       }
     },
     {
-      "temp": 25.2,
-      "humidity": 87.0,
-      "timestamp": 1745737200,
+      "temp": 23.5,
+      "humidity": 93.0,
+      "timestamp": 1745791200,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1240,
+        "text": "Light rain shower",
+        "icon": 353
       }
     },
     {
-      "temp": 27.4,
-      "humidity": 75.0,
-      "timestamp": 1745740800,
+      "temp": 23.1,
+      "humidity": 94.0,
+      "timestamp": 1745794800,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1240,
+        "text": "Light rain shower",
+        "icon": 353
       }
     },
     {
-      "temp": 30.0,
-      "humidity": 62.0,
-      "timestamp": 1745744400,
+      "temp": 22.5,
+      "humidity": 97.0,
+      "timestamp": 1745798400,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1030,
+        "text": "Mist",
+        "icon": 143
       }
     },
     {
-      "temp": 32.2,
-      "humidity": 54.0,
-      "timestamp": 1745748000,
+      "temp": 22.6,
+      "humidity": 95.0,
+      "timestamp": 1745802000,
+      "condition": {
+        "code": 1030,
+        "text": "Mist",
+        "icon": 143
+      }
+    },
+    {
+      "temp": 22.8,
+      "humidity": 93.0,
+      "timestamp": 1745805600,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy",
+        "icon": 116
+      }
+    },
+    {
+      "temp": 23.2,
+      "humidity": 89.0,
+      "timestamp": 1745809200,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy",
+        "icon": 116
+      }
+    },
+    {
+      "temp": 23.0,
+      "humidity": 90.0,
+      "timestamp": 1745812800,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy",
+        "icon": 116
+      }
+    },
+    {
+      "temp": 22.6,
+      "humidity": 93.0,
+      "timestamp": 1745816400,
+      "condition": {
+        "code": 1006,
+        "text": "Cloudy",
+        "icon": 119
+      }
+    },
+    {
+      "temp": 22.6,
+      "humidity": 93.0,
+      "timestamp": 1745820000,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy",
+        "icon": 116
+      }
+    },
+    {
+      "temp": 23.4,
+      "humidity": 89.0,
+      "timestamp": 1745823600,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy",
+        "icon": 116
+      }
+    },
+    {
+      "temp": 25.6,
+      "humidity": 76.0,
+      "timestamp": 1745827200,
       "condition": {
         "code": 1000,
-        "text": "Sunny"
+        "text": "Sunny",
+        "icon": 113
       }
     },
     {
-      "temp": 34.1,
-      "humidity": 47.0,
-      "timestamp": 1745751600,
+      "temp": 28.6,
+      "humidity": 60.0,
+      "timestamp": 1745830800,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1000,
+        "text": "Sunny",
+        "icon": 113
       }
     },
     {
-      "temp": 35.8,
+      "temp": 31.0,
+      "humidity": 49.0,
+      "timestamp": 1745834400,
+      "condition": {
+        "code": 1000,
+        "text": "Sunny",
+        "icon": 113
+      }
+    },
+    {
+      "temp": 33.4,
       "humidity": 42.0,
-      "timestamp": 1745755200,
+      "timestamp": 1745838000,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1000,
+        "text": "Sunny",
+        "icon": 113
+      }
+    },
+    {
+      "temp": 35.1,
+      "humidity": 37.0,
+      "timestamp": 1745841600,
+      "condition": {
+        "code": 1000,
+        "text": "Sunny",
+        "icon": 113
+      }
+    },
+    {
+      "temp": 36.1,
+      "humidity": 35.0,
+      "timestamp": 1745845200,
+      "condition": {
+        "code": 1000,
+        "text": "Sunny",
+        "icon": 113
+      }
+    },
+    {
+      "temp": 36.5,
+      "humidity": 34.0,
+      "timestamp": 1745848800,
+      "condition": {
+        "code": 1000,
+        "text": "Sunny",
+        "icon": 113
       }
     }
   ],
   "next_days": [
     {
-      "min_temp": 22.9,
-      "max_temp": 35.6,
-      "humidity": 72.0,
-      "timestamp": 1745625600,
+      "min_temp": 23.1,
+      "max_temp": 36.2,
+      "humidity": 76.0,
+      "timestamp": 1745712000,
       "condition": {
-        "code": 1003,
-        "text": "Partly Cloudy"
+        "code": 1189,
+        "text": "Moderate rain",
+        "icon": 302
       }
     },
     {
       "min_temp": 22.5,
-      "max_temp": 37.6,
-      "humidity": 70.0,
-      "timestamp": 1745712000,
+      "max_temp": 36.5,
+      "humidity": 65.0,
+      "timestamp": 1745798400,
       "condition": {
         "code": 1063,
-        "text": "Patchy rain nearby"
+        "text": "Patchy rain nearby",
+        "icon": 176
       }
     },
     {
-      "min_temp": 23.3,
-      "max_temp": 34.2,
-      "humidity": 79.0,
-      "timestamp": 1745798400,
+      "min_temp": 22.8,
+      "max_temp": 35.7,
+      "humidity": 72.0,
+      "timestamp": 1745884800,
       "condition": {
         "code": 1189,
-        "text": "Moderate rain"
+        "text": "Moderate rain",
+        "icon": 302
       }
     }
   ]

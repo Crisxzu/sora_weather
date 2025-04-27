@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:weather_app/model/condition.dart';
 
 class Utils {
   static const Color blue = const Color.fromRGBO(41, 75, 121, 1);
@@ -11,4 +13,49 @@ class Utils {
     blue
   ];
 
+
+  static Map<String, TextStyle> mobileTextStyle = {
+    'header': GoogleFonts.roboto(
+        fontSize: 64,
+        fontWeight: FontWeight.bold
+    ),
+    'title1': GoogleFonts.roboto(
+        fontSize: 32,
+        fontWeight: FontWeight.bold
+    ),
+    'title2': GoogleFonts.roboto(
+        fontSize: 24,
+        fontWeight: FontWeight.bold
+    ),
+    'bodyHighlight': GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.bold
+    ),
+    'body': GoogleFonts.roboto(
+        fontSize: 16
+    )
+  };
+
+
+  static Map<String, TextStyle> desktopTextStyle = {
+    'header': GoogleFonts.roboto(
+        fontSize: 72,
+        fontWeight: FontWeight.bold
+    ),
+    'title1': GoogleFonts.roboto(
+        fontSize: 40,
+        fontWeight: FontWeight.bold
+    ),
+    'title2': GoogleFonts.roboto(
+        fontSize: 32,
+        fontWeight: FontWeight.bold
+    ),
+    'bodyHighlight': GoogleFonts.roboto(
+        fontSize: 24,
+        fontWeight: FontWeight.bold
+    ),
+    'body': GoogleFonts.roboto(
+        fontSize: 24
+    )
+  };
 }

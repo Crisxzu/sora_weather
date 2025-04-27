@@ -11,7 +11,7 @@ class WeatherIcon extends StatelessWidget {
     super.key,
     required this.iconCode,
     this.isDay = true,
-    this.size = 48.0,
+    this.size = 56.0,
   });
 
   @override

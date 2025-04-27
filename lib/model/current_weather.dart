@@ -1,11 +1,11 @@
 import 'condition.dart';
 
 class CurrentWeather {
-  final double temp;
-  final double minTemp;
-  final double maxTemp;
+  final int temp;
+  final int minTemp;
+  final int maxTemp;
   final bool isDay;
-  final double feelsLike;
+  final int feelsLike;
   final Condition condition;
 
   CurrentWeather({
@@ -19,11 +19,11 @@ class CurrentWeather {
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
     return CurrentWeather(
-      temp: json['temp'].toDouble(),
-      minTemp: json['min_temp'].toDouble(),
-      maxTemp: json['max_temp'].toDouble(),
+      temp: json['temp'].toDouble().round(),
+      minTemp: json['min_temp'].toDouble().round(),
+      maxTemp: json['max_temp'].toDouble().round(),
       isDay: json['is_day'],
-      feelsLike: json['feels_like'].toDouble(),
+      feelsLike: json['feels_like'].toDouble().round(),
       condition: Condition.fromJson(json['condition']),
     );
   }

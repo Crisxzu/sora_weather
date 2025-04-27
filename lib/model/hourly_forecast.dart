@@ -1,8 +1,8 @@
 import 'condition.dart';
 
 class HourlyForecast {
-  final double temp;
-  final double humidity;
+  final int temp;
+  final int humidity;
   final int timestamp;
   final Condition condition;
 
@@ -15,8 +15,8 @@ class HourlyForecast {
 
   factory HourlyForecast.fromJson(Map<String, dynamic> json) {
     return HourlyForecast(
-      temp: json['temp'].toDouble(),
-      humidity: json['humidity'].toDouble(),
+      temp: json['temp'].toDouble().round(),
+      humidity: json['humidity'].toDouble().round(),
       timestamp: json['timestamp'],
       condition: Condition.fromJson(json['condition']),
     );
