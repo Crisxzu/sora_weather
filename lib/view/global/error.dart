@@ -51,15 +51,14 @@ class ErrorMessage extends StatelessWidget
                   color: textColor
               )
           ),
-          IconButton(
+          ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const Main()),
                 );
               },
-              color: Colors.white,
-              icon: const Icon(Icons.refresh)
+              child: const Icon(Icons.refresh)
           )
         ],
       ),
