@@ -1,0 +1,285 @@
+{
+  "last_updated": 1745671500,
+  "source": "Weather API",
+  "source_link": "https://www.weatherapi.com/",
+  "location": {
+    "name": "Lalasso",
+    "region": "Savanes",
+    "country": "Cote d'Ivoire",
+    "lat": 7.3075,
+    "lon": -3.7264,
+    "tz_id": "Africa/Abidjan",
+    "localtime_epoch": 1745671647,
+    "localtime": "2025-04-26 12:47"
+  },
+  "current": {
+    "temp": 34.3,
+    "min_temp": 22.9,
+    "max_temp": 35.6,
+    "is_day": true,
+    "feels_like": 38.5,
+    "condition": {
+      "code": 1003,
+      "text": "Partly Cloudy"
+    }
+  },
+  "next_24h": [
+    {
+      "temp": 34.3,
+      "humidity": 47.0,
+      "timestamp": 1745668800,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 35.1,
+      "humidity": 44.0,
+      "timestamp": 1745672400,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 35.5,
+      "humidity": 42.0,
+      "timestamp": 1745676000,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 35.6,
+      "humidity": 41.0,
+      "timestamp": 1745679600,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 34.9,
+      "humidity": 42.0,
+      "timestamp": 1745683200,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 33.2,
+      "humidity": 49.0,
+      "timestamp": 1745686800,
+      "condition": {
+        "code": 1000,
+        "text": "Sunny"
+      }
+    },
+    {
+      "temp": 30.9,
+      "humidity": 59.0,
+      "timestamp": 1745690400,
+      "condition": {
+        "code": 1000,
+        "text": "Sunny"
+      }
+    },
+    {
+      "temp": 28.7,
+      "humidity": 68.0,
+      "timestamp": 1745694000,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 27.8,
+      "humidity": 73.0,
+      "timestamp": 1745697600,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 27.4,
+      "humidity": 76.0,
+      "timestamp": 1745701200,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 26.7,
+      "humidity": 79.0,
+      "timestamp": 1745704800,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 25.9,
+      "humidity": 83.0,
+      "timestamp": 1745708400,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 25.3,
+      "humidity": 86.0,
+      "timestamp": 1745712000,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 24.9,
+      "humidity": 88.0,
+      "timestamp": 1745715600,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 24.6,
+      "humidity": 90.0,
+      "timestamp": 1745719200,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 24.2,
+      "humidity": 92.0,
+      "timestamp": 1745722800,
+      "condition": {
+        "code": 1000,
+        "text": "Clear"
+      }
+    },
+    {
+      "temp": 24.4,
+      "humidity": 91.0,
+      "timestamp": 1745726400,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 24.7,
+      "humidity": 89.0,
+      "timestamp": 1745730000,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 24.0,
+      "humidity": 93.0,
+      "timestamp": 1745733600,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 25.2,
+      "humidity": 87.0,
+      "timestamp": 1745737200,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 27.4,
+      "humidity": 75.0,
+      "timestamp": 1745740800,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 30.0,
+      "humidity": 62.0,
+      "timestamp": 1745744400,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 32.2,
+      "humidity": 54.0,
+      "timestamp": 1745748000,
+      "condition": {
+        "code": 1000,
+        "text": "Sunny"
+      }
+    },
+    {
+      "temp": 34.1,
+      "humidity": 47.0,
+      "timestamp": 1745751600,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "temp": 35.8,
+      "humidity": 42.0,
+      "timestamp": 1745755200,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    }
+  ],
+  "next_days": [
+    {
+      "min_temp": 22.9,
+      "max_temp": 35.6,
+      "humidity": 72.0,
+      "timestamp": 1745625600,
+      "condition": {
+        "code": 1003,
+        "text": "Partly Cloudy"
+      }
+    },
+    {
+      "min_temp": 22.5,
+      "max_temp": 37.6,
+      "humidity": 70.0,
+      "timestamp": 1745712000,
+      "condition": {
+        "code": 1063,
+        "text": "Patchy rain nearby"
+      }
+    },
+    {
+      "min_temp": 23.3,
+      "max_temp": 34.2,
+      "humidity": 79.0,
+      "timestamp": 1745798400,
+      "condition": {
+        "code": 1189,
+        "text": "Moderate rain"
+      }
+    }
+  ]
+}
