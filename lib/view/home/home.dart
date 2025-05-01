@@ -12,6 +12,7 @@ import 'package:weather_app/view/home/widgets/weather_icon.dart';
 
 import '../../common/utils.dart';
 import '../global/gradient_background.dart';
+import 'widgets/hourly_forecast.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -83,54 +84,7 @@ class _HomeState extends State<Home> {
   }
 }
 
-class HourlyForecastView extends StatelessWidget {
-  const HourlyForecastView({
-    super.key,
-    required this.data
-  });
 
-  final List<HourlyForecast> data;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Container(
-        height: 175,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(25)),
-          color: Utils.darkBlue.withOpacity(0.53)
-        ),
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: data.length,
-          itemBuilder: (BuildContext context, int index) {
-            HourlyForecast forecast = data[index];
-            DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(forecast.timestamp * 1000);
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
-              child: Column(
-                children: [
-                  Text(
-                    '${dateTime.hour}:00',
-                    style: Utils.mobileTextStyle['body']!.copyWith(color: Utils.gray),
-                  ),
-                  WeatherIcon(
-                      iconCode: "${forecast.condition.iconCode}"
-                  ),
-                  Text(
-                    '${forecast.temp}º',
-                    style: Utils.mobileTextStyle['bodyHighlight'],
-                  ),
-                  HumidityView(humidity: forecast.humidity)
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
 

@@ -5,12 +5,14 @@ class HourlyForecast {
   final int humidity;
   final int timestamp;
   final Condition condition;
+  final bool isDay;
 
   HourlyForecast({
     required this.temp,
     required this.humidity,
     required this.timestamp,
     required this.condition,
+    required this.isDay
   });
 
   factory HourlyForecast.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class HourlyForecast {
       humidity: json['humidity'].toDouble().round(),
       timestamp: json['timestamp'],
       condition: Condition.fromJson(json['condition']),
+      isDay: json['is_day']
     );
   }
 
@@ -28,6 +31,7 @@ class HourlyForecast {
       'humidity': humidity,
       'timestamp': timestamp,
       'condition': condition.toJson(),
+      'is_day': isDay
     };
   }
 }
