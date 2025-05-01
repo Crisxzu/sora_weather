@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/utils.dart';
@@ -34,7 +35,7 @@ class CurrentWeatherView extends StatelessWidget {
           ),
           const SizedBox(height: 16,),
           Text(
-            "${data.maxTemp}º/${data.minTemp}º Feels like ${data.feelsLike}º",
+            "${data.maxTemp}º/${data.minTemp}º, ${AppLocalizations.of(context)!.feelsLike} ${data.feelsLike}º",
             style: Utils.mobileTextStyle['title2'],
           )
         ],

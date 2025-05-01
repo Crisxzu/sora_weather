@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/model/daily_forecast.dart';
 import 'package:weather_app/model/hourly_forecast.dart';
 import 'package:weather_app/model/weather_data.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/global/error.dart';
 import 'package:weather_app/view/global/loading_indicator.dart';
 import 'package:weather_app/view/home/widgets/current_weather.dart';
+import 'package:weather_app/view/home/widgets/daily_forecast.dart';
 import 'package:weather_app/view/home/widgets/humidity.dart';
 import 'package:weather_app/view/home/widgets/weather_icon.dart';
 
@@ -28,13 +30,20 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _loadWeatherData();
   }
 
   Future<void> _loadWeatherData() async {
     final weatherDataProvider = Provider.of<WeatherDataProvider>(context, listen: false);
+
     setState(() {
-      _weatherData = weatherDataProvider.getData();
+      Locale currentLocale = Utils.getUserLanguage(context);
+      _weatherData = weatherDataProvider.getData("7.370945,-3.752885", currentLocale.languageCode);
     });
   }
 
@@ -59,7 +68,8 @@ class _HomeState extends State<Home> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CurrentWeatherView(data: snapshot.data!.current),
-                            HourlyForecastView(data: snapshot.data!.next24h)
+                            HourlyForecastView(data: snapshot.data!.next24h),
+                            DailyForecastView(data: snapshot.data!.nextDays),
                           ],
                         );
                       }
@@ -83,6 +93,9 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+
 
 
 

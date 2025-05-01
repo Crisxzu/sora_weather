@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:weather_app/model/weather_data.dart';
 
 class WeatherDataController {
-  Future<WeatherData> fetchWeatherData(String position) async {
+  Future<WeatherData> fetchWeatherData(String position, String languageCode) async {
     try{
       final String response = await rootBundle.loadString('assets/json/weather_data.json');
 

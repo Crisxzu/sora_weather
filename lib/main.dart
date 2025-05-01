@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/home/home.dart';
 import 'package:weather_app/view/home/widgets/position.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 Future main() async {
@@ -43,6 +45,16 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent, brightness: Brightness.dark),
           useMaterial3: true,
         ),
+        supportedLocales: const [
+          Locale('en'),
+          Locale('fr'),
+        ],
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         home: const Main(),
       ),
     );

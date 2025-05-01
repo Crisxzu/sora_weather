@@ -40,6 +40,9 @@ dependencies:
   path_provider: ^2.1.5
   http: ^1.3.0
   google_fonts: ^6.2.1
+  intl: ^0.19.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +73,8 @@ flutter:
     - assets/json/
     - assets/images/
     - assets/sounds/
+
+  generate: true
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
