@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/utils.dart';
 import '../../main.dart';
-import '../home/home.dart';
 
 
 class ErrorMessage extends StatelessWidget
@@ -23,7 +23,7 @@ class ErrorMessage extends StatelessWidget
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Oups, une erreur est survenue. 😥',
+            AppLocalizations.of(context)!.dataErrorTitle,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 25,
@@ -36,7 +36,7 @@ class ErrorMessage extends StatelessWidget
               Text(message!, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15),),
           ],
           Text(
-            'Veuillez vérifier votre connexion Internet et réessayer.',
+            AppLocalizations.of(context)!.dataErrorMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 15,
@@ -44,7 +44,7 @@ class ErrorMessage extends StatelessWidget
             ),
           ),
           Text(
-            "Si l'erreur persiste, merci de contacter les développeurs sur PlayStore",
+              AppLocalizations.of(context)!.dataErrorContact,
             textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 15,

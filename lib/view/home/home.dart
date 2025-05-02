@@ -1,16 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/model/daily_forecast.dart';
-import 'package:weather_app/model/hourly_forecast.dart';
 import 'package:weather_app/model/weather_data.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/global/error.dart';
 import 'package:weather_app/view/global/loading_indicator.dart';
 import 'package:weather_app/view/home/widgets/current_weather.dart';
 import 'package:weather_app/view/home/widgets/daily_forecast.dart';
-import 'package:weather_app/view/home/widgets/humidity.dart';
-import 'package:weather_app/view/home/widgets/weather_icon.dart';
-
+import 'package:weather_app/view/home/widgets/footer.dart';
 
 import '../../common/utils.dart';
 import '../global/gradient_background.dart';
@@ -26,10 +25,21 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final appBarHeight = kToolbarHeight;
   Future<WeatherData>? _weatherData;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    _timer = Timer.periodic(Duration(minutes: int.parse(dotenv.env['UPDATE_TIME_LIMIT'] ?? "5" )), (timer) async {
+      await _loadWeatherData();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Nettoyage du timer
+    super.dispose();
   }
 
   @override
@@ -43,56 +53,83 @@ class _HomeState extends State<Home> {
 
     setState(() {
       Locale currentLocale = Utils.getUserLanguage(context);
-      _weatherData = weatherDataProvider.getData("7.370945,-3.752885", currentLocale.languageCode);
+      _weatherData = weatherDataProvider.getData(currentLocale.languageCode);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const GradientBackground(),
-        SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: appBarHeight,),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: FutureBuilder<WeatherData>(
-                    future: _weatherData,
-                    builder: (context, snapshot) {
-                      if(snapshot.hasData) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CurrentWeatherView(data: snapshot.data!.current),
-                            HourlyForecastView(data: snapshot.data!.next24h),
-                            DailyForecastView(data: snapshot.data!.nextDays),
-                          ],
-                        );
-                      }
-                      else if(snapshot.hasError) {
-                        print("Error when fetching weather data: ${snapshot.error}");
+    return GradientBackground(
+      child: SafeArea(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              color: Utils.white,
+              backgroundColor: Utils.darkBlue,
+              strokeWidth: 4.0,
+              onRefresh: () async {
+                return _loadWeatherData();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: constraints.maxHeight,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: FutureBuilder<WeatherData>(
+                                future: _weatherData,
+                                builder: (context, snapshot) {
+                                  if(snapshot.hasData) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            CurrentWeatherView(data: snapshot.data!.current),
+                                            HourlyForecastView(data: snapshot.data!.next24h),
+                                            DailyForecastView(data: snapshot.data!.nextDays),
+                                          ],
+                                        ),
+                                        Footer(data: snapshot.data!),
+                                      ],
+                                    );
+                                  }
+                                  else if(snapshot.hasError) {
+                                    print("Error when fetching weather data: ${snapshot.error}");
 
-                        return const ErrorMessage(message: null,);
-                      }
-                      else {
-                        return const LoadingIndicator();
-                      }
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
-        )
-
-      ],
+                                    return const ErrorMessage(message: null,);
+                                  }
+                                  else {
+                                    return const LoadingIndicator();
+                                  }
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
+
 
 
 

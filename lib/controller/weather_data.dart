@@ -6,6 +6,7 @@ import 'package:weather_app/model/weather_data.dart';
 class WeatherDataController {
   Future<WeatherData> fetchWeatherData(String position, String languageCode) async {
     try{
+      print(position);
       final String response = await rootBundle.loadString('assets/json/weather_data.json');
 
       return WeatherData.fromJson(json.decode(response));

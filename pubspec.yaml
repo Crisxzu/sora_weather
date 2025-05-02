@@ -43,6 +43,11 @@ dependencies:
   intl: ^0.19.0
   flutter_localizations:
     sdk: flutter
+  url_launcher: ^6.3.1
+  geolocator: ^14.0.0
+
+dependency_overrides:
+  geolocator_android: 4.6.1
 
 dev_dependencies:
   flutter_test:

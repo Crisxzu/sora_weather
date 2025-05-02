@@ -1,3 +1,9 @@
 {
-  "feelsLike": "Ressenti"
+  "feelsLike": "Ressenti",
+  "source": "Source",
+  "updated": "Mis à jour le:",
+  "linkError": "Impossible d'ouvrir le lien",
+  "dataErrorTitle": "Oups, une erreur est survenue. 😥",
+  "dataErrorMessage": "Veuillez vérifier votre connexion Internet, ainsi que l’activation de la localisation et des services associés (GPS, Wi-Fi).",
+  "dataErrorContact": "Si le problème persiste, merci de contacter les développeurs via le Play Store."
 }

@@ -5,7 +5,9 @@ import '../../common/utils.dart';
 class GradientBackground extends StatelessWidget {
   const GradientBackground({
     super.key,
+    this.child
   });
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,7 @@ class GradientBackground extends StatelessWidget {
               colors: Utils.blueGradientColors
           )
       ),
+      child: child,
     );
   }
 }

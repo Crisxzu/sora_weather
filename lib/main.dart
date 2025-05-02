@@ -79,9 +79,6 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
