@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/model/condition.dart';
 
 class Utils {
   static const Color blue = const Color.fromRGBO(41, 75, 121, 1);
