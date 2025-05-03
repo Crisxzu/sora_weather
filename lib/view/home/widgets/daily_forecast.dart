@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/view/home/widgets/humidity.dart';
 import 'package:weather_app/view/home/widgets/panel.dart';
 import 'package:weather_app/view/home/widgets/weather_icon.dart';
 
 import '../../../common/utils.dart';
 import '../../../model/daily_forecast.dart';
+import '../../../providers/params.dart';
 
 class DailyForecastView extends StatelessWidget {
   const DailyForecastView({
@@ -38,8 +40,8 @@ class DayForecastView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Locale currentLocale = Utils.getUserLanguage(context);
-    String day = Utils.getDayOfWeek(data.timestamp, currentLocale);
+    final paramsProvider = Provider.of<ParamsProvider>(context);
+    String day = Utils.getDayOfWeek(data.timestamp, paramsProvider.locale!);
 
 
     return Padding(
@@ -68,12 +70,12 @@ class DayForecastView extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "${data.maxTemp}º",
+                    paramsProvider.tempUnit!.toStr(data.maxTemp),
                     style: Utils.mobileTextStyle['bodyHighlight'],
                   ),
                   const SizedBox(width: 12,),
                   Text(
-                    "${data.minTemp}º",
+                    paramsProvider.tempUnit!.toStr(data.minTemp),
                     style: Utils.mobileTextStyle['bodyHighlight'],
                   ),
                 ],

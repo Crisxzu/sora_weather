@@ -10,7 +10,7 @@ class ErrorMessage extends StatelessWidget
   const ErrorMessage({
     super.key,
     this.message,
-    this.textColor = Utils.white
+    this.textColor = Utils.white,
   });
   final String? message;
   final Color textColor;

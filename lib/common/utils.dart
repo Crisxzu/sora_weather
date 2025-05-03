@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +14,18 @@ class Utils {
     darkBlue,
     blue.withBlue(122).withGreen(73),
     blue
+  ];
+
+  static Map<String, TempUnit> tempUnits = {
+    'celsius': TempUnit(unit: "ºC", name: 'celsius', convert: (value) => value),
+    'fahrenheit': TempUnit(unit: "ºF", name: 'fahrenheit', convert: (value) => ((value * 1.8) + 32).round())
+  };
+
+  static List<int> supportedUpdateTimeLimit = [
+    5,
+    10,
+    15,
+    30
   ];
 
 
@@ -68,8 +81,6 @@ class Utils {
   static String getDayOfWeek(int timestamp, Locale locale) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
 
-    print(locale.languageCode);
-
     final formatter = DateFormat('EEEE', locale.toString());
     return formatter.format(dateTime);
   }
@@ -94,6 +105,10 @@ class Utils {
     }
 
     return "${text.substring(0, 1).toUpperCase()}${text.substring(1)}";
+  }
+
+  static String getLanguageName(BuildContext context, Locale locale) {
+    return LocaleNames.of(context)!.nameOf(locale.toString())!;
   }
 
   static Future<Position> determinePosition() async {
@@ -131,5 +146,21 @@ class Utils {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
+  }
+}
+
+class TempUnit {
+  TempUnit({
+    required this.unit,
+    required this.name,
+    required this.convert,
+  });
+
+  final String unit;
+  final String name;
+  int Function(int) convert;
+
+  String toStr(int value) {
+    return "${convert(value)}º";
   }
 }

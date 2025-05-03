@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/utils.dart';
 import '../../../model/weather_data.dart';
+import '../../../providers/params.dart';
 import 'link_button.dart';
 
 class Footer extends StatelessWidget {
@@ -15,7 +17,7 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Locale currentLocale = Utils.getUserLanguage(context);
+    final paramsProvider = Provider.of<ParamsProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
@@ -29,7 +31,7 @@ class Footer extends StatelessWidget {
               style: Utils.mobileTextStyle['title2'],
             ),
             Text(
-              "${AppLocalizations.of(context)!.updated} ${Utils.getDate(data.lastUpdated, currentLocale)}",
+              "${AppLocalizations.of(context)!.updated} ${Utils.getDate(data.lastUpdated, paramsProvider.locale!)}",
               style: Utils.mobileTextStyle['bodyHighlight'],
             ),
           ],

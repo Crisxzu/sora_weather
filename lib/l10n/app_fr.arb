@@ -5,5 +5,12 @@
   "linkError": "Impossible d'ouvrir le lien",
   "dataErrorTitle": "Oups, une erreur est survenue. 😥",
   "dataErrorMessage": "Veuillez vérifier votre connexion Internet, ainsi que l’activation de la localisation et des services associés (GPS, Wi-Fi).",
-  "dataErrorContact": "Si le problème persiste, merci de contacter les développeurs via le Play Store."
+  "dataErrorContact": "Si le problème persiste, merci de contacter les développeurs via le Play Store.",
+  "settingsTitle": "Paramètres",
+  "selectLanguage": "Sélectionner une langue",
+  "appLanguage": "Langue de l'application",
+  "systemLocale": "Langue du système",
+  "tempUnit": "Unité de température",
+  "updateTimeLimit": "Mettre à jour toutes les",
+  "credits": "Fait avec ❤️ par Dazu"
 }

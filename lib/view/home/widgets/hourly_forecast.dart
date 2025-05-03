@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/view/home/widgets/panel.dart';
 
 import '../../../common/utils.dart';
 import '../../../model/hourly_forecast.dart';
+import '../../../providers/params.dart';
 import 'humidity.dart';
 import 'weather_icon.dart';
 
@@ -16,6 +18,8 @@ class HourlyForecastView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final paramsProvider = Provider.of<ParamsProvider>(context);
+
     return Panel(
       height: 175,
       child: ShaderMask(
@@ -40,14 +44,13 @@ class HourlyForecastView extends StatelessWidget {
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
               HourlyForecast forecast = data[index];
-              Locale currentLocale = Utils.getUserLanguage(context);
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
                 child: Column(
                   children: [
                     Text(
-                      Utils.getHour(forecast.timestamp, currentLocale),
+                      Utils.getHour(forecast.timestamp, paramsProvider.locale!),
                       style: Utils.mobileTextStyle['body']!.copyWith(color: Utils.gray),
                     ),
                     WeatherIcon(
@@ -55,7 +58,7 @@ class HourlyForecastView extends StatelessWidget {
                       isDay: forecast.isDay,
                     ),
                     Text(
-                      '${forecast.temp}º',
+                      paramsProvider.tempUnit!.toStr(forecast.temp),
                       style: Utils.mobileTextStyle['bodyHighlight'],
                     ),
                     HumidityView(humidity: forecast.humidity)

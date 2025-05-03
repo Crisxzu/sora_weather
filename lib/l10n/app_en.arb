@@ -5,5 +5,12 @@
   "linkError": "Cannot open the link",
   "dataErrorTitle": "Oops, an error has occurred. 😥",
   "dataErrorMessage": "Please check your Internet connection, and make sure that location services and related features (GPS, Wi-Fi) are enabled.",
-  "dataErrorContact": "If the problem persists, please contact the developers via the Play Store."
+  "dataErrorContact": "If the problem persists, please contact the developers via the Play Store.",
+  "settingsTitle": "Settings",
+  "selectLanguage": "Select language",
+  "appLanguage": "App language",
+  "systemLocale": "System language",
+  "tempUnit": "Temperature unit",
+  "updateTimeLimit": "Update every",
+  "credits": "Made with ❤️ by Dazu"
 }

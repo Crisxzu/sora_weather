@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/model/weather_data.dart';
+import 'package:weather_app/providers/params.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/global/error.dart';
 import 'package:weather_app/view/global/loading_indicator.dart';
@@ -26,20 +25,10 @@ class _HomeState extends State<Home> {
   final appBarHeight = kToolbarHeight;
   Future<WeatherData>? _weatherData;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(Duration(minutes: int.parse(dotenv.env['UPDATE_TIME_LIMIT'] ?? "5" )), (timer) async {
-      await _loadWeatherData();
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel(); // Nettoyage du timer
-    super.dispose();
   }
 
   @override
@@ -50,82 +39,86 @@ class _HomeState extends State<Home> {
 
   Future<void> _loadWeatherData() async {
     final weatherDataProvider = Provider.of<WeatherDataProvider>(context, listen: false);
+    final paramsProvider = Provider.of<ParamsProvider>(context, listen: false);
 
     setState(() {
-      Locale currentLocale = Utils.getUserLanguage(context);
-      _weatherData = weatherDataProvider.getData(currentLocale.languageCode);
+      _weatherData = weatherDataProvider.getData(paramsProvider.locale!.languageCode);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return GradientBackground(
-      child: SafeArea(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return RefreshIndicator(
-              key: _refreshIndicatorKey,
-              color: Utils.white,
-              backgroundColor: Utils.darkBlue,
-              strokeWidth: 4.0,
-              onRefresh: () async {
-                return _loadWeatherData();
-              },
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: constraints.maxHeight,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: FutureBuilder<WeatherData>(
-                                future: _weatherData,
-                                builder: (context, snapshot) {
-                                  if(snapshot.hasData) {
-                                    return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
+    return Consumer<ParamsProvider>(
+      builder: (context, provider, child) {
+        return GradientBackground(
+          child: SafeArea(
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return RefreshIndicator(
+                  key: _refreshIndicatorKey,
+                  color: Utils.white,
+                  backgroundColor: Utils.darkBlue,
+                  strokeWidth: 4.0,
+                  onRefresh: () async {
+                    return _loadWeatherData();
+                  },
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: constraints.maxHeight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: FutureBuilder<WeatherData>(
+                                    future: _weatherData,
+                                    builder: (context, snapshot) {
+                                      if(snapshot.hasData) {
+                                        return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            CurrentWeatherView(data: snapshot.data!.current),
-                                            HourlyForecastView(data: snapshot.data!.next24h),
-                                            DailyForecastView(data: snapshot.data!.nextDays),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                CurrentWeatherView(data: snapshot.data!.current),
+                                                HourlyForecastView(data: snapshot.data!.next24h),
+                                                DailyForecastView(data: snapshot.data!.nextDays),
+                                              ],
+                                            ),
+                                            Footer(data: snapshot.data!),
                                           ],
-                                        ),
-                                        Footer(data: snapshot.data!),
-                                      ],
-                                    );
-                                  }
-                                  else if(snapshot.hasError) {
-                                    print("Error when fetching weather data: ${snapshot.error}");
+                                        );
+                                      }
+                                      else if(snapshot.hasError) {
+                                        print("Error when fetching weather data: ${snapshot.error}");
 
-                                    return const ErrorMessage(message: null,);
-                                  }
-                                  else {
-                                    return const LoadingIndicator();
-                                  }
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                                        return const ErrorMessage(message: null);
+                                      }
+                                      else {
+                                        return const LoadingIndicator();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
