@@ -111,7 +111,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   void useSystemLocale() async {
     _useSystemLocale = true;
-    final systemLocales = WidgetsBinding.instance.window.locales;
+    final systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
     if (systemLocales.isNotEmpty) {
       _updateToSystemLocale(systemLocales.first);
     }
