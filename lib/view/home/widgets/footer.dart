@@ -27,8 +27,8 @@ class Footer extends StatelessWidget {
           mainAxisAlignment : MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              AppLocalizations.of(context)!.source,
-              style: Utils.mobileTextStyle['title2'],
+              data.source,
+              style: Utils.mobileTextStyle['bodyHighlight'],
             ),
             Text(
               "${AppLocalizations.of(context)!.updated} ${Utils.getDate(data.lastUpdated, paramsProvider.locale!)}",
