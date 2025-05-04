@@ -69,48 +69,41 @@ class _HomeState extends State<Home> {
                           constraints: BoxConstraints(
                               minHeight: constraints.maxHeight
                           ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: constraints.maxHeight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: FutureBuilder<WeatherData>(
-                                    future: _weatherData,
-                                    builder: (context, snapshot) {
-                                      if(snapshot.hasData) {
-                                        return Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                CurrentWeatherView(data: snapshot.data!.current),
-                                                HourlyForecastView(data: snapshot.data!.next24h),
-                                                DailyForecastView(data: snapshot.data!.nextDays),
-                                              ],
-                                            ),
-                                            Footer(data: snapshot.data!),
-                                          ],
-                                        );
-                                      }
-                                      else if(snapshot.hasError) {
-                                        print("Error when fetching weather data: ${snapshot.error}");
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: FutureBuilder<WeatherData>(
+                              future: _weatherData,
+                              builder: (context, snapshot) {
+                                if(snapshot.hasData) {
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CurrentWeatherView(data: snapshot.data!.current),
+                                          HourlyForecastView(data: snapshot.data!.next24h),
+                                          DailyForecastView(data: snapshot.data!.nextDays),
+                                        ],
+                                      ),
+                                      Footer(data: snapshot.data!),
+                                    ],
+                                  );
+                                }
+                                else if(snapshot.hasError) {
+                                  print("Error when fetching weather data: ${snapshot.error}");
 
-                                        return const ErrorMessage(message: null);
-                                      }
-                                      else {
-                                        return const LoadingIndicator();
-                                      }
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
+                                  return const ErrorMessage(message: null);
+                                }
+                                else {
+                                  return const LoadingIndicator();
+                                }
+                              },
+                            ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 );

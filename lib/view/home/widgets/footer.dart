@@ -31,7 +31,7 @@ class Footer extends StatelessWidget {
               style: Utils.mobileTextStyle['bodyHighlight'],
             ),
             Text(
-              "${AppLocalizations.of(context)!.updated} ${Utils.getDate(data.lastUpdated, paramsProvider.locale!)}",
+              Utils.getDate(data.lastUpdated, paramsProvider.locale!),
               style: Utils.mobileTextStyle['bodyHighlight'],
             ),
           ],
