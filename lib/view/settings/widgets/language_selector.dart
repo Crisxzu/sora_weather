@@ -6,6 +6,7 @@ import '../../../l10n/l10n.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../providers/params.dart';
+import '../../../providers/weather_data.dart';
 
 class LanguageSelector extends StatelessWidget {
   const LanguageSelector({
@@ -16,6 +17,7 @@ class LanguageSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
+    final weatherDataProvider = Provider.of<WeatherDataProvider>(context);
 
     return DropdownButtonFormField<String>(
       value: paramsProvider.isSystemLocal ? 'system' : paramsProvider.locale!.languageCode,
@@ -23,14 +25,18 @@ class LanguageSelector extends StatelessWidget {
         border: OutlineInputBorder(),
       ),
       hint: Text(AppLocalizations.of(context)!.selectLanguage),
-      onChanged: (String? languageCode) {
+      onChanged: (String? languageCode) async {
         if (languageCode != null) {
+          Locale? newLocale;
           if (languageCode == 'system') {
             // Réinitialiser à la langue du système
-            paramsProvider.useSystemLocale();
+            newLocale = await paramsProvider.useSystemLocale();
           } else {
-            paramsProvider.locale = Locale(languageCode);
+            newLocale = Locale(languageCode);
+            paramsProvider.isSystemLocal = false;
+            paramsProvider.locale = newLocale;
           }
+          paramsProvider.refreshIndicatorKey!.currentState!.show();
         }
       },
       items: [

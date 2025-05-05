@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -15,11 +14,12 @@ import 'package:weather_app/view/home/widgets/position.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:weather_app/view/settings/settings.dart';
 
+import 'env/env.dart';
+
 
 Future main() async {
   await Hive.initFlutter();
   var box = await Hive.openBox("appParams");
-  await dotenv.load();
   runApp(MyApp());
 }
 
@@ -103,6 +103,19 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   @override
+  void initState() {
+    _loadRefreshKey();
+    super.initState();
+  }
+
+  _loadRefreshKey() {
+    final paramsProvider = Provider.of<ParamsProvider>(context, listen: false);
+
+    paramsProvider.refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -143,7 +156,7 @@ class _MainState extends State<Main> {
                     ],
                   ),
                   LinkButton(
-                      urlStr: dotenv.env['PORTFOLIO_LINK'] ?? '',
+                      urlStr: Env.portfolioLink ?? '',
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Text(

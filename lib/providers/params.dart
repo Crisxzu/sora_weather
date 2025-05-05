@@ -17,6 +17,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
   Locale? get locale => _locale;
   bool get isSystemLocal => _useSystemLocale;
   final paramsData = Hive.box("appParams");
+  GlobalKey<RefreshIndicatorState>? refreshIndicatorKey;
 
   ParamsProvider() {
     var unit = paramsData.get('tempUnit');
@@ -69,6 +70,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
       locale = systemLocale;
       paramsData.put('locale', 'system');
       notifyListeners();
+      refreshIndicatorKey!.currentState!.show();
     }
   }
 
@@ -109,12 +111,15 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
         .contains(locale.languageCode);
   }
 
-  void useSystemLocale() async {
+  Future<Locale> useSystemLocale() async {
     _useSystemLocale = true;
     final systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
     if (systemLocales.isNotEmpty) {
       _updateToSystemLocale(systemLocales.first);
+      return systemLocales.first;
     }
+
+    return locale!;
   }
 
 
@@ -165,5 +170,9 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
     _locale = newValue;
     paramsData.put('locale', newValue!.languageCode);
     notifyListeners();
+  }
+
+  set isSystemLocal(bool newValue) {
+    _useSystemLocale = newValue;
   }
 }

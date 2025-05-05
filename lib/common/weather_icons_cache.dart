@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
+
+import '../env/env.dart';
 
 class WeatherIconsCache {
   static final WeatherIconsCache _instance = WeatherIconsCache._internal();
@@ -11,7 +13,7 @@ class WeatherIconsCache {
   WeatherIconsCache._internal();
 
   final Map<String, Image> _memoryCache = {};
-  final String baseIconUrl = '${dotenv.env['BASE_ICON_URL']}';
+  final String baseIconUrl = Env.baseIconUrl;
 
   Future<Image> getWeatherIcon(String iconCode, {bool isDay = true}) async {
     final String cacheKey = '${iconCode}_${isDay ? 'day' : 'night'}';
@@ -29,41 +31,47 @@ class WeatherIconsCache {
   // Obtenir l'icône et la mettre en cache
   Future<Image> _fetchAndCacheIcon(String iconCode, bool isDay, String cacheKey) async {
     try {
+      // Construire l'URL
+      final String timeOfDay = isDay ? 'day' : 'night';
+      final String url = '$baseIconUrl/$timeOfDay/$iconCode.png';
 
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/weather_icons/$cacheKey.png';
-      final file = File(filePath);
+      if(!kIsWeb) {
+        final directory = await getApplicationDocumentsDirectory();
+        final filePath = '${directory.path}/weather_icons/$cacheKey.png';
+        final file = File(filePath);
 
-      if(!await file.exists())
-      {
-        // Construire l'URL
-        final String timeOfDay = isDay ? 'day' : 'night';
-        final String url = '$baseIconUrl/$timeOfDay/$iconCode.png';
+        if(!await file.exists())
+        {
+          print('Download icon : $url');
 
-        print('Download icon : $url');
+          // Télécharger l'image
+          final response = await http.get(Uri.parse(url));
 
-        // Télécharger l'image
-        final response = await http.get(Uri.parse(url));
+          if (response.statusCode != 200) {
+            throw Exception('Download of icon failed: ${response.statusCode}');
+          }
 
-        if (response.statusCode != 200) {
-          throw Exception('Download of icon failed: ${response.statusCode}');
+          // Créer le dossier si nécessaire
+          final iconDir = Directory('${directory.path}/weather_icons');
+          if (!await iconDir.exists()) {
+            await iconDir.create(recursive: true);
+          }
+
+          await file.writeAsBytes(response.bodyBytes);
         }
 
-        // Créer le dossier si nécessaire
-        final iconDir = Directory('${directory.path}/weather_icons');
-        if (!await iconDir.exists()) {
-          await iconDir.create(recursive: true);
-        }
+        // Mettre à jour le cache
+        final image = Image.file(file);
+        _memoryCache[cacheKey] = image;
 
-        await file.writeAsBytes(response.bodyBytes);
+        print('Icon fetched and cached: $cacheKey');
+        return image;
       }
-
-      // Mettre à jour le cache
-      final image = Image.file(file);
-      _memoryCache[cacheKey] = image;
-
-      print('Icon fetched and cached: $cacheKey');
-      return image;
+      else {
+        print("Web version detected ");
+        print("Fetch icon from: $url");
+        return Image.network(url);
+      }
     } catch (e) {
       print('Error when fetching icon: $e');
       // Retourner une icône par défaut en cas d'erreur

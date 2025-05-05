@@ -24,7 +24,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final appBarHeight = kToolbarHeight;
   Future<WeatherData>? _weatherData;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -55,12 +54,13 @@ class _HomeState extends State<Home> {
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return RefreshIndicator(
-                  key: _refreshIndicatorKey,
+                  key: provider.refreshIndicatorKey,
                   color: Utils.white,
                   backgroundColor: Utils.darkBlue,
                   strokeWidth: 4.0,
                   onRefresh: () async {
-                    return _loadWeatherData();
+                    _loadWeatherData();
+                    return await Future.delayed(const Duration(seconds: 3));
                   },
                   child: CustomScrollView(
                     slivers: [

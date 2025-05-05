@@ -11,11 +11,8 @@ class WeatherDataProvider extends ChangeNotifier {
   Position? userPosition;
 
 
-  void updateData(String position, String languageCode) {
-    _controller.fetchWeatherData(position, languageCode).then((value) {
-      _data = value;
-      notifyListeners();
-    });
+  void updateData() {
+    notifyListeners();
   }
 
   Future<WeatherData> getData(String languageCode) async {
