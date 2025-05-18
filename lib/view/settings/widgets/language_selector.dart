@@ -17,7 +17,6 @@ class LanguageSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
-    final weatherDataProvider = Provider.of<WeatherDataProvider>(context);
 
     return DropdownButtonFormField<String>(
       value: paramsProvider.isSystemLocal ? 'system' : paramsProvider.locale!.languageCode,

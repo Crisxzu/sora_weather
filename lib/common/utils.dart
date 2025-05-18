@@ -22,10 +22,9 @@ class Utils {
   };
 
   static List<int> supportedUpdateTimeLimit = [
-    5,
-    10,
     15,
-    30
+    30,
+    60,
   ];
 
 
