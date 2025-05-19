@@ -1,167 +1,166 @@
 # Sora Weather ☀️
 
-A beautiful, feature-rich weather application built with Flutter, following MVC architecture.
+Une application météo magnifique et riche en fonctionnalités, construite avec Flutter, suivant l'architecture MVC.
 
 <div align="center">
-  <img src="assets/images/logo.png" alt="Sora Weather Logo" width="180"/>
+  <img src="assets/images/logo.png" alt="Logo de Sora Weather" width="180"/>
 </div>
 
-Design of app available [here](https://www.figma.com/design/fMr1nPU6FOMlqOAwUdCog3/Application-M%C3%A9t%C3%A9o?m=auto&t=iZYpI7RJz56kmtNq-1)
+Le design de l'application est disponible [ici](https://www.figma.com/design/fMr1nPU6FOMlqOAwUdCog3/Application-M%C3%A9t%C3%A9o?m=auto&t=iZYpI7RJ56kmtNq-1)
 
 ## 🔧 Configuration
 
-### API Setup
+### Configuration de l'API
 
-This application uses a custom API that I've developed to communicate with Weather API. The API code is available in a [separate repository](https://github.com/Crisxzu/weather-api). You can:
+Cette application utilise une API personnalisée que j'ai développée pour communiquer avec Weather API. Le code de l'API est disponible dans un [dépôt séparé](https://github.com/Crisxzu/weather-api). Vous pouvez :
 
-- Deploy your own instance of the API using your Weather API key
-- Use the default API endpoint that comes with the APK release (which uses my hosted instance)
+- Déployer votre propre instance de l'API en utilisant votre clé Weather API
+- Utiliser le point de terminaison API par défaut fourni avec la version APK (qui utilise mon instance hébergée)
 
-### Debug Mode
+### Mode Debug
 
-The application includes a debug mode that can be activated through the `.env` file:
+L'application inclut un mode debug qui peut être activé via le fichier `.env` :
 
-- When `DEBUG_MODE = 0` (default): The app connects to the actual API
-- When `DEBUG_MODE = 1`: The app uses test data from `assets/json/weather_data.json`
+- Lorsque `DEBUG_MODE = 0` (par défaut) : L'application se connecte à l'API réelle
+- Lorsque `DEBUG_MODE = 1` : L'application utilise des données de test provenant de `assets/json/weather_data.json`
 
-This is useful for development and testing without consuming API requests.
+C'est utile pour le développement et les tests sans consommer de requêtes API.
 
-### Environment Variables
+### Variables d'environnement
 
-The app uses the `envied` package to securely manage environment variables. After creating your `.env` file, you need to generate the configuration file:
+L'application utilise le package `envied` pour gérer les variables d'environnement en toute sécurité. Après avoir créé votre fichier `.env`, vous devez générer le fichier de configuration :
 
 ```bash
 dart run build_runner build
 ```
 
-Example `.env` file:
+Exemple de fichier `.env` :
 ```
-WEATHER_API_KEY = your_weather_api_key
-WEATHER_API_LINK = your_api_url
+WEATHER_API_KEY = votre_clé_api_météo
+WEATHER_API_LINK = votre_url_api
 BASE_ICON_URL = "https://cdn.weatherapi.com/weather/64x64"
 PORTFOLIO_LINK = "https://dazu.fr"
 DEBUG_MODE = 0
 ```
 
-## 📱 Availability
+## 📱 Disponibilité
 
-- ✅ **Android**: Available via APK download
-- 🚧 **iOS**: Coming soon
-- 🚧 **Web**: Coming soon
-- 🚧 **Windows**: Coming soon
-- 🚧 **macOS**: Coming soon
+- ✅ **Android** : Disponible via téléchargement APK
+- 🚧 **iOS** : Bientôt disponible
+- 🚧 **Web** : Bientôt disponible
+- 🚧 **Windows** : Bientôt disponible
+- 🚧 **macOS** : Bientôt disponible
 
-## 📺 Tutorial Series
+## 📺 Série de tutoriels
 
-This application was built as part of my step-by-step tutorial series on creating a complete application from scratch. Watch the series to learn how each feature was implemented:
+Cette application a été construite dans le cadre de ma série de tutoriels étape par étape sur la création d'une application complète à partir de zéro. Regardez la série pour apprendre comment chaque fonctionnalité a été implémentée :
 
-| Episode | Topic                                    | Link                         |
-|---------|------------------------------------------|------------------------------|
-| 01      | On design notre App Météo avec Figma     | https://youtu.be/Z-Tla0dGWxs |
-| 02      | On code notre propre API météo en Python | https://youtu.be/0cWW8Nz1gUI |
-| 03      | On code notre App Météo (Android)        | [Coming Soon]                |
-| ...     | ...                                      | ...                          |
+| Épisode | Sujet                                      | Lien                         |
+|---------|--------------------------------------------|------------------------------|
+| 01      | On design notre App Météo avec Figma       | https://youtu.be/Z-Tla0dGWxs |
+| 02      | On code notre propre API météo en Python   | https://youtu.be/0cWW8Nz1gUI |
+| 03      | On code notre App Météo (Android)          | [Bientôt Disponible]         |
+| ...     | ...                                        | ...                          |
 
-## ✨ Features
+## ✨ Fonctionnalités
 
-- **Real-time Weather Data**: Current conditions and forecasts powered by Weather API
-- **Hourly Forecasts**: 24-hour forecast with scrollable timeline
-- **Daily Forecasts**: 3-day weather outlook (free plan limitations)
-- **Location Detection**: Automatic location detection with permission handling
-- **Multi-language Support**: Application automatically adapts to your device language
-- **Temperature Units**: Choose between Celsius and Fahrenheit
-- **Auto-refresh**: Configurable auto-refresh intervals (5-15 minutes)
-- **Icon Caching**: Efficient caching system for weather icons
-- **Beautiful UI**: Clean, modern interface with custom gradients
+- **Données météo en temps réel** : Conditions actuelles et prévisions fournies par Weather API
+- **Prévisions horaires** : Prévisions sur 24 heures avec timeline défilante
+- **Prévisions quotidiennes** : Aperçu météo sur 3 jours (limitations du plan gratuit)
+- **Détection de localisation** : Détection automatique de la localisation avec gestion des permissions
+- **Support multilingue** : L'application s'adapte automatiquement à la langue de votre appareil
+- **Unités de température** : Choisissez entre Celsius et Fahrenheit
+- **Rafraîchissement automatique** : Intervalles de rafraîchissement automatique configurables (5-15 minutes)
+- **Mise en cache des icônes** : Système de mise en cache efficace pour les icônes météo
+- **Belle interface utilisateur** : Interface propre et moderne avec des dégradés personnalisés
 
 ## 🏗️ Architecture
 
-The project follows a clean MVC (Model-View-Controller) architecture:
+Le projet suit une architecture MVC (Model-View-Controller) propre :
 
-- **Models**: Data structures for weather information
-- **Views**: UI components and screens
-- **Controllers**: Business logic and API communication
-- **Providers**: State management and data synchronization
-- **Common**: Utility functions and shared code
+- **Models** : Structures de données pour les informations météorologiques
+- **Views** : Composants UI et écrans
+- **Controllers** : Logique métier et communication API
+- **Providers** : Gestion de l'état et synchronisation des données
+- **Common** : Fonctions utilitaires et code partagé
 
-## 📦 Dependencies
+## 📦 Dépendances
 
-- `provider`: State management
-- `http`: API requests
-- `path_provider`: Local data access
-- `google_fonts`: Custom typography
-- `intl` & `flutter_localizations`: Internationalization
-- `url_launcher`: Opening external links
-- `hive` & `hive_flutter`: Local data storage
-- `flutter_launcher_icons`: App icon management
-- `geolocator`: Location services
-- `envied`: Environment variables management
+- `provider` : Gestion de l'état
+- `http` : Requêtes API
+- `path_provider` : Accès aux données locales
+- `google_fonts` : Typographie personnalisée
+- `intl` & `flutter_localizations` : Internationalisation
+- `url_launcher` : Ouverture de liens externes
+- `hive` & `hive_flutter` : Stockage de données locales
+- `flutter_launcher_icons` : Gestion des icônes d'application
+- `geolocator` : Services de localisation
+- `envied` : Gestion des variables d'environnement
 
-## 🚀 Getting Started
+## 🚀 Démarrer
 
-### Prerequisites
+### Prérequis
 
 - Flutter SDK (3.24.1)
-- Android Studio / VS Code with Flutter extensions
-- Basic understanding of Dart and Flutter
+- Android Studio / VS Code avec les extensions Flutter
+- Compréhension de base de Dart et Flutter
 
 ### Installation
 
-1. Clone the repository:
+1. Clonez le dépôt :
 ```bash
 git clone https://github.com/Crisxzu/sora_weather.git
 ```
 
-2. Navigate to the project directory:
+2. Naviguez vers le répertoire du projet :
 ```bash
 cd sora_weather
 ```
 
-3. Install dependencies:
+3. Installez les dépendances :
 ```bash
 flutter pub get
 ```
 
-4. Create an `.env` file in the root directory with:
+4. Créez un fichier `.env` à la racine du répertoire avec :
 ```
-WEATHER_API_KEY = your_weather_api_key
-WEATHER_API_LINK = your_api_url
+WEATHER_API_KEY = votre_clé_api_météo
+WEATHER_API_LINK = votre_url_api
 BASE_ICON_URL = "https://cdn.weatherapi.com/weather/64x64"
 PORTFOLIO_LINK = "https://dazu.fr"
 DEBUG_MODE = 0
 ```
 
-5. Generate the environment configuration:
+5. Générez la configuration de l'environnement :
 ```bash
 dart run build_runner build
 ```
 
-6. Run the app:
+6. Lancez l'application :
 ```bash
 flutter run
 ```
 
-## 📥 Download
+## 📥 Téléchargement
 
-- Android APK: [Download Link](https://link-to-your-apk.com)
-- Other platforms: Coming soon
+- APK Android : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/untagged-31de565aac6f650ce23c/app-release.apk)
+- Autres plateformes : Bientôt disponible
 
-## 🤝 Contributing
+## 🤝 Contribution
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Crisxzu/sora_weather/issues).
+Les contributions, les problèmes et les demandes de fonctionnalités sont les bienvenus ! N'hésitez pas à consulter la [page des problèmes](https://github.com/Crisxzu/sora_weather/issues).
 
-## 📋 License
+## 📋 Licence
 
-This project is licensed under the [MIT License](LICENSE).
+Ce projet est sous licence [MIT](LICENSE).
 
-## 🙏 Acknowledgements
+## 🙏 Remerciements
 
-- Weather data provided by [Weather API](https://www.weatherapi.com/)
-- Icons from WeatherAPI
+- Données météo fournies par [Weather API](https://www.weatherapi.com/)
+- Icônes de WeatherAPI
 
 ## 📞 Contact
 
-- GitHub: [@Crisxzu](https://github.com/Crisxzu)
-- Youtube channel : [@dazu-zara](https://www.youtube.com/@dazu-zara)
-- Website: [dazu.fr](https://dazu.fr)
-
+- GitHub : [@Crisxzu](https://github.com/Crisxzu)
+- Chaîne Youtube : [@dazu-zara](https://www.youtube.com/@dazu-zara)
+- Site web : [dazu.fr](https://dazu.fr)
