@@ -143,7 +143,7 @@ flutter run
 
 ## 📥 Téléchargement
 
-- APK Android : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/untagged-31de565aac6f650ce23c/app-release.apk)
+- APK Android : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.0.0/app-release.apk)
 - Autres plateformes : Bientôt disponible
 
 ## 🤝 Contribution
