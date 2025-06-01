@@ -11,7 +11,7 @@ import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/home/home.dart';
 import 'package:weather_app/view/home/widgets/link_button.dart';
 import 'package:weather_app/view/home/widgets/position.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:weather_app/l10n/app_localizations.dart';
 import 'package:weather_app/view/settings/settings.dart';
 
 import 'env/env.dart';

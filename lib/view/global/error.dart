@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:weather_app/l10n/app_localizations.dart';
 
 import '../../common/utils.dart';
 import '../../main.dart';

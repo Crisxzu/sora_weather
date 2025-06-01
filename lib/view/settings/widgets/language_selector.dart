@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../common/utils.dart';
 import '../../../l10n/l10n.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:weather_app/l10n/app_localizations.dart';
 
 import '../../../providers/params.dart';
 import '../../../providers/weather_data.dart';
