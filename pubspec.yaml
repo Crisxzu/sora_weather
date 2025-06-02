@@ -76,11 +76,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - .env
     - assets/
     - assets/json/
     - assets/images/
-    - assets/sounds/
 
   generate: true
 
