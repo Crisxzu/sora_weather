@@ -21,6 +21,7 @@ class Panel extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(25)),
               color: Utils.fadeDarkBlue
           ),
+          clipBehavior: Clip.hardEdge,
           child: child,
         )
     );

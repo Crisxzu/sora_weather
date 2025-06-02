@@ -41,6 +41,7 @@ class DayForecastView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
     String day = Utils.getDayOfWeek(data.timestamp, paramsProvider.locale!);
 
 
@@ -51,7 +52,7 @@ class DayForecastView extends StatelessWidget {
           Expanded(
             child: Text(
               Utils.makeTitle(day),
-              style: Utils.mobileTextStyle['bodyHighlight'],
+              style: textStyle['bodyHighlight'],
             ),
           ),
           Row(
@@ -66,19 +67,22 @@ class DayForecastView extends StatelessWidget {
                   size: 40,
                 ),
               ),
-              const SizedBox(width: 16,),
-              Row(
-                children: [
-                  Text(
-                    paramsProvider.tempUnit!.toStr(data.maxTemp),
-                    style: Utils.mobileTextStyle['bodyHighlight'],
-                  ),
-                  const SizedBox(width: 12,),
-                  Text(
-                    paramsProvider.tempUnit!.toStr(data.minTemp),
-                    style: Utils.mobileTextStyle['bodyHighlight'],
-                  ),
-                ],
+              const SizedBox(width: 12,),
+              SizedBox(
+                width: MediaQuery.of(context).size.width < Utils.lgBreakpoint ? 70 : 100,
+                child: Row(
+                  children: [
+                    Text(
+                      paramsProvider.tempUnit!.toStr(data.maxTemp),
+                      style: textStyle['bodyHighlight'],
+                    ),
+                    const SizedBox(width: 12,),
+                    Text(
+                      paramsProvider.tempUnit!.toStr(data.minTemp),
+                      style: textStyle['bodyHighlight'],
+                    ),
+                  ],
+                ),
               )
             ],
           )

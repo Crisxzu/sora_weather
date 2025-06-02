@@ -18,6 +18,7 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
@@ -28,11 +29,11 @@ class Footer extends StatelessWidget {
           children: [
             Text(
               data.source,
-              style: Utils.mobileTextStyle['bodyHighlight'],
+              style: textStyle['bodyHighlight'],
             ),
             Text(
               Utils.getDate(data.lastUpdated, paramsProvider.locale!),
-              style: Utils.mobileTextStyle['bodyHighlight'],
+              style: textStyle['bodyHighlight'],
             ),
           ],
         ),

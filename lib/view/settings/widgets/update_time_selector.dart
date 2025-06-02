@@ -12,6 +12,7 @@ class UpdateTimeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     return DropdownButtonFormField<int>(
         value: paramsProvider.updateTimeLimit!,
@@ -21,13 +22,13 @@ class UpdateTimeSelector extends StatelessWidget {
         onChanged: (int? newValue) {
           paramsProvider.updateTimeLimit = newValue;
         },
+        style: textStyle['body']!.copyWith(color: Utils.white),
         items: [
           ...Utils.supportedUpdateTimeLimit.map((int minutes) {
             return DropdownMenuItem<int>(
               value: Utils.supportedUpdateTimeLimit.indexOf(minutes),
               child: Text(
                 "$minutes minutes",
-                style: Utils.mobileTextStyle['body'],
               ),
             );
           })

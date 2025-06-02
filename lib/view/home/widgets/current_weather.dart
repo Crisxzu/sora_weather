@@ -16,6 +16,7 @@ class CurrentWeatherView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -27,18 +28,18 @@ class CurrentWeatherView extends StatelessWidget {
             children: [
               Text(
                 paramsProvider.tempUnit!.toStr(data.temp),
-                style: Utils.mobileTextStyle['header'],
+                style: textStyle['header'],
               ),
               Text(
                 data.condition.text,
-                style: Utils.mobileTextStyle['title2'],
+                style: textStyle['title2'],
               )
             ],
           ),
           const SizedBox(height: 16,),
           Text(
             "${paramsProvider.tempUnit!.toStr(data.maxTemp)}/${paramsProvider.tempUnit!.toStr(data.minTemp)}, ${AppLocalizations.of(context)!.feelsLike} ${paramsProvider.tempUnit!.toStr(data.feelsLike)}",
-            style: Utils.mobileTextStyle['title2'],
+            style: textStyle['title2'],
           )
         ],
       ),

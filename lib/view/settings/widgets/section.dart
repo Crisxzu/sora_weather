@@ -11,11 +11,13 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Text(
         title,
-        style: Utils.mobileTextStyle['bodyHighlight'],
+        style: textStyle['bodyHighlight'],
       ),
     );
   }

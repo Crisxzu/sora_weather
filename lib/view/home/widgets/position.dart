@@ -13,6 +13,8 @@ class PositionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherDataProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
+
 
     return Row(
       children: [
@@ -21,7 +23,7 @@ class PositionView extends StatelessWidget {
             Text(
               weatherProvider.data!.location.name,
               overflow: TextOverflow.ellipsis,
-              style: Utils.mobileTextStyle['title2'],
+              style: textStyle['title2'],
             )
         ]
       ],
