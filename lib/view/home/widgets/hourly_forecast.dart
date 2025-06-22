@@ -96,10 +96,6 @@ class _HourlyForecastViewState extends State<HourlyForecastView> {
               ),
             ),
           ),
-          VerticalDivider(
-            color: Utils.white.withValues(alpha: 0.2),
-            width: 0,
-          ),
           if(kIsWeb || Utils.checkIfDesktop())
             ...[
               VerticalDivider(
