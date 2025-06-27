@@ -19,11 +19,13 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.settingsTitle,
-          style: Utils.mobileTextStyle['title2'],
+          style: textStyle['title2'],
         ),
       ),
       body: ListView(

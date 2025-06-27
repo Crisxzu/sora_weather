@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/model/weather_data.dart';
@@ -24,6 +25,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final appBarHeight = kToolbarHeight;
   Future<WeatherData>? _weatherData;
+  ScrollController controller = ScrollController();
 
   @override
   void initState() {
@@ -62,49 +64,54 @@ class _HomeState extends State<Home> {
                     _loadWeatherData();
                     return await Future.delayed(const Duration(seconds: 3));
                   },
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                              minHeight: constraints.maxHeight
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: FutureBuilder<WeatherData>(
-                              future: _weatherData,
-                              builder: (context, snapshot) {
-                                if(snapshot.hasData) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          CurrentWeatherView(data: snapshot.data!.current),
-                                          HourlyForecastView(data: snapshot.data!.next24h),
-                                          DailyForecastView(data: snapshot.data!.nextDays),
-                                        ],
-                                      ),
-                                      Footer(data: snapshot.data!),
-                                    ],
-                                  );
-                                }
-                                else if(snapshot.hasError) {
-                                  print("Error when fetching weather data: ${snapshot.error}");
+                  child: Scrollbar(
+                    thumbVisibility: kIsWeb || Utils.checkIfDesktop(),
+                    controller: controller,
+                    child: CustomScrollView(
+                      controller: controller,
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: FutureBuilder<WeatherData>(
+                                future: _weatherData,
+                                builder: (context, snapshot) {
+                                  if(snapshot.hasData) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            CurrentWeatherView(data: snapshot.data!.current),
+                                            HourlyForecastView(data: snapshot.data!.next24h),
+                                            DailyForecastView(data: snapshot.data!.nextDays),
+                                          ],
+                                        ),
+                                        Footer(data: snapshot.data!),
+                                      ],
+                                    );
+                                  }
+                                  else if(snapshot.hasError) {
+                                    print("Error when fetching weather data: ${snapshot.error}");
 
-                                  return const ErrorMessage(message: null);
-                                }
-                                else {
-                                  return const LoadingIndicator();
-                                }
-                              },
+                                    return const ErrorMessage(message: null);
+                                  }
+                                  else {
+                                    return const LoadingIndicator();
+                                  }
+                                },
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },

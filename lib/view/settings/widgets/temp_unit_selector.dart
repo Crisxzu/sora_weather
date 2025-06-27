@@ -12,6 +12,7 @@ class TempUnitSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     return DropdownButtonFormField<TempUnit>(
         value: paramsProvider.tempUnit!,
@@ -21,13 +22,13 @@ class TempUnitSelector extends StatelessWidget {
         onChanged: (TempUnit? newUnit) {
           paramsProvider.tempUnit = newUnit;
         },
+        style: textStyle['body']!.copyWith(color: Utils.white),
         items: [
           ...Utils.tempUnits.values.toList().map((TempUnit unit) {
             return DropdownMenuItem<TempUnit>(
               value: unit,
               child: Text(
                 "${unit.unit} (${Utils.makeTitle(unit.name)})",
-                style: Utils.mobileTextStyle['body'],
               ),
             );
           })

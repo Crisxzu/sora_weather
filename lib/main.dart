@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
@@ -21,6 +24,26 @@ Future main() async {
   await Hive.initFlutter();
   var box = await Hive.openBox("appParams");
   runApp(MyApp());
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override le buildOverscrollIndicator pour désactiver l'effet "glow"
+  // qui est tactile et moins pertinent sur desktop/web.
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child; // Retourne simplement l'enfant, sans l'indicateur
+  }
+
+  // Permet le défilement par glisser-déposer sur toutes les plateformes,
+  // y compris la souris et le clavier.
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse, // Permet le défilement avec la souris
+    // PointerDeviceKind.stylus,
+    // PointerDeviceKind.unknown,
+  };
 }
 
 class MyApp extends StatelessWidget {
@@ -75,6 +98,7 @@ class MyApp extends StatelessWidget {
             // Si la locale n'est pas supportée, utiliser le français
             return const Locale('en');
           },
+          scrollBehavior: MyCustomScrollBehavior(),
           home: const Main(),
         );
       },
@@ -117,13 +141,30 @@ class _MainState extends State<Main> {
 
   @override
   Widget build(BuildContext context) {
+    final paramsProvider = Provider.of<ParamsProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: Utils.white,
         elevation: 0,
-        title: const PositionView(),
+        toolbarHeight: kToolbarHeight + 6,
+        title: Row(
+          children: [
+            const Expanded(child: PositionView()),
+            if(kIsWeb || Utils.checkIfDesktop())
+              IconButton(
+                  onPressed: () {
+                    paramsProvider.refreshIndicatorKey!.currentState!.show();
+                  },
+                  icon: const Icon(
+                      Icons.refresh
+                  )
+              )
+          ],
+        ),
       ),
       drawer: Drawer(
         child: Column(
@@ -142,7 +183,7 @@ class _MainState extends State<Main> {
                         leading: const Icon(Icons.settings),
                         title: Text(
                           AppLocalizations.of(context)!.settingsTitle,
-                          style: Utils.mobileTextStyle['bodyHighlight'],
+                          style: textStyle['bodyHighlight'],
                         ),
                         onTap: () {
                           setState(() {
@@ -161,7 +202,7 @@ class _MainState extends State<Main> {
                       padding: const EdgeInsets.all(24.0),
                       child: Text(
                         AppLocalizations.of(context)!.credits,
-                        style: Utils.mobileTextStyle['bodyHighlight'],
+                        style: textStyle['bodyHighlight'],
                       ),
                     ),
                   )

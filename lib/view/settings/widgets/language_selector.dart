@@ -17,13 +17,18 @@ class LanguageSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paramsProvider = Provider.of<ParamsProvider>(context);
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     return DropdownButtonFormField<String>(
       value: paramsProvider.isSystemLocal ? 'system' : paramsProvider.locale!.languageCode,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
       ),
-      hint: Text(AppLocalizations.of(context)!.selectLanguage),
+      hint: Text(
+          AppLocalizations.of(context)!.selectLanguage,
+          style: textStyle['body'],
+      ),
+      isExpanded: true,
       onChanged: (String? languageCode) async {
         if (languageCode != null) {
           Locale? newLocale;
@@ -38,12 +43,12 @@ class LanguageSelector extends StatelessWidget {
           paramsProvider.refreshIndicatorKey!.currentState!.show();
         }
       },
+      style: textStyle['body']!.copyWith(color: Utils.white),
       items: [
         DropdownMenuItem<String>(
           value: "system",
           child: Text(
             AppLocalizations.of(context)!.systemLocale,
-            style: Utils.mobileTextStyle['body'],
           ),
         ),
         ...L10n.supportedLocales.map((Locale locale) {
@@ -51,7 +56,6 @@ class LanguageSelector extends StatelessWidget {
             value: locale.languageCode,
             child: Text(
               Utils.makeTitle(Utils.getLanguageName(context, locale)),
-              style: Utils.mobileTextStyle['body'],
             ),
           );
         })

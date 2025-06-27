@@ -14,9 +14,12 @@ class HumidityView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Water drop shape
           Center(
@@ -30,7 +33,7 @@ class HumidityView extends StatelessWidget {
           ),
           Text(
               "$humidity%",
-            style: Utils.mobileTextStyle['body'],
+            style: textStyle['body'],
           )
         ],
       ),

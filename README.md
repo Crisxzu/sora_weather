@@ -46,21 +46,22 @@ DEBUG_MODE = 0
 ## 📱 Disponibilité
 
 - ✅ **Android** : Disponible via téléchargement APK
-- 🚧 **iOS** : Bientôt disponible
-- 🚧 **Web** : Bientôt disponible
-- 🚧 **Windows** : Bientôt disponible
-- 🚧 **macOS** : Bientôt disponible
+- ✅ **iOS** : Fichier archive disponible (bientôt disponible sur l'App Store)
+- ✅ **macOS** : Fichier app disponible (bientôt disponible sur l'App Store)
+- ✅ **Windows** : Exécutable EXE disponible ! (bientôt disponible sur Microsoft Store)
+- ✅ **Web** : Accédez directement au [site](https://sora-weather.dazu.fr) depuis votre navigateur !
 
 ## 📺 Série de tutoriels
 
 Cette application a été construite dans le cadre de ma série de tutoriels étape par étape sur la création d'une application complète à partir de zéro. Regardez la série pour apprendre comment chaque fonctionnalité a été implémentée :
 
-| Épisode | Sujet                                    | Lien                         |
-|---------|------------------------------------------|------------------------------|
-| 01      | On design notre App Météo avec Figma     | https://youtu.be/Z-Tla0dGWxs |
-| 02      | On code notre propre API météo en Python | https://youtu.be/0cWW8Nz1gUI |
-| 03      | On code notre App Météo (Android)        | https://youtu.be/sOW1gINQxF0 |
-| ...     | ...                                      | ...                          |
+| Épisode | Sujet                                        | Lien                         |
+|---------|----------------------------------------------|------------------------------|
+| 01      | On design notre App Météo avec Figma         | https://youtu.be/Z-Tla0dGWxs |
+| 02      | On code notre propre API météo en Python     | https://youtu.be/0cWW8Nz1gUI |
+| 03      | On code notre App Météo (Android)            | https://youtu.be/sOW1gINQxF0 |
+| 04      | Rendre notre App Météo fonctionnelle partout | https://youtu.be/YSFwwXcVbwI |
+| ...     | ...                                          | ...                          |
 
 ## ✨ Fonctionnalités
 
@@ -101,7 +102,7 @@ Le projet suit une architecture MVC (Model-View-Controller) propre :
 
 ### Prérequis
 
-- Flutter SDK (3.24.1)
+- Flutter SDK (3.32.3)
 - Android Studio / VS Code avec les extensions Flutter
 - Compréhension de base de Dart et Flutter
 
@@ -143,8 +144,10 @@ flutter run
 
 ## 📥 Téléchargement
 
-- APK Android : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.0.0/app-release.apk)
-- Autres plateformes : Bientôt disponible
+- APK Android : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.0.1/app-release.apk)
+- App MacOS : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.0.1/weather_app_mac.zip)
+- Archive IOS : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.0.1/weather_app_ios.zip)
+- Exécutable Windows : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.0.1/weather_app_windows.zip)
 
 ## 🤝 Contribution
 

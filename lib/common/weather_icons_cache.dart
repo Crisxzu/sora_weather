@@ -60,12 +60,23 @@ class WeatherIconsCache {
           await file.writeAsBytes(response.bodyBytes);
         }
 
-        // Mettre à jour le cache
-        final image = Image.file(file);
-        _memoryCache[cacheKey] = image;
+        for(int i = 0; i < 3; i++) {
+          try {
+            // Mettre à jour le cache
+            final image = Image.file(file);
+            _memoryCache[cacheKey] = image;
 
-        print('Icon fetched and cached: $cacheKey');
-        return image;
+            print('Icon fetched and cached: $cacheKey');
+            return image;
+          }
+          on StateError catch(e) {
+            print('Exception when getting icon : $e');
+            await Future.delayed(const Duration(seconds: 3));
+            continue;
+          }
+        }
+
+        return Future.error('Image file cannot be fetched');
       }
       else {
         print("Web version detected ");

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,6 +16,9 @@ class Utils {
     blue.withBlue(122).withGreen(73),
     blue
   ];
+  static const lgBreakpoint = 1024;
+  static const xlBreakpoint = 1280;
+  static const twoXlBreakpoint = 1536;
 
   static Map<String, TempUnit> tempUnits = {
     'celsius': TempUnit(unit: "ºC", name: 'celsius', convert: (value) => value),
@@ -72,6 +76,15 @@ class Utils {
         fontSize: 24
     )
   };
+
+  static Map<String, TextStyle> getTextStyle(double screenWidth) {
+    if(screenWidth < lgBreakpoint) {
+      return mobileTextStyle;
+    }
+    else {
+      return desktopTextStyle;
+    }
+  }
 
   static Locale getUserLanguage(BuildContext context) {
     return Localizations.localeOf(context);
@@ -145,6 +158,16 @@ class Utils {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
+  }
+
+  static bool checkIfDesktop() {
+    if (defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.windows) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
