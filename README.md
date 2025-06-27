@@ -60,7 +60,7 @@ Cette application a été construite dans le cadre de ma série de tutoriels ét
 | 01      | On design notre App Météo avec Figma         | https://youtu.be/Z-Tla0dGWxs |
 | 02      | On code notre propre API météo en Python     | https://youtu.be/0cWW8Nz1gUI |
 | 03      | On code notre App Météo (Android)            | https://youtu.be/sOW1gINQxF0 |
-| 04      | Rendre notre App Météo fonctionnelle partout | ...                          |
+| 04      | Rendre notre App Météo fonctionnelle partout | https://youtu.be/YSFwwXcVbwI |
 | ...     | ...                                          | ...                          |
 
 ## ✨ Fonctionnalités
