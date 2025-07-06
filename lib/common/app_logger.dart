@@ -44,7 +44,7 @@ class AppLogger {
       level: Level.trace,
     );
 
-    if(!kIsWeb) return;
+    if(kIsWeb) return;
 
     _logDirectory = await getApplicationSupportDirectory();
 
