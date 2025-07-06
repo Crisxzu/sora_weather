@@ -113,6 +113,8 @@ Vous pouvez accéder aux logs en allant dans les paramètres de l'application pu
 sur la version de l'application.<br/>
 À partir de là, vous pouvez choisir de copier-coller les logs, les partager, les nettoyer.
 
+**P.S : Sur web, il faut juste regarder la console (impossible de garder des fichiers de logs)**
+
 ## 🚀 Démarrer
 
 ### Prérequis
