@@ -42,6 +42,7 @@ class AppLogger {
         FileLogOutput(_onLogWritten), // Save file
       ]),
       level: Level.trace,
+      filter: MyFilter()
     );
 
     if(kIsWeb) return;
@@ -152,5 +153,15 @@ class AppLogger {
     } catch (e) {
       _logger?.e('Failed to clear log files', error: e);
     }
+  }
+}
+
+class MyFilter extends LogFilter {
+  @override
+  bool shouldLog(LogEvent event) {
+    if(event.level == Level.debug && !kDebugMode) {
+      return true;
+    }
+    return true;
   }
 }

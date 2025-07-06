@@ -30,7 +30,6 @@ class _HourlyForecastViewState extends State<HourlyForecastView> {
   Widget build(BuildContext context) {
     return Panel(
       height: MediaQuery.of(context).size.width < Utils.lgBreakpoint ? 175 : 210,
-      padding: 0,
       child: Row(
         children: [
           if(kIsWeb || Utils.checkIfDesktop())
