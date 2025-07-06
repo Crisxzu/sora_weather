@@ -20,16 +20,16 @@ class WeatherDataController {
 
   Future<WeatherData> fetchApiWeatherData(String position, String languageCode) async {
     try{
+      final String apiLink = Uri.encodeFull('${Env.apiLink}/weather?position=$position&lang_iso=$languageCode');
       final http.Response response = await http.get(
-        Uri.parse('${Env.apiLink}/weather?position=$position&lang_iso=$languageCode'),
+        Uri.parse(apiLink),
         headers: {
           'Authorization': 'Api-Key ${Env.apiKey}',
         },
       );
 
       if(response.statusCode != 200) {
-        AppLogger.instance.d(jsonDecode(response.body));
-        throw Exception("Failed to fetch weather data from API");
+        throw Exception("Failed to fetch weather data from API. Link: $apiLink. Status code : ${response.statusCode}");
       }
 
       return WeatherData.fromJson(json.decode(utf8.decode(response.bodyBytes)));
