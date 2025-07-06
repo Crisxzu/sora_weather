@@ -5,6 +5,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/l10n/l10n.dart';
 
+import '../common/app_logger.dart';
+
 
 class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
   TempUnit? _tempUnit;
@@ -23,7 +25,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
     var unit = paramsData.get('tempUnit');
 
     if(unit == null || !Utils.tempUnits.containsKey(unit)) {
-      print("Cannot find unit $unit in supported units. Celsius selected by default");
+      AppLogger.instance.i("Cannot find unit $unit in supported units. Celsius selected by default");
       tempUnit = Utils.tempUnits['celsius'];
     }
     else {
@@ -34,7 +36,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
 
     if(timeLimitIndex == null || !(timeLimitIndex >= 0 && timeLimitIndex < Utils.supportedUpdateTimeLimit.length)) {
-      print("Cannot get update time limit");
+      AppLogger.instance.i("Cannot get update time limit");
       updateTimeLimit = 0;
     }
     else {
@@ -48,7 +50,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    // Se désinscrire quand le provider est disposé
+    // Remove observer when provider disposed
     WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     super.dispose();
@@ -56,10 +58,11 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void didChangeLocales(List<Locale>? locales) {
-    print("System change locale");
-    print(_useSystemLocale);
-    print(locales);
-    // Cette méthode est appelée quand la locale système change
+    AppLogger.instance.d("System change locale");
+    AppLogger.instance.d(_useSystemLocale);
+    AppLogger.instance.d(locales);
+
+    // Call when locale language change
     if (_useSystemLocale && locales != null && locales.isNotEmpty) {
       _updateToSystemLocale(locales.first);
     }
@@ -76,26 +79,26 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   void initializeLocale({bool forceSystem = false}) {
     var languageCode = paramsData.get("locale");
-    print(languageCode);
+    AppLogger.instance.d(languageCode);
 
     if(languageCode == null || forceSystem || languageCode == 'system') {
-      print("Cannot get saved locale or system language use.");
+      AppLogger.instance.i("Cannot get saved locale or system language use.");
       _useSystemLocale = true;
       final List<Locale> systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
 
       if (systemLocales.isNotEmpty) {
-        // Vérifier si la langue du système est supportée
+        // Check if system language is supported
         final systemLocale = systemLocales.first;
         if (_isSupported(systemLocale)) {
           locale = systemLocale;
           paramsData.put('locale', 'system');
           notifyListeners();
         } else {
-          // Si la langue système n'est pas supportée, utiliser le français par défaut
+          // If not supported, use english
           locale = const Locale('en');
         }
       } else {
-        // Fallback sur le français si aucune locale système n'est disponible
+        // Fallback on english, if no system language available
         locale = const Locale('en');
       }
     }
@@ -136,7 +139,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void _onTimerTick() {
-    // Notifier les listeners qu'une mise à jour est nécessaire
+    // Notify listeners if update necessary
     notifyListeners();
   }
 
@@ -166,7 +169,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   set locale(Locale? newValue) {
-    print("new value $newValue");
+    AppLogger.instance.d("new value $newValue");
     _locale = newValue;
     paramsData.put('locale', newValue!.languageCode);
     notifyListeners();

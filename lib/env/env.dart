@@ -18,4 +18,10 @@ abstract class Env {
 
   @EnviedField(varName: 'DEBUG_MODE')
   static const String debugMode = _Env.debugMode;
+
+  @EnviedField(varName: 'DEV_EMAIL')
+  static const String devEmail = _Env.devEmail;
+
+  @EnviedField(varName: 'GITHUB_LINK')
+  static const String githubLink = _Env.githubLink;
 }

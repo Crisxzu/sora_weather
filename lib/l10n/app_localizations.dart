@@ -137,8 +137,86 @@ abstract class AppLocalizations {
   /// No description provided for @dataErrorContact.
   ///
   /// In en, this message translates to:
-  /// **'If the problem persists, please contact the developers via the Play Store.'**
+  /// **'If the problem persists, please contact the developers on the app store or Github.'**
   String get dataErrorContact;
+
+  /// No description provided for @mailContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact by mail'**
+  String get mailContact;
+
+  /// No description provided for @github.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Github'**
+  String get github;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @logsNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No logs found.'**
+  String get logsNotFound;
+
+  /// No description provided for @logsCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs copied on clipboard !'**
+  String get logsCopied;
+
+  /// No description provided for @logsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs cleared !'**
+  String get logsCleared;
+
+  /// No description provided for @logsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No logs to share'**
+  String get logsUnavailable;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get appVersion;
+
+  /// No description provided for @appLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'App logs'**
+  String get appLogs;
+
+  /// No description provided for @copyLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy logs'**
+  String get copyLogs;
+
+  /// No description provided for @shareLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Share logs'**
+  String get shareLogs;
+
+  /// No description provided for @clearLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear logs'**
+  String get clearLogs;
+
+  /// No description provided for @refreshLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh logs'**
+  String get refreshLogs;
 
   /// No description provided for @settingsTitle.
   ///

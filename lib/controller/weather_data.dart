@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/common/app_logger.dart';
 import 'package:weather_app/model/weather_data.dart';
 
 import '../env/env.dart';
@@ -9,7 +10,7 @@ import '../env/env.dart';
 class WeatherDataController {
   Future<WeatherData> fetchWeatherData(String position, String languageCode) async {
     if(Env.debugMode == '1') {
-      print("USE TEST DATA");
+      AppLogger.instance.i("USE TEST DATA");
       return fetchTestWeatherData(position, languageCode);
     }
     else {
@@ -27,14 +28,14 @@ class WeatherDataController {
       );
 
       if(response.statusCode != 200) {
-        print(jsonDecode(response.body));
+        AppLogger.instance.d(jsonDecode(response.body));
         throw Exception("Failed to fetch weather data from API");
       }
 
       return WeatherData.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     }
     catch(e) {
-      print(e);
+      AppLogger.instance.e(e);
       throw Exception("Unable to fetch weather data");
     }
   }
@@ -46,7 +47,7 @@ class WeatherDataController {
       return WeatherData.fromJson(json.decode(response));
     }
     catch(e) {
-      print(e);
+      AppLogger.instance.e(e);
       throw Exception("Unable to load weather data");
     }
   }

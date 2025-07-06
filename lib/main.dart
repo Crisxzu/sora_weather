@@ -7,6 +7,7 @@ import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:weather_app/common/app_logger.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/l10n/l10n.dart';
 import 'package:weather_app/providers/params.dart';
@@ -23,6 +24,7 @@ import 'env/env.dart';
 Future main() async {
   await Hive.initFlutter();
   var box = await Hive.openBox("appParams");
+  await AppLogger.initialize();
   runApp(MyApp());
 }
 

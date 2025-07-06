@@ -97,6 +97,21 @@ Le projet suit une architecture MVC (Model-View-Controller) propre :
 - `flutter_launcher_icons` : Gestion des icônes d'application
 - `geolocator` : Services de localisation
 - `envied` : Gestion des variables d'environnement
+- `logger` : Système de logs
+- `share_plus` : Partage de données
+- `package_info_plus` : Informations de l'application (version etc...)
+
+## 📝 Logs
+
+Un système de logs a été mis en place pour faciliter le déboguage avec les fonctionnalités suivantes :
+
+- **Enregistrement des logs dans différents fichiers**
+- **Création d'un nouveau fichier si les logs sont trop imposants (>= 5MB)**
+- **Suppression automatique des anciens logs (pas plus de 10 fichiers sauvegardés)**
+
+Vous pouvez accéder aux logs en allant dans les paramètres de l'application puis en tapant 7 fois de suite <br/>
+sur la version de l'application.<br/>
+À partir de là, vous pouvez choisir de copier-coller les logs, les partager, les nettoyer.
 
 ## 🚀 Démarrer
 

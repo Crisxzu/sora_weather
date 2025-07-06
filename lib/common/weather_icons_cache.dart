@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:weather_app/common/app_logger.dart';
 
 import '../env/env.dart';
 
@@ -20,7 +21,7 @@ class WeatherIconsCache {
 
     // Vérifier si l'icône est déjà en mémoire
     if (_memoryCache.containsKey(cacheKey)) {
-      print('Use icon from memory cache: $cacheKey');
+      AppLogger.instance.i('Use icon from memory cache: $cacheKey');
       return _memoryCache[cacheKey]!;
     }
 
@@ -42,7 +43,7 @@ class WeatherIconsCache {
 
         if(!await file.exists())
         {
-          print('Download icon : $url');
+          AppLogger.instance.i('Download icon : $url');
 
           // Télécharger l'image
           final response = await http.get(Uri.parse(url));
@@ -66,11 +67,11 @@ class WeatherIconsCache {
             final image = Image.file(file);
             _memoryCache[cacheKey] = image;
 
-            print('Icon fetched and cached: $cacheKey');
+            AppLogger.instance.i('Icon fetched and cached: $cacheKey');
             return image;
           }
           on StateError catch(e) {
-            print('Exception when getting icon : $e');
+            AppLogger.instance.e('Exception when getting icon : $e');
             await Future.delayed(const Duration(seconds: 3));
             continue;
           }
@@ -79,13 +80,13 @@ class WeatherIconsCache {
         return Future.error('Image file cannot be fetched');
       }
       else {
-        print("Web version detected ");
-        print("Fetch icon from: $url");
+        AppLogger.instance.i("Web version detected ");
+        AppLogger.instance.i("Fetch icon from: $url");
         return Image.network(url);
       }
     } catch (e) {
-      print('Error when fetching icon: $e');
-      // Retourner une icône par défaut en cas d'erreur
+      AppLogger.instance.e('Error when fetching icon: $e');
+
       return Image.asset('assets/images/default_weather_icon.png');
     }
   }
@@ -99,11 +100,11 @@ class WeatherIconsCache {
 
       if (await iconDir.exists()) {
         await iconDir.delete(recursive: true);
-        print('Icons cache deleted');
+        AppLogger.instance.i('Icons cache deleted');
       }
 
     } catch (e) {
-      print('Error when clearing icons cache: $e');
+      AppLogger.instance.e('Error when clearing icons cache: $e');
     }
   }
 
@@ -111,6 +112,6 @@ class WeatherIconsCache {
     for (final iconCode in iconCodes) {
       await getWeatherIcon(iconCode, isDay: isDay);
     }
-    print('${iconCodes.length} icônes préchargées');
+    AppLogger.instance.i('${iconCodes.length} icônes préchargées');
   }
 }
