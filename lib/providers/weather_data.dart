@@ -4,6 +4,8 @@ import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/controller/weather_data.dart';
 import 'package:weather_app/model/weather_data.dart';
 
+import '../common/app_logger.dart';
+
 class WeatherDataProvider extends ChangeNotifier {
   WeatherData? _data;
   WeatherData? get data => _data;
@@ -21,7 +23,7 @@ class WeatherDataProvider extends ChangeNotifier {
       return _data!;
     }
     catch(e) {
-      print("$e");
+      AppLogger.instance.e("$e");
       throw Exception("Unable to get weather data");
     }
   }

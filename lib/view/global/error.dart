@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
+import 'package:weather_app/view/home/widgets/link_button.dart';
 
 import '../../common/utils.dart';
+import '../../env/env.dart';
 import '../../main.dart';
-
 
 class ErrorMessage extends StatelessWidget
 {
@@ -17,6 +18,8 @@ class ErrorMessage extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
+
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
@@ -25,11 +28,7 @@ class ErrorMessage extends StatelessWidget
           Text(
             AppLocalizations.of(context)!.dataErrorTitle,
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: textColor
-            ),
+            style: textStyle['title2'],
           ),
           ...[
             if(message != null)
@@ -38,18 +37,40 @@ class ErrorMessage extends StatelessWidget
           Text(
             AppLocalizations.of(context)!.dataErrorMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 15,
-                color: textColor
-            ),
+            style: textStyle['body'],
           ),
           Text(
-              AppLocalizations.of(context)!.dataErrorContact,
+            AppLocalizations.of(context)!.dataErrorContact,
             textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 15,
-                  color: textColor
-              )
+            style: textStyle['body']
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: TextButton(
+                  onPressed: (){},
+                  child: LinkButton(
+                    urlStr: Uri.encodeFull("mailto:${Env.devEmail}?subject=App Issue"),
+                    child: Text(
+                        AppLocalizations.of(context)!.mailContact,
+                        style: textStyle['bodyHighlight']
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TextButton(
+                  onPressed: (){},
+                  child: LinkButton(
+                    urlStr: Env.githubLink,
+                    child: Text(
+                      AppLocalizations.of(context)!.github,
+                      style: textStyle['bodyHighlight'],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           ElevatedButton(
               onPressed: () {

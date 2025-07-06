@@ -29,7 +29,46 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get dataErrorContact =>
-      'Si le problème persiste, merci de contacter les développeurs via le Play Store.';
+      'Si le problème persiste, merci de contacter les développeurs via le store de l\'application ou Github.';
+
+  @override
+  String get mailContact => 'Contacter par mail';
+
+  @override
+  String get github => 'Aller au Github';
+
+  @override
+  String get loading => 'Chargement...';
+
+  @override
+  String get logsNotFound => 'Aucun logs trouvé';
+
+  @override
+  String get logsCopied => 'Logs copié dans le presse-papier';
+
+  @override
+  String get logsCleared => 'Logs effacé !';
+
+  @override
+  String get logsUnavailable => 'Aucun log à partager';
+
+  @override
+  String get appVersion => 'Version';
+
+  @override
+  String get appLogs => 'Logs de l\'application';
+
+  @override
+  String get copyLogs => 'Copier les logs';
+
+  @override
+  String get shareLogs => 'Partager les logs';
+
+  @override
+  String get clearLogs => 'Effacer les logs';
+
+  @override
+  String get refreshLogs => 'Rafraîchir les logs';
 
   @override
   String get settingsTitle => 'Paramètres';

@@ -11,6 +11,7 @@ import 'package:weather_app/view/home/widgets/current_weather.dart';
 import 'package:weather_app/view/home/widgets/daily_forecast.dart';
 import 'package:weather_app/view/home/widgets/footer.dart';
 
+import '../../common/app_logger.dart';
 import '../../common/utils.dart';
 import '../global/gradient_background.dart';
 import 'widgets/hourly_forecast.dart';
@@ -98,7 +99,7 @@ class _HomeState extends State<Home> {
                                     );
                                   }
                                   else if(snapshot.hasError) {
-                                    print("Error when fetching weather data: ${snapshot.error}");
+                                    AppLogger.instance.e("Error when fetching weather data: ${snapshot.error}");
 
                                     return const ErrorMessage(message: null);
                                   }
