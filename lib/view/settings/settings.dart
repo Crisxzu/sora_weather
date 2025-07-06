@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
 import 'package:weather_app/view/home/widgets/link_button.dart';
@@ -93,19 +94,20 @@ class _SettingsState extends State<Settings> {
               )
             ),
           ),
-          GestureDetector(
-            onTap: _handleVersionTap,
-            child: ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: Text(
-                AppLocalizations.of(context)!.appVersion,
-                style: textStyle['body'],
-              ),
-              subtitle: Text(
-                'v$_version'
+          if(!kIsWeb)
+            GestureDetector(
+              onTap: _handleVersionTap,
+              child: ListTile(
+                leading: const Icon(Icons.info_outline),
+                title: Text(
+                  AppLocalizations.of(context)!.appVersion,
+                  style: textStyle['body'],
+                ),
+                subtitle: Text(
+                    'v$_version'
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
