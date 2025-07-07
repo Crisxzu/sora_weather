@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Chris KOUASSI on 08/07/2025.
+  
+*/
+"NSLocationWhenInUseUsageDescription" = "Turning on location services allows us to show you weather data based on your position";
