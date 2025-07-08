@@ -35,7 +35,7 @@ class _LogsState extends State<Logs> {
   Future<void> _copyLogs() async {
     await Clipboard.setData(ClipboardData(text: _logsContent));
 
-    print("Logs copied successfully");
+    AppLogger.instance.i("Logs copied successfully");
     // Prevent snackbar to be shown if widget not mounted (on page change for example)
     if(!mounted) {
       return;
@@ -55,14 +55,14 @@ class _LogsState extends State<Logs> {
       );
 
       if(result.status == ShareResultStatus.success) {
-        print("Logs shared successfully");
+        AppLogger.instance.i("Logs shared successfully");
       }
       else {
-        print("Logs cannot be shared, maybe by user cancel action or an unknown action");
+        AppLogger.instance.i("Logs cannot be shared, maybe by user cancel action or an unknown action");
       }
 
     } else {
-      print("Logs unavailable for sharing");
+      AppLogger.instance.i("Logs unavailable for sharing");
 
       // Prevent snackbar to be shown if widget not mounted (on page change for example)
       if(!mounted) {
