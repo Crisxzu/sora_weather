@@ -194,6 +194,12 @@ abstract class AppLocalizations {
   /// **'App logs'**
   String get appLogs;
 
+  /// No description provided for @appDevMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to the intricacies of the 🧑‍💻 application. But hush 🤫.'**
+  String get appDevMode;
+
   /// No description provided for @copyLogs.
   ///
   /// In en, this message translates to:

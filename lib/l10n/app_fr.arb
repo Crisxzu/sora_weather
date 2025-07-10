@@ -15,6 +15,7 @@
   "logsUnavailable": "Aucun log à partager",
   "appVersion": "Version",
   "appLogs": "Logs de l'application",
+  "appDevMode": "Bienvenue dans les méandres de l'application 🧑‍💻. Mais attention chut 🤫.",
   "copyLogs": "Copier les logs",
   "shareLogs": "Partager les logs",
   "clearLogs": "Effacer les logs",

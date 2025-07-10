@@ -59,6 +59,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appLogs => 'App logs';
 
   @override
+  String get appDevMode =>
+      'Welcome to the intricacies of the 🧑‍💻 application. But hush 🤫.';
+
+  @override
   String get copyLogs => 'Copy logs';
 
   @override

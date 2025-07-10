@@ -59,6 +59,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appLogs => 'Logs de l\'application';
 
   @override
+  String get appDevMode =>
+      'Bienvenue dans les méandres de l\'application 🧑‍💻. Mais attention chut 🤫.';
+
+  @override
   String get copyLogs => 'Copier les logs';
 
   @override

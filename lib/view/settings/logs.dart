@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; //
 import 'package:share_plus/share_plus.dart';
 import 'package:weather_app/common/app_logger.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
+
+import '../../common/utils.dart';
 
 class Logs extends StatefulWidget {
   const Logs({super.key});
@@ -14,6 +17,7 @@ class Logs extends StatefulWidget {
 class _LogsState extends State<Logs> {
   String _logsContent = '';
   bool _isLoading = true;
+  ScrollController controller = ScrollController();
 
   @override
   void initState() {
@@ -117,16 +121,23 @@ class _LogsState extends State<Logs> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: SelectableText(
-          _logsContent,
-          style: const TextStyle(
-              fontFamily: 'monospace',
-              fontSize: 12
+          : Scrollbar(
+            thumbVisibility: kIsWeb || Utils.checkIfDesktop(),
+            controller: controller,
+            child: Container(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                      controller: controller,
+                      child: SelectableText(
+              _logsContent,
+              style: const TextStyle(
+                  fontFamily: 'monospace',
+                  fontSize: 12
+              ),
+                      ),
+                    ),
+            ),
           ),
-        ),
-      ),
     );
   }
 }
