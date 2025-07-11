@@ -161,10 +161,10 @@ flutter run
 
 ## 📥 Téléchargement
 
-- APK Android : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.2.0/app-release.apk)
-- App MacOS : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.2.0/weather_app_mac.zip)
-- Archive IOS : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.2.0/weather_app_ios.zip)
-- Exécutable Windows : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v1.2.0/weather_app_windows.zip)
+- APK Android : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v.1.2.0/app-release.apk)
+- App MacOS : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v.1.2.0/weather_app_mac.zip)
+- Archive IOS : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v.1.2.0/weather_app_ios.zip)
+- Exécutable Windows : [Lien de téléchargement](https://github.com/Crisxzu/sora_weather/releases/download/v.1.2.0/weather_app_windows.zip)
 
 ## 🤝 Contribution
 
