@@ -8,19 +8,27 @@ import 'package:weather_app/model/weather_data.dart';
 import '../env/env.dart';
 
 class WeatherDataController {
-  Future<WeatherData> fetchWeatherData(String position, String languageCode) async {
+  Future<WeatherData> fetchWeatherData(Map<String, String?> params) async {
+    params.removeWhere((key, value) => value == null);
+
     if(Env.debugMode == '1') {
       AppLogger.instance.i("USE TEST DATA");
-      return fetchTestWeatherData(position, languageCode);
+      return fetchTestWeatherData(params);
     }
     else {
-      return fetchApiWeatherData(position, languageCode);
+      return fetchApiWeatherData(params);
     }
   }
 
-  Future<WeatherData> fetchApiWeatherData(String position, String languageCode) async {
+  Future<WeatherData> fetchApiWeatherData(Map<String, String?> params) async {
     try{
-      final String apiLink = Uri.encodeFull('${Env.apiLink}/weather?position=$position&lang_iso=$languageCode');
+      String paramsStr = '';
+
+      if(params.keys.isNotEmpty) {
+        paramsStr = '?${params.keys.map((key) => "$key=${params[key]}").join('&')}';
+      }
+
+      final String apiLink = Uri.encodeFull('${Env.apiLink}/weather$paramsStr');
       final http.Response response = await http.get(
         Uri.parse(apiLink),
         headers: {
@@ -40,7 +48,7 @@ class WeatherDataController {
     }
   }
 
-  Future<WeatherData> fetchTestWeatherData(String position, String languageCode) async {
+  Future<WeatherData> fetchTestWeatherData(Map<String, String?> params) async {
     try{
       final String response = await rootBundle.loadString('assets/json/weather_data.json');
 

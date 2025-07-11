@@ -24,8 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dataErrorTitle => 'Oops, an error has occurred. 😥';
 
   @override
-  String get dataErrorMessage =>
-      'Please check your Internet connection, and make sure that location services and related features (GPS, Wi-Fi) are enabled.';
+  String get dataErrorMessage => 'Please check your Internet connection.';
 
   @override
   String get dataErrorContact =>
@@ -91,6 +90,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateTimeLimit => 'Update every';
+
+  @override
+  String get locationDialogTitle => 'Location 📍';
+
+  @override
+  String get locationProvided => 'Data provided from your precise location 😎.';
+
+  @override
+  String get locationNotProvided =>
+      'Data provided from the position deduced from your IP address, so potentially inaccurate 😓.\nFor better accuracy, please enable location services, give access to the app and reload the page 😉.';
+
+  @override
+  String get closeDialog => 'Close';
+
+  @override
+  String get goToLocationSettings => 'Go to Settings';
 
   @override
   String get credits => 'Made with ❤️ by Dazu';

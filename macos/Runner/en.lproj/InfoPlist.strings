@@ -5,4 +5,4 @@
   Created by Chris KOUASSI on 09/07/2025.
   
 */
-"NSLocationUsageDescription" = "Turning on location services allows us to show you weather data based on your position";
+"NSLocationUsageDescription" = "Turning on location services allows us to show you weather data based on your exact position";

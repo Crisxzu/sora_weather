@@ -5,4 +5,4 @@
   Created by Chris KOUASSI on 08/07/2025.
   
 */
-"NSLocationWhenInUseUsageDescription" = "Activer les services de localisation vont nous permettre de pouvoir vous afficher des données météo basées sur votre position";
+"NSLocationWhenInUseUsageDescription" = "Activer les services de localisation vont nous permettre de pouvoir vous afficher des données météo basées sur votre position précise";

@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import 'app_logger.dart';
+
 class Utils {
   static const Color blue = const Color.fromRGBO(41, 75, 121, 1);
   static const Color gray = const Color.fromRGBO(198, 206, 216, 1);
@@ -123,7 +125,7 @@ class Utils {
     return LocaleNames.of(context)!.nameOf(locale.toString())!;
   }
 
-  static Future<Position> determinePosition() async {
+  static Future<Position?> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -133,7 +135,9 @@ class Utils {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+      AppLogger.instance.e('Location services are disabled.');
+
+      return null;
     }
 
     permission = await Geolocator.checkPermission();
@@ -145,14 +149,16 @@ class Utils {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+
+        AppLogger.instance.e('Location permissions are denied');
+        return null;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      AppLogger.instance.e('Location permissions are permanently denied, we cannot request permissions.');
+      return null;
     }
 
     // When we reach here, permissions are granted and we can

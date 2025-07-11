@@ -124,7 +124,7 @@ class _LogsState extends State<Logs> {
           : Scrollbar(
             thumbVisibility: kIsWeb || Utils.checkIfDesktop(),
             controller: controller,
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: SingleChildScrollView(
                       controller: controller,
