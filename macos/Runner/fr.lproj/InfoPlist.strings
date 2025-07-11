@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Chris KOUASSI on 09/07/2025.
+  
+*/
+"NSLocationUsageDescription" = "Activer les services de localisation vont nous permettre de pouvoir vous afficher des données météo basées sur votre position précise";

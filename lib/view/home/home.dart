@@ -70,6 +70,7 @@ class _HomeState extends State<Home> {
                     controller: controller,
                     child: CustomScrollView(
                       controller: controller,
+                      physics: const AlwaysScrollableScrollPhysics(),
                       slivers: [
                         SliverToBoxAdapter(
                           child: ConstrainedBox(

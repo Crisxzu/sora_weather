@@ -16,7 +16,12 @@ class WeatherDataProvider extends ChangeNotifier {
     try {
       userPosition = await Utils.determinePosition();
 
-      _data = await _controller.fetchWeatherData("${userPosition!.latitude},${userPosition!.longitude}", languageCode);
+      _data = await _controller.fetchWeatherData(
+        {
+          'position': userPosition != null ? "${userPosition!.latitude},${userPosition!.longitude}" : null,
+          'lang_iso': languageCode
+        }
+      );
 
       notifyListeners();
 

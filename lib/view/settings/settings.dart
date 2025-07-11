@@ -45,6 +45,20 @@ class _SettingsState extends State<Settings> {
     if (_tapCount >= 7) {
       _tapCount = 0; // Reset for next access
       _lastTapTime = null;
+
+      // Prevent snackbar to be shown if widget not mounted (on page change for example)
+      if(!context.mounted) {
+        return;
+      }
+
+      // Funny message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.appDevMode),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const Logs()),

@@ -24,8 +24,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get dataErrorTitle => 'Oups, une erreur est survenue. 😥';
 
   @override
-  String get dataErrorMessage =>
-      'Veuillez vérifier votre connexion Internet, ainsi que l’activation de la localisation et des services associés (GPS, Wi-Fi).';
+  String get dataErrorMessage => 'Veuillez vérifier votre connexion Internet.';
 
   @override
   String get dataErrorContact =>
@@ -59,6 +58,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appLogs => 'Logs de l\'application';
 
   @override
+  String get appDevMode =>
+      'Bienvenue dans les méandres de l\'application 🧑‍💻. Mais attention chut 🤫.';
+
+  @override
   String get copyLogs => 'Copier les logs';
 
   @override
@@ -87,6 +90,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get updateTimeLimit => 'Mettre à jour toutes les';
+
+  @override
+  String get locationDialogTitle => 'Localisation 📍';
+
+  @override
+  String get locationProvided =>
+      'Données fournies à partir de votre localisation précise 😎.';
+
+  @override
+  String get locationNotProvided =>
+      'Données fournies à partir de la position déduite de votre adresse IP, donc potentiellement inexacte 😓.\nPour plus de précision, activez les services de localisation, accorder la permission à l\'application et recharger la page 😉.';
+
+  @override
+  String get closeDialog => 'Fermer';
+
+  @override
+  String get goToLocationSettings => 'Aller aux Paramètres';
 
   @override
   String get credits => 'Fait avec ❤️ par Dazu';

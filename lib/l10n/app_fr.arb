@@ -4,7 +4,7 @@
   "updated": "Mis à jour le:",
   "linkError": "Impossible d'ouvrir le lien",
   "dataErrorTitle": "Oups, une erreur est survenue. 😥",
-  "dataErrorMessage": "Veuillez vérifier votre connexion Internet, ainsi que l’activation de la localisation et des services associés (GPS, Wi-Fi).",
+  "dataErrorMessage": "Veuillez vérifier votre connexion Internet.",
   "dataErrorContact": "Si le problème persiste, merci de contacter les développeurs via le store de l'application ou Github.",
   "mailContact": "Contacter par mail",
   "github": "Aller au Github",
@@ -15,6 +15,7 @@
   "logsUnavailable": "Aucun log à partager",
   "appVersion": "Version",
   "appLogs": "Logs de l'application",
+  "appDevMode": "Bienvenue dans les méandres de l'application 🧑‍💻. Mais attention chut 🤫.",
   "copyLogs": "Copier les logs",
   "shareLogs": "Partager les logs",
   "clearLogs": "Effacer les logs",
@@ -25,5 +26,10 @@
   "systemLocale": "Langue du système",
   "tempUnit": "Unité de température",
   "updateTimeLimit": "Mettre à jour toutes les",
+  "locationDialogTitle": "Localisation 📍",
+  "locationProvided": "Données fournies à partir de votre localisation précise 😎.",
+  "locationNotProvided": "Données fournies à partir de la position déduite de votre adresse IP, donc potentiellement inexacte 😓.\nPour plus de précision, activez les services de localisation, accorder la permission à l'application et recharger la page 😉.",
+  "closeDialog": "Fermer",
+  "goToLocationSettings": "Aller aux Paramètres",
   "credits": "Fait avec ❤️ par Dazu"
 }

@@ -8,28 +8,36 @@ import 'package:weather_app/model/weather_data.dart';
 import '../env/env.dart';
 
 class WeatherDataController {
-  Future<WeatherData> fetchWeatherData(String position, String languageCode) async {
+  Future<WeatherData> fetchWeatherData(Map<String, String?> params) async {
+    params.removeWhere((key, value) => value == null);
+
     if(Env.debugMode == '1') {
       AppLogger.instance.i("USE TEST DATA");
-      return fetchTestWeatherData(position, languageCode);
+      return fetchTestWeatherData(params);
     }
     else {
-      return fetchApiWeatherData(position, languageCode);
+      return fetchApiWeatherData(params);
     }
   }
 
-  Future<WeatherData> fetchApiWeatherData(String position, String languageCode) async {
+  Future<WeatherData> fetchApiWeatherData(Map<String, String?> params) async {
     try{
+      String paramsStr = '';
+
+      if(params.keys.isNotEmpty) {
+        paramsStr = '?${params.keys.map((key) => "$key=${params[key]}").join('&')}';
+      }
+
+      final String apiLink = Uri.encodeFull('${Env.apiLink}/weather$paramsStr');
       final http.Response response = await http.get(
-        Uri.parse('${Env.apiLink}/weather?position=$position&lang_iso=$languageCode'),
+        Uri.parse(apiLink),
         headers: {
           'Authorization': 'Api-Key ${Env.apiKey}',
         },
       );
 
       if(response.statusCode != 200) {
-        AppLogger.instance.d(jsonDecode(response.body));
-        throw Exception("Failed to fetch weather data from API");
+        throw Exception("Failed to fetch weather data from API. Link: $apiLink. Status code : ${response.statusCode}");
       }
 
       return WeatherData.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -40,7 +48,7 @@ class WeatherDataController {
     }
   }
 
-  Future<WeatherData> fetchTestWeatherData(String position, String languageCode) async {
+  Future<WeatherData> fetchTestWeatherData(Map<String, String?> params) async {
     try{
       final String response = await rootBundle.loadString('assets/json/weather_data.json');
 

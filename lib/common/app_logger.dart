@@ -160,7 +160,7 @@ class MyFilter extends LogFilter {
   @override
   bool shouldLog(LogEvent event) {
     if(event.level == Level.debug && !kDebugMode) {
-      return true;
+      return false;
     }
     return true;
   }

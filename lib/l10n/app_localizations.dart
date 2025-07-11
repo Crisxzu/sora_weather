@@ -131,7 +131,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Please check your Internet connection, and make sure that location services and related features (GPS, Wi-Fi) are enabled.'**
+  /// **'Please check your Internet connection.'**
   String get dataErrorMessage;
 
   /// No description provided for @dataErrorContact.
@@ -194,6 +194,12 @@ abstract class AppLocalizations {
   /// **'App logs'**
   String get appLogs;
 
+  /// No description provided for @appDevMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to the intricacies of the 🧑‍💻 application. But hush 🤫.'**
+  String get appDevMode;
+
   /// No description provided for @copyLogs.
   ///
   /// In en, this message translates to:
@@ -253,6 +259,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update every'**
   String get updateTimeLimit;
+
+  /// No description provided for @locationDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location 📍'**
+  String get locationDialogTitle;
+
+  /// No description provided for @locationProvided.
+  ///
+  /// In en, this message translates to:
+  /// **'Data provided from your precise location 😎.'**
+  String get locationProvided;
+
+  /// No description provided for @locationNotProvided.
+  ///
+  /// In en, this message translates to:
+  /// **'Data provided from the position deduced from your IP address, so potentially inaccurate 😓.\nFor better accuracy, please enable location services, give access to the app and reload the page 😉.'**
+  String get locationNotProvided;
+
+  /// No description provided for @closeDialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get closeDialog;
+
+  /// No description provided for @goToLocationSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get goToLocationSettings;
 
   /// No description provided for @credits.
   ///

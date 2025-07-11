@@ -6,7 +6,6 @@ import '../../../l10n/l10n.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
 
 import '../../../providers/params.dart';
-import '../../../providers/weather_data.dart';
 
 class LanguageSelector extends StatelessWidget {
   const LanguageSelector({

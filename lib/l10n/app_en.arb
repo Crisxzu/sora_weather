@@ -4,7 +4,7 @@
   "updated": "Updated:",
   "linkError": "Cannot open the link",
   "dataErrorTitle": "Oops, an error has occurred. 😥",
-  "dataErrorMessage": "Please check your Internet connection, and make sure that location services and related features (GPS, Wi-Fi) are enabled.",
+  "dataErrorMessage": "Please check your Internet connection.",
   "dataErrorContact": "If the problem persists, please contact the developers on the app store or Github.",
   "mailContact": "Contact by mail",
   "github": "Go to Github",
@@ -15,6 +15,7 @@
   "logsUnavailable": "No logs to share",
   "appVersion": "Version",
   "appLogs": "App logs",
+  "appDevMode": "Welcome to the intricacies of the 🧑‍💻 application. But hush 🤫.",
   "copyLogs": "Copy logs",
   "shareLogs": "Share logs",
   "clearLogs": "Clear logs",
@@ -25,5 +26,10 @@
   "systemLocale": "System language",
   "tempUnit": "Temperature unit",
   "updateTimeLimit": "Update every",
+  "locationDialogTitle": "Location 📍",
+  "locationProvided": "Data provided from your precise location 😎.",
+  "locationNotProvided": "Data provided from the position deduced from your IP address, so potentially inaccurate 😓.\nFor better accuracy, please enable location services, give access to the app and reload the page 😉.",
+  "closeDialog": "Close",
+  "goToLocationSettings": "Go to Settings",
   "credits": "Made with ❤️ by Dazu"
 }
