@@ -42,8 +42,9 @@ class WeatherDataController {
 
       return WeatherData.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     }
-    catch(e) {
-      AppLogger.instance.e(e);
+    catch(e, stackTrace) {
+      AppLogger.instance.e("Error in fetchApiWeatherData: $e");
+      AppLogger.instance.e("Stack trace: $stackTrace");
       throw Exception("Unable to fetch weather data");
     }
   }
