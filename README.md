@@ -46,22 +46,23 @@ DEBUG_MODE = 0
 ## 📱 Disponibilité
 
 - ✅ **Android** : Disponible via téléchargement APK
-- ✅ **iOS** : Fichier archive disponible (bientôt disponible sur l'App Store)
-- ✅ **macOS** : Fichier app disponible (bientôt disponible sur l'App Store)
-- ✅ **Windows** : Exécutable EXE disponible ! (bientôt disponible sur Microsoft Store)
+- ✅ **iOS** : Fichier archive disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
+- ✅ **macOS** : Fichier app disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
+- ✅ **Windows** : Exécutable EXE disponible ! Aussi dispo sur [Microsoft Store](https://apps.microsoft.com/detail/9n5bv4lcr3gx)
 - ✅ **Web** : Accédez directement au [site](https://sora-weather.dazu.fr) depuis votre navigateur !
 
 ## 📺 Série de tutoriels
 
 Cette application a été construite dans le cadre de ma série de tutoriels étape par étape sur la création d'une application complète à partir de zéro. Regardez la série pour apprendre comment chaque fonctionnalité a été implémentée :
 
-| Épisode | Sujet                                        | Lien                         |
-|---------|----------------------------------------------|------------------------------|
-| 01      | On design notre App Météo avec Figma         | https://youtu.be/Z-Tla0dGWxs |
-| 02      | On code notre propre API météo en Python     | https://youtu.be/0cWW8Nz1gUI |
-| 03      | On code notre App Météo (Android)            | https://youtu.be/sOW1gINQxF0 |
-| 04      | Rendre notre App Météo fonctionnelle partout | https://youtu.be/YSFwwXcVbwI |
-| ...     | ...                                          | ...                          |
+| Épisode | Sujet                                                       | Lien                         |
+|---------|-------------------------------------------------------------|------------------------------|
+| 01      | On design notre App Météo avec Figma                        | https://youtu.be/Z-Tla0dGWxs |
+| 02      | On code notre propre API météo en Python                    | https://youtu.be/0cWW8Nz1gUI |
+| 03      | On code notre App Météo (Android)                           | https://youtu.be/sOW1gINQxF0 |
+| 04      | Rendre notre App Météo fonctionnelle partout                | https://youtu.be/YSFwwXcVbwI |
+| 05      | On tente de déployer sur Play Store (ça s'est mal passé 😅) | https://youtu.be/ZA40PPwi29I |
+| ...     | ...                                                         | ...                          |
 
 ## ✨ Fonctionnalités
 

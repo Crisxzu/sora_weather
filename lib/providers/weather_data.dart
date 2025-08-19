@@ -27,8 +27,9 @@ class WeatherDataProvider extends ChangeNotifier {
 
       return _data!;
     }
-    catch(e) {
-      AppLogger.instance.e("$e");
+    catch(e, stackTrace) {
+      AppLogger.instance.e("Error in WeatherDataProvider.getData : $e");
+      AppLogger.instance.e("Stack trace: $stackTrace");
       throw Exception("Unable to get weather data");
     }
   }

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.2.0+7
+version: 1.2.1+8
 
 environment:
   sdk: ^3.5.1
@@ -43,7 +43,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   url_launcher: ^6.3.1
-  geolocator: ^14.0.0
+  geolocator: ^14.0.2
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   flutter_localized_locales: ^2.0.5
@@ -65,6 +65,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   envied_generator: ^1.1.1
   build_runner: ^2.4.13
+  msix: ^3.16.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -110,3 +111,15 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+
+msix_config:
+  display_name: Sora Weather
+  publisher: CN=503149AC-543F-45F5-AFC7-C83370C72E5B
+  publisher_display_name: Dazu
+  identity_name: Dazu.SoraWeather
+  msix_version: 1.2.1.0
+  logo_path: C:\Users\Chris Kouassi\sora_weather\assets\images\logo.png
+  store: true
+  languages: en-us, fr-fr
+  capabilities: "internetClient,location"
