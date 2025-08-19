@@ -46,9 +46,9 @@ DEBUG_MODE = 0
 ## 📱 Disponibilité
 
 - ✅ **Android** : Disponible via téléchargement APK
-- ✅ **iOS** : Fichier archive disponible (bientôt disponible sur l'App Store)
-- ✅ **macOS** : Fichier app disponible (bientôt disponible sur l'App Store)
-- ✅ **Windows** : Exécutable EXE disponible ! (bientôt disponible sur Microsoft Store)
+- ✅ **iOS** : Fichier archive disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
+- ✅ **macOS** : Fichier app disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
+- ✅ **Windows** : Exécutable EXE disponible ! Aussi dispo sur [Microsoft Store](https://apps.microsoft.com/detail/9n5bv4lcr3gx)
 - ✅ **Web** : Accédez directement au [site](https://sora-weather.dazu.fr) depuis votre navigateur !
 
 ## 📺 Série de tutoriels
