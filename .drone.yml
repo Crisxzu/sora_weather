@@ -8,7 +8,7 @@ steps:
     commands:
       - git fetch --tags
 
-  - name: prepare-signing
+  - name: prepare-build
     image: ghcr.io/cirruslabs/flutter:3.35.2
     environment:
       KEY_PASSWORD:
@@ -17,6 +17,8 @@ steps:
         from_secret: store_password
       KEYSTORE:
         from_secret: keystore_file
+      ENV_FILE:
+        from_secret: env_file
     commands:
       # Création des fichiers de signature avec vérification des secrets
       - echo "Checking if secrets are present..."
@@ -43,7 +45,11 @@ steps:
       - echo "Checking keystore:"
       - ls -l android/app/upload-keystore.jks
 
-  - name: build
+      # Décodage du fichier contenant les variables environnement
+      - echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
+      - ls -l lib/env
+
+  - name: build-android
     image: ghcr.io/cirruslabs/flutter:3.35.2
     environment:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
@@ -59,7 +65,17 @@ steps:
       #- flutter build appbundle --release --obfuscate --split-debug-info=./debug/ || exit 1
       - flutter build apk --release --obfuscate --split-debug-info=./debug/ || exit 1
     depends_on:
-      - prepare-signing
+      - prepare-build
+
+  #- name: build-web
+  #  image: ghcr.io/cirruslabs/flutter:3.35.2
+  #  commands:
+  #    # Clean et get des dépendances
+  #    - flutter clean
+  #    - flutter pub get
+  #    - flutter build web
+  #  depends_on:
+  #    - prepare-build
 
   - name: release
     image: plugins/github-release
@@ -74,7 +90,7 @@ steps:
     when:
       event: tag
     depends_on:
-      - build
+      - build-android
 
 #  - name: deploy-playstore
 #    image: ruby:3.2.6
@@ -93,6 +109,8 @@ steps:
 #    when:
 #      branch: main
 #      event: push
+
+
 
 volumes:
   - name: gradle-cache
