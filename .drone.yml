@@ -25,6 +25,7 @@ steps:
       - if [ -z "$KEY_PASSWORD" ]; then echo "KEY_PASSWORD is missing" && exit 1; fi
       - if [ -z "$STORE_PASSWORD" ]; then echo "STORE_PASSWORD is missing" && exit 1; fi
       - if [ -z "$KEYSTORE" ]; then echo "KEYSTORE is missing" && exit 1; fi
+      - if [ -z "$ENV_FILE" ]; then echo "ENV_FILE is missing" && exit 1; fi
 
       # Création du key.properties avec le bon format
       - |
@@ -63,7 +64,7 @@ steps:
       - flutter clean
       - flutter pub get
       #- flutter build appbundle --release --obfuscate --split-debug-info=./debug/ || exit 1
-      - flutter build apk --release --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build apk --release -verbose --obfuscate --split-debug-info=./debug/ || exit 1
     depends_on:
       - prepare-build
 
