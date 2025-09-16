@@ -64,7 +64,7 @@ steps:
       - flutter clean
       - flutter pub get
       #- flutter build appbundle --release --obfuscate --split-debug-info=./debug/ || exit 1
-      - flutter build apk --release -verbose --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build apk --release --verbose --obfuscate --split-debug-info=./debug/ || exit 1
     depends_on:
       - prepare-build
 
