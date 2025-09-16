@@ -1,0 +1,115 @@
+kind: pipeline
+type: docker
+name: flutter-release
+
+steps:
+  - name: prepare-git-tags
+    image: alpine/git
+    commands:
+      - git fetch --tags
+
+  - name: prepare-signing
+    image: ghcr.io/cirruslabs/flutter:3.35.2
+    environment:
+      KEY_PASSWORD:
+        from_secret: key_password
+      STORE_PASSWORD:
+        from_secret: store_password
+      KEYSTORE:
+        from_secret: keystore_file
+    commands:
+      # Création des fichiers de signature avec vérification des secrets
+      - echo "Checking if secrets are present..."
+      - if [ -z "$KEY_PASSWORD" ]; then echo "KEY_PASSWORD is missing" && exit 1; fi
+      - if [ -z "$STORE_PASSWORD" ]; then echo "STORE_PASSWORD is missing" && exit 1; fi
+      - if [ -z "$KEYSTORE" ]; then echo "KEYSTORE is missing" && exit 1; fi
+
+      # Création du key.properties avec le bon format
+      - |
+        cat > android/key.properties << EOF
+        storePassword=$STORE_PASSWORD
+        keyPassword=$KEY_PASSWORD
+        keyAlias=upload
+        storeFile=upload-keystore.jks
+        EOF
+
+      # Décodage du keystore
+      - echo "$KEYSTORE" | base64 -d > android/app/upload-keystore.jks
+
+      # Vérification des fichiers
+      - echo "Verifying files..."
+      - echo "key.properties content (excluding passwords):"
+      - grep "storeFile" android/key.properties
+      - echo "Checking keystore:"
+      - ls -l android/app/upload-keystore.jks
+
+  - name: build
+    image: ghcr.io/cirruslabs/flutter:3.35.2
+    environment:
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+    commands:
+      # Installation de Java 17
+      - apt-get update && apt-get install -y openjdk-17-jdk
+      # Vérification de Java
+      - java -version
+      - echo $JAVA_HOME
+      # Clean et get des dépendances
+      - flutter clean
+      - flutter pub get
+      #- flutter build appbundle --release --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build apk --release --obfuscate --split-debug-info=./debug/ || exit 1
+    depends_on:
+      - prepare-signing
+
+  - name: release
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_token
+      files:
+        - build/app/outputs/apk/release/app-release.apk
+        #- build/app/outputs/bundle/release/app-release.aab
+      title: ${DRONE_TAG}
+      draft: true
+    when:
+      event: tag
+    depends_on:
+      - build
+
+#  - name: deploy-playstore
+#    image: ruby:3.2.6
+#    environment:
+#      PLAYSTORE_JSON_KEY:
+#        from_secret: playstore_service_account
+#      environment:
+#        JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+#    commands:
+#      - gem install fastlane
+#      - echo "$PLAYSTORE_JSON_KEY" | base64 -d > android/fastlane/playstore_key.json
+#      - cd android
+#      - fastlane deploy
+#    depends_on:
+#      - build
+#    when:
+#      branch: main
+#      event: push
+
+volumes:
+  - name: gradle-cache
+    temp: {}
+
+trigger:
+  event:
+    - tag
+    - push
+  branch:
+    - main
+    - dev
+    - test-drone
+
+---
+kind: secret
+name: github_token
+get:
+  path: secrets/data/ci/github
+  name: token
