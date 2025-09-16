@@ -55,13 +55,6 @@ steps:
     environment:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
       GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
-    volumes:
-      - name: gradle-cache
-        path: /root/.gradle
-      - name: pub-cache
-        path: /root/.pub-cache
-      - name: flutter-cache
-        path: /flutter/bin/cache
     commands:
       # Installation de Java 17
       - apt-get update && apt-get install -y openjdk-17-jdk
@@ -123,14 +116,7 @@ steps:
 
 volumes:
   - name: gradle-cache
-    host:
-      path: /var/cache/drone/gradle
-  - name: pub-cache
-    host:
-      path: /var/cache/drone/pub
-  - name: flutter-cache
-    host:
-      path: /var/cache/drone/flutter
+    temp: {}
 
 trigger:
   event:
