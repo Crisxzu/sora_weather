@@ -7,6 +7,8 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.dazu.sora-weather
+      groups:
+        - sora
       vars:
         APP_ID: 6748250805 # <-- Put your APP ID here
       flutter: "3.32.3"
