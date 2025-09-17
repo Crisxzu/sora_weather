@@ -9,7 +9,7 @@ steps:
       - git fetch --tags
 
   - name: prepare-build
-    image: ghcr.io/cirruslabs/flutter:3.24.1
+    image: ghcr.io/cirruslabs/flutter:3.32.3
     environment:
       KEY_PASSWORD:
         from_secret: key_password
