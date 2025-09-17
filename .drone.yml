@@ -9,7 +9,7 @@ steps:
       - git fetch --tags
 
   - name: prepare-build
-    image: ghcr.io/cirruslabs/flutter:3.35.2
+    image: ghcr.io/cirruslabs/flutter:3.24.1
     environment:
       KEY_PASSWORD:
         from_secret: key_password
@@ -51,7 +51,7 @@ steps:
       - ls -l lib/env
 
   - name: build-android
-    image: ghcr.io/cirruslabs/flutter:3.35.2
+    image: ghcr.io/cirruslabs/flutter:3.24.1
     environment:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
       GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
