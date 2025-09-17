@@ -8,13 +8,16 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: io.codemagic.flutteryaml
+        bundle_identifier: codema
       vars:
-        APP_ID: 1111111111 # <-- Put your APP ID here
+        APP_ID: 6748250805 # <-- Put your APP ID here
       flutter: "3.32.3"
       xcode: "16.4" # <-- set to specific version e.g. 14.3, 15.0 to avoid unexpected updates.
       cocoapods: default
     scripts:
+      - name: Generate env file
+        script: |
+          echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
