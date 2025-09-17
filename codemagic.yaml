@@ -7,7 +7,7 @@ workflows:
       app_store_connect: codemagic
     environment:
       ios_signing:
-        distribution_type: app_store
+        distribution_type: development
         bundle_identifier: codema
       vars:
         APP_ID: 6748250805 # <-- Put your APP ID here
