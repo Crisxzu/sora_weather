@@ -7,8 +7,8 @@ workflows:
       app_store_connect: codemagic
     environment:
       ios_signing:
-        distribution_type: development
-        bundle_identifier: codema
+        distribution_type: app_store
+        bundle_identifier: com.dazu.sora-weather
       vars:
         APP_ID: 6748250805 # <-- Put your APP ID here
       flutter: "3.32.3"
