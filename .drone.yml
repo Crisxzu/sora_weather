@@ -51,7 +51,7 @@ steps:
       - ls -l lib/env
 
   - name: build-android
-    image: ghcr.io/cirruslabs/flutter:3.24.1
+    image: ghcr.io/cirruslabs/flutter:3.32.3
     environment:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
       GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
