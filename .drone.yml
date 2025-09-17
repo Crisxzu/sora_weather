@@ -54,7 +54,12 @@ steps:
     image: ghcr.io/cirruslabs/flutter:3.32.3
     environment:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-      GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+      GRADLE_JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=512m -Dorg.gradle.workers.max=2 -Dorg.gradle.daemon=false"
+    resources:
+      limits:
+        memory: 4096MiB
+        cpu: 2
     commands:
       # Installation de Java 17
       - apt-get update && apt-get install -y openjdk-17-jdk
