@@ -17,10 +17,3 @@ tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 
-buildTypes {
-    release {
-        minifyEnabled false   // désactive R8 pour isoler l’OOM
-        shrinkResources false
-    }
-}
-

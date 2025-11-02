@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../../../common/utils.dart';
+import '../../../controller/params.dart';
 import '../../../l10n/l10n.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
-
-import '../../../providers/params.dart';
 
 class LanguageSelector extends StatelessWidget {
   const LanguageSelector({
@@ -15,17 +14,17 @@ class LanguageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paramsProvider = Provider.of<ParamsProvider>(context);
+    final ParamsController paramsController = Get.find();
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     return DropdownButtonFormField<String>(
-      value: paramsProvider.isSystemLocal ? 'system' : paramsProvider.locale!.languageCode,
+      value: paramsController.isSystemLocal ? 'system' : paramsController.locale!.languageCode,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
       ),
       hint: Text(
-          AppLocalizations.of(context)!.selectLanguage,
-          style: textStyle['body'],
+        AppLocalizations.of(context)!.selectLanguage,
+        style: textStyle['body'],
       ),
       isExpanded: true,
       onChanged: (String? languageCode) async {
@@ -33,13 +32,13 @@ class LanguageSelector extends StatelessWidget {
           Locale? newLocale;
           if (languageCode == 'system') {
             // Réinitialiser à la langue du système
-            newLocale = await paramsProvider.useSystemLocale();
+            newLocale = await paramsController.useSystemLocale();
           } else {
             newLocale = Locale(languageCode);
-            paramsProvider.isSystemLocal = false;
-            paramsProvider.locale = newLocale;
+            paramsController.isSystemLocal = false;
           }
-          paramsProvider.refreshIndicatorKey!.currentState!.show();
+          paramsController.locale = newLocale;
+          paramsController.refreshIndicatorKey!.currentState!.show();
         }
       },
       style: textStyle['body']!.copyWith(color: Utils.white),

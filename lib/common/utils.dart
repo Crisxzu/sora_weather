@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 import 'app_logger.dart';
 
 class Utils {
-  static const Color blue = const Color.fromRGBO(41, 75, 121, 1);
-  static const Color gray = const Color.fromRGBO(198, 206, 216, 1);
-  static const Color darkBlue = const Color.fromRGBO(28, 49, 104, 1);
+  static const Color blue = Color.fromRGBO(41, 75, 121, 1);
+  static const Color gray = Color.fromRGBO(198, 206, 216, 1);
+  static const Color darkBlue = Color.fromRGBO(28, 49, 104, 1);
   static Color fadeDarkBlue = darkBlue.withValues(alpha: 0.53);
   static const Color white = Colors.white;
   static List<Color> blueGradientColors = [

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; //
+import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:weather_app/common/app_logger.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
@@ -44,8 +45,10 @@ class _LogsState extends State<Logs> {
     if(!mounted) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context)!.logsCopied)),
+
+    Get.snackbar(
+        AppLocalizations.of(context)!.messageForYou,
+        AppLocalizations.of(context)!.logsCopied
     );
   }
 
@@ -72,8 +75,10 @@ class _LogsState extends State<Logs> {
       if(!mounted) {
         return;
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.logsUnavailable)),
+
+      Get.snackbar(
+          AppLocalizations.of(context)!.messageForYou,
+          AppLocalizations.of(context)!.logsUnavailable
       );
     }
   }
@@ -86,8 +91,10 @@ class _LogsState extends State<Logs> {
     if(!mounted) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context)!.logsCleared)),
+
+    Get.snackbar(
+        AppLocalizations.of(context)!.messageForYou,
+        AppLocalizations.of(context)!.logsCleared
     );
   }
 

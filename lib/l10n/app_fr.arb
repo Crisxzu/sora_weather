@@ -2,6 +2,7 @@
   "feelsLike": "Ressenti",
   "source": "Source",
   "updated": "Mis à jour le:",
+  "linkErrorTitle": "Erreur sur le lien",
   "linkError": "Impossible d'ouvrir le lien",
   "dataErrorTitle": "Oups, une erreur est survenue. 😥",
   "dataErrorMessage": "Veuillez vérifier votre connexion Internet.",
@@ -31,5 +32,6 @@
   "locationNotProvided": "Données fournies à partir de la position déduite de votre adresse IP, donc potentiellement inexacte 😓.\nPour plus de précision, activez les services de localisation, accorder la permission à l'application et recharger la page 😉.",
   "closeDialog": "Fermer",
   "goToLocationSettings": "Aller aux Paramètres",
-  "credits": "Fait avec ❤️ par Dazu"
+  "credits": "Fait avec ❤️ par Dazu",
+  "messageForYou": "Message pour toi 💌"
 }

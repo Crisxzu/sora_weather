@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:weather_app/view/home/widgets/panel.dart';
 
 import '../../../common/utils.dart';
+import '../../../controller/params.dart';
 import '../../../model/hourly_forecast.dart';
-import '../../../providers/params.dart';
 import 'humidity.dart';
 import 'weather_icon.dart';
 
@@ -139,15 +139,15 @@ class HourForecast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paramsProvider = Provider.of<ParamsProvider>(context);
+    final ParamsController paramsController = Get.find();
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
     
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
-      child: Column(
+      child: Obx(() => Column(
         children: [
           Text(
-            Utils.getHour(data.timestamp, paramsProvider.locale!),
+            Utils.getHour(data.timestamp, paramsController.locale!),
             style: textStyle['body']!.copyWith(color: Utils.gray),
           ),
           WeatherIcon(
@@ -155,12 +155,12 @@ class HourForecast extends StatelessWidget {
             isDay: data.isDay,
           ),
           Text(
-            paramsProvider.tempUnit!.toStr(data.temp),
+            paramsController.tempUnit!.toStr(data.temp),
             style: textStyle['bodyHighlight'],
           ),
           HumidityView(humidity: data.humidity)
         ],
-      ),
+      )),
     );
   }
 }

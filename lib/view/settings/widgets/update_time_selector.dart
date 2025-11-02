@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../../../common/utils.dart';
-import '../../../providers/params.dart';
+import '../../../controller/params.dart';
 
 class UpdateTimeSelector extends StatelessWidget {
   const UpdateTimeSelector({
@@ -11,28 +11,30 @@ class UpdateTimeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paramsProvider = Provider.of<ParamsProvider>(context);
+    final ParamsController paramsController = Get.find();
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
-    return DropdownButtonFormField<int>(
-        value: paramsProvider.updateTimeLimit!,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-        ),
-        onChanged: (int? newValue) {
-          paramsProvider.updateTimeLimit = newValue;
-        },
-        style: textStyle['body']!.copyWith(color: Utils.white),
-        items: [
-          ...Utils.supportedUpdateTimeLimit.map((int minutes) {
-            return DropdownMenuItem<int>(
-              value: Utils.supportedUpdateTimeLimit.indexOf(minutes),
-              child: Text(
-                "$minutes minutes",
-              ),
-            );
-          })
-        ]
+    return Obx(() =>
+        DropdownButtonFormField<int>(
+            value: paramsController.updateTimeLimit!,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (int? newValue) {
+              paramsController.updateTimeLimit = newValue;
+            },
+            style: textStyle['body']!.copyWith(color: Utils.white),
+            items: [
+              ...Utils.supportedUpdateTimeLimit.map((int minutes) {
+                return DropdownMenuItem<int>(
+                  value: Utils.supportedUpdateTimeLimit.indexOf(minutes),
+                  child: Text(
+                    "$minutes minutes",
+                  ),
+                );
+              })
+            ]
+        )
     );
   }
 }

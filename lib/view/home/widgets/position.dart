@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
-import 'package:weather_app/providers/params.dart';
 
 import '../../../common/utils.dart';
-import '../../../providers/weather_data.dart';
+import '../../../controller/weather_data.dart';
 
 class PositionView extends StatefulWidget {
   const PositionView({
@@ -42,10 +41,9 @@ class _PositionViewState extends State<PositionView> with SingleTickerProviderSt
     if(!mounted) {
       return;
     }
-
-    final weatherProvider = Provider.of<WeatherDataProvider>(context, listen: false);
-
-    if (_controller.isAnimating || weatherProvider.data == null) {
+    final WeatherDataController weatherDataController = Get.find();
+    
+    if (_controller.isAnimating || weatherDataController.data == null) {
       return;
     }
 
@@ -64,7 +62,7 @@ class _PositionViewState extends State<PositionView> with SingleTickerProviderSt
   }
 
   void _handlePositionTap() {
-    final weatherProvider = Provider.of<WeatherDataProvider>(context, listen: false);
+    final WeatherDataController weatherDataController = Get.find();
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     showDialog(
@@ -75,12 +73,12 @@ class _PositionViewState extends State<PositionView> with SingleTickerProviderSt
             style: textStyle['title2'],
             AppLocalizations.of(context)!.locationDialogTitle
           ),
-          content: Text(
+          content: Obx(() => Text(
               style: textStyle['body'],
-              weatherProvider.userPosition != null
+              weatherDataController.userPosition != null
                   ? AppLocalizations.of(context)!.locationProvided
                   : AppLocalizations.of(context)!.locationNotProvided
-          ),
+          )),
           actions: <Widget>[
             TextButton(
               child: Text(
@@ -110,43 +108,45 @@ class _PositionViewState extends State<PositionView> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    final weatherProvider = Provider.of<WeatherDataProvider>(context);
+    final WeatherDataController weatherDataController = Get.find();
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
-    if(weatherProvider.data == null) {
-      return Container();
-    }
+    return Obx(() {
+        if(weatherDataController.data == null) {
+          return Container();
+        }
 
-    return SizedBox(
-      width: double.infinity,
-      child: GestureDetector(
-        onTap: _handlePositionTap,
-        child: Row(
-          children: [
-            Text(
-              weatherProvider.data!.location.name,
-              overflow: TextOverflow.ellipsis,
-              style: textStyle['title2'],
+        return SizedBox(
+          width: double.infinity,
+          child: GestureDetector(
+            onTap: _handlePositionTap,
+            child: Row(
+              children: [
+                Text(
+                  weatherDataController.data!.location.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: textStyle['title2'],
+                ),
+                const SizedBox(width: 10,),
+                ...[
+                  if(weatherDataController.userPosition == null)
+                    AnimatedBuilder(
+                      animation: _opacityAnimation,
+                      builder: (context, child) {
+                        return Opacity(
+                          opacity: _opacityAnimation.value,
+                          child: const Icon(
+                            Icons.location_disabled,
+                          ),
+                        );
+                      },
+                    )
+                ],
+              ],
             ),
-            const SizedBox(width: 10,),
-            ...[
-              if(weatherProvider.userPosition == null)
-                AnimatedBuilder(
-                  animation: _opacityAnimation,
-                  builder: (context, child) {
-                    return Opacity(
-                      opacity: _opacityAnimation.value,
-                      child: const Icon(
-                        Icons.location_disabled,
-                      ),
-                    );
-                  },
-                )
-            ],
-          ],
-        ),
-      ),
-    );
+          ),
+        );
+    });
   }
 
   @override

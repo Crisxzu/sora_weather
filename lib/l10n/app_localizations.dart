@@ -116,6 +116,12 @@ abstract class AppLocalizations {
   /// **'Updated:'**
   String get updated;
 
+  /// No description provided for @linkErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Link error'**
+  String get linkErrorTitle;
+
   /// No description provided for @linkError.
   ///
   /// In en, this message translates to:
@@ -295,6 +301,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Made with ❤️ by Dazu'**
   String get credits;
+
+  /// No description provided for @messageForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Message for you 💌'**
+  String get messageForYou;
 }
 
 class _AppLocalizationsDelegate

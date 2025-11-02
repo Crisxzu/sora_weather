@@ -1,27 +1,28 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:weather_app/common/utils.dart';
-import 'package:weather_app/l10n/l10n.dart';
+import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
 import '../common/app_logger.dart';
+import '../common/utils.dart';
+import '../l10n/l10n.dart';
+import 'weather_data.dart';
 
-
-class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
-  TempUnit? _tempUnit;
-  int? _updateTimeLimit;
-  Locale? _locale;
+class ParamsController extends GetxController with WidgetsBindingObserver {
+  final Rx<TempUnit?> _tempUnit = Rx<TempUnit?>(null);
+  final Rx<int?> _updateTimeLimit = Rx<int?>(null);
+  final Rx<Locale?> _locale = Rx<Locale?>(null);
   bool _useSystemLocale = true;
-  Timer? _timer;
-  TempUnit? get tempUnit => _tempUnit;
-  int? get updateTimeLimit => _updateTimeLimit;
-  Locale? get locale => _locale;
+  final Rx<Timer?> _timer = Rx<Timer?>(null);
+  TempUnit? get tempUnit => _tempUnit.value;
+  int? get updateTimeLimit => _updateTimeLimit.value;
+  Locale? get locale => _locale.value;
   bool get isSystemLocal => _useSystemLocale;
   final paramsData = Hive.box("appParams");
   GlobalKey<RefreshIndicatorState>? refreshIndicatorKey;
 
-  ParamsProvider() {
+  ParamsController() {
     var unit = paramsData.get('tempUnit');
 
     if(unit == null || !Utils.tempUnits.containsKey(unit)) {
@@ -52,7 +53,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
   void dispose() {
     // Remove observer when provider disposed
     WidgetsBinding.instance.removeObserver(this);
-    _timer?.cancel();
+    _timer.value?.cancel();
     super.dispose();
   }
 
@@ -60,7 +61,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
   void didChangeLocales(List<Locale>? locales) {
     AppLogger.instance.d("System change locale");
     AppLogger.instance.d(_useSystemLocale);
-    AppLogger.instance.d(locales);
+    AppLogger.instance.d(locales.toString());
 
     // Call when locale language change
     if (_useSystemLocale && locales != null && locales.isNotEmpty) {
@@ -72,8 +73,8 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
     if (_isSupported(systemLocale)) {
       locale = systemLocale;
       paramsData.put('locale', 'system');
-      notifyListeners();
-      refreshIndicatorKey!.currentState!.show();
+      //notifyListeners();
+      refreshIndicatorKey?.currentState!.show();
     }
   }
 
@@ -92,7 +93,7 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
         if (_isSupported(systemLocale)) {
           locale = systemLocale;
           paramsData.put('locale', 'system');
-          notifyListeners();
+          //notifyListeners();
         } else {
           // If not supported, use english
           locale = const Locale('en');
@@ -127,52 +128,58 @@ class ParamsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
 
   void _startTimer() {
-    _timer = Timer.periodic(
-      Duration(minutes: Utils.supportedUpdateTimeLimit[_updateTimeLimit!]),
+    _timer.value = Timer.periodic(
+      Duration(minutes: Utils.supportedUpdateTimeLimit[_updateTimeLimit.value!]),
           (_) => _onTimerTick(),
     );
   }
 
   void _restartTimer() {
-    _timer?.cancel();
+    _timer.value?.cancel();
     _startTimer();
   }
 
-  void _onTimerTick() {
+  void _onTimerTick() async {
     // Notify listeners if update necessary
-    notifyListeners();
+    WeatherDataController weatherData = Get.find();
+    await weatherData.fetchData(locale!.languageCode);
+    //notifyListeners();
   }
 
   void pauseTimer() {
-    _timer?.cancel();
-    notifyListeners();
+    _timer.value?.cancel();
+    _timer.refresh();
+    //notifyListeners();
   }
 
   void resumeTimer() {
-    if (_timer == null || !_timer!.isActive) {
+    if (_timer.value == null || !_timer.value!.isActive) {
       _startTimer();
-      notifyListeners();
+      //notifyListeners();
     }
   }
 
   set updateTimeLimit(int? index) {
-    _updateTimeLimit = index;
     paramsData.put('updateTimeLimit', index);
+    _updateTimeLimit.value = index;
     _restartTimer();
-    notifyListeners();
+    //notifyListeners();
   }
 
   set tempUnit(TempUnit? newValue) {
-    _tempUnit = newValue;
     paramsData.put('tempUnit', newValue!.name);
-    notifyListeners();
+    _tempUnit.value = newValue;
+    //notifyListeners();
   }
 
   set locale(Locale? newValue) {
     AppLogger.instance.d("new value $newValue");
-    _locale = newValue;
     paramsData.put('locale', newValue!.languageCode);
-    notifyListeners();
+    _locale.value = newValue;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.updateLocale(newValue);
+    });
+    //notifyListeners();
   }
 
   set isSystemLocal(bool newValue) {

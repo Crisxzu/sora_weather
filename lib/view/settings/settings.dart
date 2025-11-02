@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
 import 'package:weather_app/view/home/widgets/link_button.dart';
 import 'package:weather_app/view/settings/widgets/update_time_selector.dart';
@@ -52,11 +53,9 @@ class _SettingsState extends State<Settings> {
       }
 
       // Funny message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.appDevMode),
-          behavior: SnackBarBehavior.floating,
-        ),
+      Get.snackbar(
+          AppLocalizations.of(context)!.messageForYou,
+          AppLocalizations.of(context)!.appDevMode
       );
 
       Navigator.push(

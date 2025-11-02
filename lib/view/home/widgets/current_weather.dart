@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 import '../../../common/utils.dart';
+import '../../../controller/params.dart';
 import '../../../model/current_weather.dart';
-import '../../../providers/params.dart';
 
 class CurrentWeatherView extends StatelessWidget {
   const CurrentWeatherView({
@@ -15,7 +15,7 @@ class CurrentWeatherView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paramsProvider = Provider.of<ParamsProvider>(context);
+    final ParamsController paramsController = Get.find();
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
 
     return Padding(
@@ -26,10 +26,10 @@ class CurrentWeatherView extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                paramsProvider.tempUnit!.toStr(data.temp),
+              Obx(() => Text(
+                paramsController.tempUnit!.toStr(data.temp),
                 style: textStyle['header'],
-              ),
+              )),
               Text(
                 data.condition.text,
                 style: textStyle['title2'],
@@ -37,9 +37,10 @@ class CurrentWeatherView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16,),
-          Text(
-            "${paramsProvider.tempUnit!.toStr(data.maxTemp)}/${paramsProvider.tempUnit!.toStr(data.minTemp)}, ${AppLocalizations.of(context)!.feelsLike} ${paramsProvider.tempUnit!.toStr(data.feelsLike)}",
-            style: textStyle['title2'],
+          Obx(() => Text(
+              "${paramsController.tempUnit!.toStr(data.maxTemp)}/${paramsController.tempUnit!.toStr(data.minTemp)}, ${AppLocalizations.of(context)!.feelsLike} ${paramsController.tempUnit!.toStr(data.feelsLike)}",
+              style: textStyle['title2'],
+            )
           )
         ],
       ),

@@ -68,7 +68,7 @@ class DropPainter extends CustomPainter {
 
     // Draw the drop outline
     final outlinePaint = Paint()
-      ..color = dropColor.withOpacity(0.5)
+      ..color = dropColor.withValues(alpha: 0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     canvas.drawPath(dropPath, outlinePaint);

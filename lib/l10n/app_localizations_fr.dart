@@ -18,6 +18,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get updated => 'Mis à jour le:';
 
   @override
+  String get linkErrorTitle => 'Erreur sur le lien';
+
+  @override
   String get linkError => 'Impossible d\'ouvrir le lien';
 
   @override
@@ -110,4 +113,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get credits => 'Fait avec ❤️ par Dazu';
+
+  @override
+  String get messageForYou => 'Message pour toi 💌';
 }

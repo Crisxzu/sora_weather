@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
 
@@ -22,22 +23,27 @@ class LinkButton extends StatelessWidget {
           if (!await launchUrl(url)) {
             AppLogger.instance.i("Cannot open link: $urlStr");
 
-            // Prevent snackbar to be shown if widget not mounted (on page change for example)
             if(!context.mounted) {
               return;
             }
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(AppLocalizations.of(context)!.linkError)),
+
+            Get.snackbar(
+                AppLocalizations.of(context)!.messageForYou,
+                AppLocalizations.of(context)!.linkError
             );
           }
         }
         catch(e) {
-          // Prevent snackbar to be shown if widget not mounted (on page change for example)
+          AppLogger.instance.e("Error happened when try to launch link: $urlStr");
+          AppLogger.instance.e("Exception details : $e");
+
           if(!context.mounted) {
             return;
           }
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.linkError)),
+
+          Get.snackbar(
+              AppLocalizations.of(context)!.messageForYou,
+              AppLocalizations.of(context)!.linkError
           );
         }
       },

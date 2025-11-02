@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:weather_app/view/home/widgets/humidity.dart';
 import 'package:weather_app/view/home/widgets/panel.dart';
 import 'package:weather_app/view/home/widgets/weather_icon.dart';
 
 import '../../../common/utils.dart';
+import '../../../controller/params.dart';
 import '../../../model/daily_forecast.dart';
-import '../../../providers/params.dart';
 
 class DailyForecastView extends StatelessWidget {
   const DailyForecastView({
@@ -40,9 +40,9 @@ class DayForecastView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paramsProvider = Provider.of<ParamsProvider>(context);
+    final ParamsController paramsController = Get.find();
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
-    String day = Utils.getDayOfWeek(data.timestamp, paramsProvider.locale!);
+    String day = Utils.getDayOfWeek(data.timestamp, paramsController.locale!);
 
 
     return Padding(
@@ -70,19 +70,19 @@ class DayForecastView extends StatelessWidget {
               const SizedBox(width: 12,),
               SizedBox(
                 width: MediaQuery.of(context).size.width < Utils.lgBreakpoint ? 70 : 100,
-                child: Row(
+                child: Obx(() => Row(
                   children: [
                     Text(
-                      paramsProvider.tempUnit!.toStr(data.maxTemp),
+                      paramsController.tempUnit!.toStr(data.maxTemp),
                       style: textStyle['bodyHighlight'],
                     ),
                     const SizedBox(width: 12,),
                     Text(
-                      paramsProvider.tempUnit!.toStr(data.minTemp),
+                      paramsController.tempUnit!.toStr(data.minTemp),
                       style: textStyle['bodyHighlight'],
                     ),
                   ],
-                ),
+                )),
               )
             ],
           )
