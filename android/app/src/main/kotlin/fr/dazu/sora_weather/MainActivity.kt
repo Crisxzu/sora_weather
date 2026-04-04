@@ -1,4 +1,4 @@
-package com.example.weather_app
+package fr.dazu.sora_weather
 
 import io.flutter.embedding.android.FlutterActivity
 

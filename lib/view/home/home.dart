@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
     final paramsProvider = Provider.of<ParamsProvider>(context, listen: false);
 
     setState(() {
-      _weatherData = weatherDataProvider.getData(paramsProvider.locale!.languageCode);
+      _weatherData = weatherDataProvider.getData(paramsProvider.locale!.languageCode, paramsProvider.tempUnit!);
     });
   }
 

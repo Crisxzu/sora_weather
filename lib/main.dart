@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:weather_app/widget_callback.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,9 +24,11 @@ import 'env/env.dart';
 
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   var box = await Hive.openBox("appParams");
   await AppLogger.initialize();
+  HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
   runApp(MyApp());
 }
 

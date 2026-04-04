@@ -14,7 +14,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.weather_app"
+    namespace = "fr.dazu.sora_weather"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

@@ -52,6 +52,7 @@ dependencies:
   logger: ^2.6.0
   share_plus: ^11.0.0
   package_info_plus: ^8.3.0
+  home_widget: ^0.7.0
 
 dev_dependencies:
   flutter_test:

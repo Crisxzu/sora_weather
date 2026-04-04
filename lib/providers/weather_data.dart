@@ -12,22 +12,24 @@ class WeatherDataProvider extends ChangeNotifier {
   final WeatherDataController _controller = WeatherDataController();
   Position? userPosition;
 
-  Future<WeatherData> getData(String languageCode) async {
+  Future<WeatherData> getData(String languageCode, TempUnit tempUnit) async {
     try {
       userPosition = await Utils.determinePosition();
 
-      _data = await _controller.fetchWeatherData(
-        {
-          'position': userPosition != null ? "${userPosition!.latitude},${userPosition!.longitude}" : null,
-          'lang_iso': languageCode
-        }
-      );
+      final position = userPosition != null
+          ? '${userPosition!.latitude},${userPosition!.longitude}'
+          : null;
+
+      _data = await _controller.fetchWeatherData({
+        'position': position,
+        'lang_iso': languageCode,
+      });
 
       notifyListeners();
+      _controller.saveWidgetData(_data!, tempUnit, position: position, langIso: languageCode);
 
       return _data!;
-    }
-    catch(e, stackTrace) {
+    } catch (e, stackTrace) {
       AppLogger.instance.e("Error in WeatherDataProvider.getData : $e");
       AppLogger.instance.e("Stack trace: $stackTrace");
       throw Exception("Unable to get weather data");
