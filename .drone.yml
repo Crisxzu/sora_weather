@@ -9,7 +9,7 @@ steps:
       - git fetch --tags
 
   - name: prepare-build
-    image: ghcr.io/cirruslabs/flutter:3.32.3
+    image: ghcr.io/crisxzu/flutter-ci:latest
     depends_on:
       - prepare-git-tags
     environment:
@@ -47,18 +47,14 @@ steps:
       - ls -l lib/env
 
   - name: build-android
-    image: ghcr.io/cirruslabs/flutter:3.32.3
+    image: ghcr.io/crisxzu/flutter-ci:latest
     environment:
-      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-      GRADLE_JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
       GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=512m -Dorg.gradle.workers.max=2 -Dorg.gradle.daemon=false"
     resources:
       limits:
         memory: 4096MiB
         cpu: 2
     commands:
-      # Installation de Java 17
-      - apt-get update && apt-get install -y openjdk-17-jdk
       # Vérification de Java
       - java -version
       - echo $JAVA_HOME
