@@ -10,6 +10,8 @@ steps:
 
   - name: prepare-build
     image: ghcr.io/cirruslabs/flutter:3.32.3
+    depends_on:
+      - prepare-git-tags
     environment:
       KEY_PASSWORD:
         from_secret: key_password
@@ -28,13 +30,7 @@ steps:
       - if [ -z "$ENV_FILE" ]; then echo "ENV_FILE is missing" && exit 1; fi
 
       # Création du key.properties avec le bon format
-      - |
-        cat > android/key.properties << EOF
-        storePassword=$STORE_PASSWORD
-        keyPassword=$KEY_PASSWORD
-        keyAlias=upload
-        storeFile=upload-keystore.jks
-        EOF
+      - printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=upload\nstoreFile=upload-keystore.jks\n' "$STORE_PASSWORD" "$KEY_PASSWORD" > android/key.properties
 
       # Décodage du keystore
       - echo "$KEYSTORE" | base64 -d > android/app/upload-keystore.jks
@@ -70,7 +66,7 @@ steps:
       - flutter clean
       - flutter pub get
       #- flutter build appbundle --release --obfuscate --split-debug-info=./debug/ || exit 1
-      - flutter build apk --release --verbose -dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build apk --release --verbose --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
     depends_on:
       - prepare-build
 
@@ -118,10 +114,6 @@ steps:
 #      event: push
 
 
-
-volumes:
-  - name: gradle-cache
-    temp: {}
 
 trigger:
   event:
