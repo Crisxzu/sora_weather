@@ -133,7 +133,6 @@ volumes:
 trigger:
   event:
     - tag
-    - push
   branch:
     - main
     - dev
