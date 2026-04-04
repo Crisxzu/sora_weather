@@ -78,6 +78,9 @@ class WeatherDataController {
       await HomeWidget.saveWidgetData<String>('widget_icon_url', iconUrl);
       await HomeWidget.saveWidgetData<String>('widget_lang_iso', langIso);
       await HomeWidget.saveWidgetData<String>('widget_unit_name', tempUnit.name);
+      await HomeWidget.saveWidgetData<String>('widget_api_link', Env.apiLink);
+      await HomeWidget.saveWidgetData<String>('widget_api_key', Env.apiKey);
+      await HomeWidget.saveWidgetData<String>('widget_base_icon_url', Env.baseIconUrl);
       if (position != null) {
         await HomeWidget.saveWidgetData<String>('widget_last_position', position);
       }
