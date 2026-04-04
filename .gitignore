@@ -50,3 +50,5 @@ env.g.dart
 /symbols
 
 android/upload-keystore.jks
+
+*64.txt
