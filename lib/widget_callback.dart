@@ -16,7 +16,10 @@ Future<void> widgetBackgroundCallback(Uri? uri) async {
 
     // Afficher l'overlay de chargement immédiatement
     await HomeWidget.saveWidgetData<bool>('widget_loading', true);
-    await HomeWidget.updateWidget(androidName: 'WeatherWidgetProvider');
+    await HomeWidget.updateWidget(
+      androidName: 'WeatherWidgetProvider',
+      iOSName: 'WeatherWidgetProvider',
+    );
 
     final position = await HomeWidget.getWidgetData<String>('widget_last_position');
     final langIso = await HomeWidget.getWidgetData<String>('widget_lang_iso') ?? 'en';
@@ -41,6 +44,9 @@ Future<void> widgetBackgroundCallback(Uri? uri) async {
     debugPrint('[WidgetCallback] Error: $e');
     // Masquer l'overlay même en cas d'erreur
     await HomeWidget.saveWidgetData<bool>('widget_loading', false);
-    await HomeWidget.updateWidget(androidName: 'WeatherWidgetProvider');
+    await HomeWidget.updateWidget(
+      androidName: 'WeatherWidgetProvider',
+      iOSName: 'WeatherWidgetProvider',
+    );
   }
 }

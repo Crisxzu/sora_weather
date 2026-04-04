@@ -67,6 +67,7 @@ class WeatherDataController {
 
       final directory = await getApplicationDocumentsDirectory();
       final iconPath = '${directory.path}/weather_icons/${iconCode}_$dayStr.png';
+      final iconUrl = '${Env.baseIconUrl}/$dayStr/$iconCode.png';
 
       await HomeWidget.saveWidgetData<String>('widget_temp', tempUnit.toStr(data.current.temp));
       await HomeWidget.saveWidgetData<String>('widget_city', data.location.name);
@@ -74,6 +75,7 @@ class WeatherDataController {
       await HomeWidget.saveWidgetData<String>('widget_min_temp', tempUnit.toStr(data.current.minTemp));
       await HomeWidget.saveWidgetData<String>('widget_max_temp', tempUnit.toStr(data.current.maxTemp));
       await HomeWidget.saveWidgetData<String>('widget_icon_path', iconPath);
+      await HomeWidget.saveWidgetData<String>('widget_icon_url', iconUrl);
       await HomeWidget.saveWidgetData<String>('widget_lang_iso', langIso);
       await HomeWidget.saveWidgetData<String>('widget_unit_name', tempUnit.name);
       if (position != null) {
@@ -82,6 +84,7 @@ class WeatherDataController {
       await HomeWidget.saveWidgetData<bool>('widget_loading', false);
       await HomeWidget.updateWidget(
         androidName: 'WeatherWidgetProvider',
+        iOSName: 'WeatherWidgetProvider',
       );
     } catch (e) {
       AppLogger.instance.e('Error saving widget data: $e');

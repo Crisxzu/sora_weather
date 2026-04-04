@@ -28,6 +28,7 @@ Future main() async {
   await Hive.initFlutter();
   var box = await Hive.openBox("appParams");
   await AppLogger.initialize();
+  HomeWidget.setAppGroupId('group.fr.dazu.sora-weather');
   HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
   runApp(MyApp());
 }
