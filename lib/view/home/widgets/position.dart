@@ -123,10 +123,12 @@ class _PositionViewState extends State<PositionView> with SingleTickerProviderSt
         onTap: _handlePositionTap,
         child: Row(
           children: [
-            Text(
-              weatherProvider.data!.location.name,
-              overflow: TextOverflow.ellipsis,
-              style: textStyle['title2'],
+            Flexible(
+              child: Text(
+                weatherProvider.data!.location.name,
+                overflow: TextOverflow.ellipsis,
+                style: textStyle['title2'],
+              ),
             ),
             const SizedBox(width: 10,),
             ...[
