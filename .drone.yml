@@ -45,6 +45,9 @@ steps:
       # Décodage du fichier contenant les variables environnement
       - echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
       - ls -l lib/env
+    volumes:
+      - name: pub-cache
+        path: /root/.pub-cache
 
   - name: build-android
     image: ghcr.io/crisxzu/flutter-ci:latest
@@ -61,10 +64,15 @@ steps:
       # Clean et get des dépendances
       - flutter clean
       - flutter pub get
-      #- flutter build appbundle --release --obfuscate --split-debug-info=./debug/ || exit 1
-      - flutter build apk --release --verbose --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build appbundle --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build apk --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
     depends_on:
       - prepare-build
+    volumes:
+      - name: pub-cache
+        path: /root/.pub-cache
+      - name: gradle-cache
+        path: /root/.gradle
 
   #- name: build-web
   #  image: ghcr.io/cirruslabs/flutter:3.35.2
@@ -91,25 +99,36 @@ steps:
     depends_on:
       - build-android
 
-#  - name: deploy-playstore
-#    image: ruby:3.2.6
-#    environment:
-#      PLAYSTORE_JSON_KEY:
-#        from_secret: playstore_service_account
-#      environment:
-#        JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-#    commands:
-#      - gem install fastlane
-#      - echo "$PLAYSTORE_JSON_KEY" | base64 -d > android/fastlane/playstore_key.json
-#      - cd android
-#      - fastlane deploy
-#    depends_on:
-#      - build-android
-#    when:
-#      branch: main
-#      event: push
+  - name: deploy-playstore
+    image: ruby:3.2.6
+    environment:
+      PLAYSTORE_JSON_KEY:
+        from_secret: playstore_service_account
+      PLAYSTORE_JSON_KEY_PATH: fastlane/playstore_key.json
+      BUNDLE_PATH: /usr/local/bundle
+    commands:
+      - bundle install --gemfile=android/Gemfile
+      - echo "$PLAYSTORE_JSON_KEY" | base64 -d > android/fastlane/playstore_key.json
+      - cd android
+      - bundle exec fastlane deploy
+    depends_on:
+      - build-android
+    when:
+      event: tag
+    volumes:
+      - name: bundle-cache
+        path: /usr/local/bundle
 
-
+volumes:
+  - name: gradle-cache
+    host:
+      path: /var/cache/drone/gradle
+  - name: pub-cache
+    host:
+      path: /var/cache/drone/pub
+  - name: bundle-cache
+    host:
+      path: /var/cache/drone/bundle
 
 trigger:
   event:
@@ -118,7 +137,6 @@ trigger:
   branch:
     - main
     - dev
-    - test-drone
 
 ---
 kind: secret

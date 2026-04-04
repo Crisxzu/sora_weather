@@ -52,3 +52,7 @@ env.g.dart
 android/upload-keystore.jks
 
 *64.txt
+
+android/fastlane/playstore_key.json
+android/fastlane/report.xml
+encode-secrets-file.sh

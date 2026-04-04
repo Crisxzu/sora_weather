@@ -1,0 +1,2 @@
+json_key_file(ENV["PLAYSTORE_JSON_KEY_PATH"])
+package_name("fr.dazu.sora_weather")

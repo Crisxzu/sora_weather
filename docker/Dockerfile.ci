@@ -7,3 +7,11 @@ RUN apt-get update \
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV GRADLE_JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH="$JAVA_HOME/bin:$PATH"
+
+# Pre-install Android SDK components used by Flutter builds
+RUN yes | sdkmanager --licenses > /dev/null 2>&1 \
+    && sdkmanager \
+        "ndk;26.3.11579264" \
+        "build-tools;34.0.0" \
+        "platforms;android-34" \
+        "cmake;3.22.1"
