@@ -61,8 +61,8 @@ steps:
       # Clean et get des dépendances
       - flutter clean
       - flutter pub get
-      #- flutter build appbundle --release --obfuscate --split-debug-info=./debug/ || exit 1
-      - flutter build apk --release --verbose --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build appbundle --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
+      - flutter build apk --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
     depends_on:
       - prepare-build
 
@@ -91,23 +91,21 @@ steps:
     depends_on:
       - build-android
 
-#  - name: deploy-playstore
-#    image: ruby:3.2.6
-#    environment:
-#      PLAYSTORE_JSON_KEY:
-#        from_secret: playstore_service_account
-#      environment:
-#        JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-#    commands:
-#      - gem install fastlane
-#      - echo "$PLAYSTORE_JSON_KEY" | base64 -d > android/fastlane/playstore_key.json
-#      - cd android
-#      - fastlane deploy
-#    depends_on:
-#      - build-android
-#    when:
-#      branch: main
-#      event: push
+  - name: deploy-playstore
+    image: ruby:3.2.6
+    environment:
+      PLAYSTORE_JSON_KEY:
+        from_secret: playstore_service_account
+      PLAYSTORE_JSON_KEY_PATH: android/fastlane/playstore_key.json
+    commands:
+      - bundle install --gemfile=android/Gemfile
+      - echo "$PLAYSTORE_JSON_KEY" | base64 -d > android/fastlane/playstore_key.json
+      - cd android
+      - bundle exec fastlane deploy
+    depends_on:
+      - build-android
+    when:
+      event: tag
 
 
 
@@ -118,7 +116,7 @@ trigger:
   branch:
     - main
     - dev
-    - test-drone
+    - deploy/config
 
 ---
 kind: secret

@@ -52,3 +52,5 @@ env.g.dart
 android/upload-keystore.jks
 
 *64.txt
+
+playstore_key.json
