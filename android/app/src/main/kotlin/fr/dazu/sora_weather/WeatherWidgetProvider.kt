@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.view.View
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetPlugin
@@ -35,6 +36,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             val minTemp = widgetData.getString("widget_min_temp", "--°") ?: "--°"
             val maxTemp = widgetData.getString("widget_max_temp", "--°") ?: "--°"
             val iconPath = widgetData.getString("widget_icon_path", null)
+            val isLoading = widgetData.getBoolean("widget_loading", false)
 
             val views = RemoteViews(context.packageName, R.layout.weather_widget)
             views.setTextViewText(R.id.widget_temp, temp)
@@ -51,6 +53,11 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                     }
                 }
             }
+
+            views.setViewVisibility(
+                R.id.widget_loading_overlay,
+                if (isLoading) View.VISIBLE else View.GONE
+            )
 
             val refreshIntent = HomeWidgetBackgroundIntent.getBroadcast(
                 context,

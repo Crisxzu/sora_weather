@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:weather_app/common/app_logger.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/controller/weather_data.dart';
+
+import 'common/app_logger.dart';
 
 @pragma('vm:entry-point')
 Future<void> widgetBackgroundCallback(Uri? uri) async {
@@ -13,11 +14,9 @@ Future<void> widgetBackgroundCallback(Uri? uri) async {
   try {
     debugPrint('[WidgetCallback] Refresh triggered');
 
-    // Feedback immédiat : passer la temp à "..." le temps du fetch
-    await HomeWidget.saveWidgetData<String>('widget_temp', '...');
-    await HomeWidget.updateWidget(
-      androidName: 'WeatherWidgetProvider',
-    );
+    // Afficher l'overlay de chargement immédiatement
+    await HomeWidget.saveWidgetData<bool>('widget_loading', true);
+    await HomeWidget.updateWidget(androidName: 'WeatherWidgetProvider');
 
     final position = await HomeWidget.getWidgetData<String>('widget_last_position');
     final langIso = await HomeWidget.getWidgetData<String>('widget_lang_iso') ?? 'en';
@@ -34,14 +33,14 @@ Future<void> widgetBackgroundCallback(Uri? uri) async {
       if (position != null) 'position': position,
     });
 
+    // saveWidgetData remet widget_loading à false et met à jour le widget
     await controller.saveWidgetData(data, tempUnit, position: position, langIso: langIso);
 
     debugPrint('[WidgetCallback] Widget updated successfully');
   } catch (e) {
     debugPrint('[WidgetCallback] Error: $e');
-    // Remettre la dernière température connue
-    await HomeWidget.updateWidget(
-      androidName: 'WeatherWidgetProvider',
-    );
+    // Masquer l'overlay même en cas d'erreur
+    await HomeWidget.saveWidgetData<bool>('widget_loading', false);
+    await HomeWidget.updateWidget(androidName: 'WeatherWidgetProvider');
   }
 }

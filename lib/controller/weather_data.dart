@@ -79,6 +79,7 @@ class WeatherDataController {
       if (position != null) {
         await HomeWidget.saveWidgetData<String>('widget_last_position', position);
       }
+      await HomeWidget.saveWidgetData<bool>('widget_loading', false);
       await HomeWidget.updateWidget(
         androidName: 'WeatherWidgetProvider',
       );
