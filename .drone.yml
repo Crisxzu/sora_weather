@@ -45,6 +45,9 @@ steps:
       # Décodage du fichier contenant les variables environnement
       - echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
       - ls -l lib/env
+    volumes:
+      - name: pub-cache
+        path: /root/.pub-cache
 
   - name: build-android
     image: ghcr.io/crisxzu/flutter-ci:latest
@@ -65,6 +68,11 @@ steps:
       - flutter build apk --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
     depends_on:
       - prepare-build
+    volumes:
+      - name: pub-cache
+        path: /root/.pub-cache
+      - name: gradle-cache
+        path: /root/.gradle
 
   #- name: build-web
   #  image: ghcr.io/cirruslabs/flutter:3.35.2
@@ -97,6 +105,7 @@ steps:
       PLAYSTORE_JSON_KEY:
         from_secret: playstore_service_account
       PLAYSTORE_JSON_KEY_PATH: fastlane/playstore_key.json
+      BUNDLE_PATH: /usr/local/bundle
     commands:
       - bundle install --gemfile=android/Gemfile
       - echo "$PLAYSTORE_JSON_KEY" | base64 -d > android/fastlane/playstore_key.json
@@ -106,8 +115,20 @@ steps:
       - build-android
     when:
       event: tag
+    volumes:
+      - name: bundle-cache
+        path: /usr/local/bundle
 
-
+volumes:
+  - name: gradle-cache
+    host:
+      path: /var/cache/drone/gradle
+  - name: pub-cache
+    host:
+      path: /var/cache/drone/pub
+  - name: bundle-cache
+    host:
+      path: /var/cache/drone/bundle
 
 trigger:
   event:
