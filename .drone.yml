@@ -137,7 +137,6 @@ trigger:
   branch:
     - main
     - dev
-    - deploy/config
 
 ---
 kind: secret
