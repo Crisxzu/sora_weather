@@ -106,7 +106,8 @@ workflows:
           xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
           rm -f unsigned.pkg
     artifacts:
-      - build/macos/**/*.pkg
+      - build/macos/Build/Products/Release/*.app
+      - build/macos/Build/Products/Release/*.pkg
       - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
