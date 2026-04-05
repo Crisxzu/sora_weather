@@ -71,26 +71,15 @@ workflows:
         - pattern: 'v*'
           include: true
     environment:
+      ios_signing:
+        distribution_type: mac_app_store
+        bundle_identifier: com.dazu.sora-weather
       groups:
         - sora
       flutter: "3.32.3"
       xcode: "16.4"
       cocoapods: default
     scripts:
-      - name: Set up keychain
-        script: keychain initialize
-      - name: Fetch signing files
-        script: |
-          app-store-connect fetch-signing-files com.dazu.sora-weather \
-            --platform MAC_OS \
-            --type MAC_APP_STORE \
-            --create
-      - name: Fetch Mac Installer Distribution certificate
-        script: |
-          app-store-connect certificates list --type MAC_INSTALLER_DISTRIBUTION --save || \
-          app-store-connect certificates create --type MAC_INSTALLER_DISTRIBUTION --save
-      - name: Set up signing certificates
-        script: keychain add-certificates
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
       - name: Generate env file
