@@ -24,6 +24,10 @@ workflows:
     scripts:
       - name: Set up keychain
         script: keychain initialize
+      - name: Fetch iOS distribution certificate
+        script: |
+          app-store-connect certificates list --type IOS_DISTRIBUTION --save || \
+          app-store-connect certificates create --type IOS_DISTRIBUTION --save
       - name: Fetch signing files for main app
         script: |
           app-store-connect fetch-signing-files com.dazu.sora-weather \
