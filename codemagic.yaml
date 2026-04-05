@@ -107,13 +107,17 @@ workflows:
       - name: Package application
         script: |
           set -x
+          echo "=== Available certificates ==="
+          keychain list-certificates | jq -r '.[].common_name'
+          echo "=============================="
           APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
           cd $(dirname "$APP_NAME")
           PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
           xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
           INSTALLER_CERT_NAME=$(keychain list-certificates \
-            | jq '.[] | select(.common_name | contains("Mac Developer Installer")) | .common_name' \
-            | xargs)
+            | jq -r '.[] | select(.common_name | ascii_downcase | test("installer")) | .common_name' \
+            | head -1)
+          echo "Installer cert: $INSTALLER_CERT_NAME"
           xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
           rm -f unsigned.pkg
     artifacts:
