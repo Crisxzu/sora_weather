@@ -1,0 +1,8 @@
+/* Widget picker description */
+"widget_description" = "Displays current weather.";
+
+/* Refresh button action */
+"widget_refresh_action" = "Refresh Weather";
+
+/* Placeholder condition text */
+"widget_placeholder_condition" = "Sunny";

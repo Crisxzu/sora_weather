@@ -1,0 +1,8 @@
+/* Widget picker description */
+"widget_description" = "Affiche la météo actuelle.";
+
+/* Refresh button action */
+"widget_refresh_action" = "Actualiser la météo";
+
+/* Placeholder condition text */
+"widget_placeholder_condition" = "Ensoleillé";

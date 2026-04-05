@@ -50,7 +50,8 @@ private func downloadIcon(from urlString: String) async -> UIImage? {
 struct WeatherTimelineProvider: TimelineProvider {
     func placeholder(in context: Context) -> WeatherEntry {
         WeatherEntry(date: Date(), city: "Paris", temp: "18º",
-                     condition: "Ensoleillé", minMax: "12º / 24º", iconImage: nil,
+                     condition: String(localized: "widget_placeholder_condition"),
+                     minMax: "12º / 24º", iconImage: nil,
                      isLoading: false, loadingStartDate: nil)
     }
 
@@ -98,7 +99,7 @@ struct WeatherTimelineProvider: TimelineProvider {
 // MARK: - Refresh Intent
 
 struct RefreshWeatherIntent: AppIntent {
-    static var title: LocalizedStringResource = "Refresh Weather"
+    static var title: LocalizedStringResource = "widget_refresh_action"
     static var isDiscoverable: Bool = false
 
     func perform() async throws -> some IntentResult {
@@ -280,7 +281,7 @@ struct WeatherWidgetProvider: Widget {
                 }
         }
         .configurationDisplayName("Sora Weather")
-        .description("Affiche la météo actuelle.")
+        .description("widget_description")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
