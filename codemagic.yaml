@@ -106,14 +106,26 @@ workflows:
           flutter build macos --release \
             --build-name=${CM_TAG#v} \
             --build-number=$PROJECT_BUILD_NUMBER
+      - name: Package application
+        script: |
+          set -x
+          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
+          cd $(dirname "$APP_NAME")
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+            | jq -r '.[] | select(.common_name | ascii_downcase | test("installer")) | .common_name' \
+            | head -1)
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+          rm -f unsigned.pkg
       - name: Publish to TestFlight
         script: |
           app-store-connect publish \
-            --path "build/macos/Build/Products/Release/Sora.app" \
+            --path "$(find $(pwd) -name "*.pkg" -path "*/Release/*" | head -1)" \
             --platform MAC_OS \
             --max-build-processing-wait 0
     artifacts:
-      - build/macos/Build/Products/Release/*.app
+      - build/macos/Build/Products/Release/*.pkg
       - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
