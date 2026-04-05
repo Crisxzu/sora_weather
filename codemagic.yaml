@@ -5,6 +5,10 @@ workflows:
     max_build_duration: 120
     integrations:
       app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
     triggering:
       events:
         - tag
@@ -28,11 +32,9 @@ workflows:
         script: |
           xcode-project use-profiles
       - name: Get Flutter packages
-        script: |
-          flutter packages pub get
+        script: flutter pub get
       - name: Install pods
-        script: |
-          find . -name "Podfile" -execdir pod install \;
+        script: cd ios && pod install
       - name: Flutter build ipa
         script: |
           flutter build ipa --release \
@@ -59,7 +61,11 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 120
     integrations:
-      app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
+      app_store_connect: MacCodemagic # <-- nom de l'intégration dans Codemagic UI
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
     triggering:
       events:
         - tag
@@ -95,7 +101,7 @@ workflows:
       - name: Get Flutter packages
         script: flutter pub get
       - name: Install pods
-        script: find . -name "Podfile" -execdir pod install \;
+        script: cd macos && pod install
       - name: Build Flutter macOS
         script: |
           flutter config --enable-macos-desktop
