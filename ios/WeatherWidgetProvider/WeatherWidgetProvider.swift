@@ -13,6 +13,8 @@ struct WeatherEntry: TimelineEntry {
     let condition: String
     let minMax: String
     let iconImage: UIImage?
+    let isLoading: Bool
+    let loadingStartDate: Date?
 }
 
 // MARK: - Icon helpers
@@ -48,7 +50,8 @@ private func downloadIcon(from urlString: String) async -> UIImage? {
 struct WeatherTimelineProvider: TimelineProvider {
     func placeholder(in context: Context) -> WeatherEntry {
         WeatherEntry(date: Date(), city: "Paris", temp: "18º",
-                     condition: "Ensoleillé", minMax: "12º / 24º", iconImage: nil)
+                     condition: "Ensoleillé", minMax: "12º / 24º", iconImage: nil,
+                     isLoading: false, loadingStartDate: nil)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
@@ -73,6 +76,11 @@ struct WeatherTimelineProvider: TimelineProvider {
         let iconURLStr = defaults?.string(forKey: "widget_icon_url")
 
         let iconImage = iconURLStr != nil ? await downloadIcon(from: iconURLStr!) : nil
+        let isLoading = defaults?.bool(forKey: "widget_loading") ?? false
+        let loadingStartInterval = defaults?.double(forKey: "widget_loading_start")
+        let loadingStartDate: Date? = (loadingStartInterval ?? 0) > 0
+            ? Date(timeIntervalSince1970: loadingStartInterval!)
+            : nil
 
         return WeatherEntry(
             date: Date(),
@@ -80,7 +88,9 @@ struct WeatherTimelineProvider: TimelineProvider {
             temp: temp,
             condition: condition,
             minMax: "\(minTemp) / \(maxTemp)",
-            iconImage: iconImage
+            iconImage: iconImage,
+            isLoading: isLoading,
+            loadingStartDate: loadingStartDate
         )
     }
 }
@@ -94,8 +104,13 @@ struct RefreshWeatherIntent: AppIntent {
     func perform() async throws -> some IntentResult {
         let defaults = UserDefaults(suiteName: appGroupId)
 
+        defaults?.set(true, forKey: "widget_loading")
+        defaults?.set(Date().timeIntervalSince1970, forKey: "widget_loading_start")
+        WidgetCenter.shared.reloadAllTimelines()
+
         guard let apiLink = defaults?.string(forKey: "widget_api_link"),
               let apiKey  = defaults?.string(forKey: "widget_api_key") else {
+            defaults?.set(false, forKey: "widget_loading")
             WidgetCenter.shared.reloadAllTimelines()
             return .result()
         }
@@ -126,6 +141,7 @@ struct RefreshWeatherIntent: AppIntent {
               let location  = json["location"]  as? [String: Any],
               let current   = json["current"]   as? [String: Any],
               let condition = current["condition"] as? [String: Any] else {
+            defaults?.set(false, forKey: "widget_loading")
             WidgetCenter.shared.reloadAllTimelines()
             return .result()
         }
@@ -151,12 +167,14 @@ struct RefreshWeatherIntent: AppIntent {
         }
         _ = await downloadIcon(from: iconURL)
 
-        defaults?.set(city,       forKey: "widget_city")
+        defaults?.set(city,         forKey: "widget_city")
         defaults?.set(fmt(tempRaw), forKey: "widget_temp")
-        defaults?.set(condText,   forKey: "widget_condition")
-        defaults?.set(fmt(minRaw), forKey: "widget_min_temp")
-        defaults?.set(fmt(maxRaw), forKey: "widget_max_temp")
-        defaults?.set(iconURL,    forKey: "widget_icon_url")
+        defaults?.set(condText,     forKey: "widget_condition")
+        defaults?.set(fmt(minRaw),  forKey: "widget_min_temp")
+        defaults?.set(fmt(maxRaw),  forKey: "widget_max_temp")
+        defaults?.set(iconURL,      forKey: "widget_icon_url")
+        defaults?.set(false,        forKey: "widget_loading")
+        defaults?.set(0.0,          forKey: "widget_loading_start")
 
         WidgetCenter.shared.reloadAllTimelines()
         return .result()
@@ -169,56 +187,76 @@ struct WeatherWidgetView: View {
     var entry: WeatherEntry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // Row 1 : ville + bouton refresh
-            HStack {
-                Text(entry.city)
-                    .font(.system(size: 14))
-                    .foregroundColor(.white.opacity(0.8))
-                    .lineLimit(1)
-                Spacer()
-                Button(intent: RefreshWeatherIntent()) {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 14, weight: .medium))
+        ZStack {
+            // Contenu principal
+            VStack(alignment: .leading, spacing: 0) {
+                // Row 1 : ville + bouton refresh
+                HStack {
+                    Text(entry.city)
+                        .font(.system(size: 14))
                         .foregroundColor(.white.opacity(0.8))
-                        .frame(width: 28, height: 28)
-                }
-                .buttonStyle(.plain)
-            }
-
-            Spacer()
-
-            // Row 2 : température + icône
-            HStack(alignment: .center, spacing: 6) {
-                Text(entry.temp)
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundColor(.white)
-
-                if let img = entry.iconImage {
-                    Image(uiImage: img)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 44, height: 44)
+                        .lineLimit(1)
+                    Spacer()
+                    Button(intent: RefreshWeatherIntent()) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white.opacity(0.8))
+                            .frame(width: 28, height: 28)
+                    }
+                    .buttonStyle(.plain)
                 }
 
                 Spacer()
-            }
 
-            Spacer()
+                // Row 2 : température + icône
+                HStack(alignment: .center, spacing: 6) {
+                    Text(entry.temp)
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundColor(.white)
 
-            // Row 3 : condition + min/max
-            HStack {
-                Text(entry.condition)
-                    .font(.system(size: 12))
-                    .foregroundColor(.white.opacity(0.6))
-                    .lineLimit(1)
+                    if let img = entry.iconImage {
+                        Image(uiImage: img)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 44, height: 44)
+                    }
+
+                    Spacer()
+                }
+
                 Spacer()
-                Text(entry.minMax)
-                    .font(.system(size: 12))
-                    .foregroundColor(.white.opacity(0.6))
+
+                // Row 3 : condition + min/max
+                HStack {
+                    Text(entry.condition)
+                        .font(.system(size: 12))
+                        .foregroundColor(.white.opacity(0.6))
+                        .lineLimit(1)
+                    Spacer()
+                    Text(entry.minMax)
+                        .font(.system(size: 12))
+                        .foregroundColor(.white.opacity(0.6))
+                }
+            }
+            .padding(16)
+
+            // Overlay de chargement
+            if entry.isLoading, let startDate = entry.loadingStartDate {
+                Color.white.opacity(0.55)
+                    .ignoresSafeArea()
+                ProgressView(
+                    timerInterval: startDate...startDate.addingTimeInterval(10),
+                    countsDown: false
+                ) {
+                    EmptyView()
+                } currentValueLabel: {
+                    EmptyView()
+                }
+                .progressViewStyle(.circular)
+                .tint(Color(red: 0.11, green: 0.19, blue: 0.41))
+                .scaleEffect(1.4)
             }
         }
-        .padding(16)
     }
 }
 
