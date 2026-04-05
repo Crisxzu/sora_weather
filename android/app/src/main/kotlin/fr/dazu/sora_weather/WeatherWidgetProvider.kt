@@ -1,13 +1,15 @@
 package fr.dazu.sora_weather
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetPlugin
 import java.io.File
 
@@ -59,9 +61,15 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                 if (isLoading) View.VISIBLE else View.GONE
             )
 
-            val refreshIntent = HomeWidgetBackgroundIntent.getBroadcast(
+            val flags = PendingIntent.FLAG_UPDATE_CURRENT or
+                if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0
+            val refreshIntent = PendingIntent.getBroadcast(
                 context,
-                Uri.parse("homeWidget://refresh")
+                0,
+                Intent(context, WeatherWidgetRefreshReceiver::class.java).apply {
+                    data = Uri.parse("homeWidget://refresh")
+                },
+                flags
             )
             views.setOnClickPendingIntent(R.id.widget_refresh_btn, refreshIntent)
 

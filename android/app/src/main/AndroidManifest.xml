@@ -45,6 +45,10 @@
         </receiver>
 
         <receiver
+            android:name=".WeatherWidgetRefreshReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name="es.antonborri.home_widget.HomeWidgetBackgroundReceiver"
             android:exported="true" />
 
