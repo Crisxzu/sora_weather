@@ -16,37 +16,21 @@ workflows:
         - pattern: 'v*'
           include: true
     environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.dazu.sora-weather
       groups:
         - sora
       flutter: "3.32.3"
       xcode: "16.4"
       cocoapods: default
     scripts:
-      - name: Set up keychain
-        script: keychain initialize
-      - name: Fetch iOS distribution certificate
-        script: |
-          app-store-connect certificates list --type IOS_DISTRIBUTION --save || \
-          app-store-connect certificates create --type IOS_DISTRIBUTION --save
-      - name: Fetch signing files for main app
-        script: |
-          app-store-connect fetch-signing-files com.dazu.sora-weather \
-            --platform IOS \
-            --type IOS_APP_STORE \
-            --create
-      - name: Fetch signing files for widget extension
-        script: |
-          app-store-connect fetch-signing-files com.dazu.sora-weather.WeatherWidgetProvider \
-            --platform IOS \
-            --type IOS_APP_STORE \
-            --create
-      - name: Set up signing certificates
-        script: keychain add-certificates
-      - name: Set up code signing settings on Xcode project
-        script: xcode-project use-profiles
       - name: Generate env file
         script: |
           echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
       - name: Get Flutter packages
         script: flutter pub get
       - name: Install pods
@@ -54,8 +38,6 @@ workflows:
       - name: Flutter build ipa
         script: |
           flutter build ipa --release \
-            --build-name=${CM_TAG#v} \
-            --build-number=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1)) \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
@@ -121,9 +103,7 @@ workflows:
       - name: Build Flutter macOS
         script: |
           flutter config --enable-macos-desktop
-          flutter build macos --release \
-            --build-name=${CM_TAG#v} \
-            --build-number=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1)) \
+          flutter build macos --release
       - name: Package application
         script: |
           set -x
