@@ -89,25 +89,24 @@ workflows:
         script: flutter pub get
       - name: Install pods
         script: cd macos && pod install
-      - name: Build Flutter macOS
+      - name: Build and archive macOS
         script: |
           flutter config --enable-macos-desktop
           flutter build macos --release
-      - name: Package application
+          xcodebuild archive \
+            -workspace macos/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath /tmp/Sora.xcarchive \
+            OTHER_CODE_SIGN_FLAGS="--keychain=$KEYCHAIN_PATH"
+      - name: Export package
         script: |
-          set -x
-          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
-          cd $(dirname "$APP_NAME")
-          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
-          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
-          INSTALLER_CERT_NAME=$(keychain list-certificates \
-            | jq '.[] | select(.common_name | contains("Mac Developer Installer")) | .common_name' \
-            | xargs)
-          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
-          rm -f unsigned.pkg
+          xcodebuild -exportArchive \
+            -archivePath /tmp/Sora.xcarchive \
+            -exportPath /tmp/macos_export \
+            -exportOptionsPlist /Users/builder/export_options.plist
     artifacts:
-      - build/macos/Build/Products/Release/*.app
-      - build/macos/Build/Products/Release/*.pkg
+      - /tmp/macos_export/*.pkg
       - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
