@@ -7,7 +7,7 @@ workflows:
       app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
     cache:
       cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
+        - $FLUTTER_ROOT
         - $HOME/Library/Caches/CocoaPods
     triggering:
       events:
@@ -62,7 +62,7 @@ workflows:
       app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
     cache:
       cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
+        - $FLUTTER_ROOT
         - $HOME/Library/Caches/CocoaPods
     triggering:
       events:
