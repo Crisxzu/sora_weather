@@ -56,3 +56,5 @@ android/upload-keystore.jks
 android/fastlane/playstore_key.json
 android/fastlane/report.xml
 encode-secrets-file.sh
+
+CLAUDE.md
