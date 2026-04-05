@@ -71,15 +71,26 @@ workflows:
         - pattern: 'v*'
           include: true
     environment:
-      ios_signing:
-        distribution_type: ad_hoc
-        bundle_identifier: com.dazu.sora-weather
       groups:
         - sora
       flutter: "3.32.3"
       xcode: "16.4"
       cocoapods: default
     scripts:
+      - name: Set up keychain
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files com.dazu.sora-weather \
+            --platform MAC_OS \
+            --type MAC_APP_STORE \
+            --create
+      - name: Fetch Mac Installer Distribution certificate
+        script: |
+          app-store-connect certificates list --type MAC_INSTALLER_DISTRIBUTION --save || \
+          app-store-connect certificates create --type MAC_INSTALLER_DISTRIBUTION --save
+      - name: Set up signing certificates
+        script: keychain add-certificates
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
       - name: Generate env file
@@ -89,24 +100,24 @@ workflows:
         script: flutter pub get
       - name: Install pods
         script: cd macos && pod install
-      - name: Build and archive macOS
+      - name: Build Flutter macOS
         script: |
           flutter config --enable-macos-desktop
           flutter build macos --release
-          xcodebuild archive \
-            -workspace macos/Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -archivePath /tmp/Sora.xcarchive \
-            OTHER_CODE_SIGN_FLAGS="--keychain=$KEYCHAIN_PATH"
-      - name: Export package
+      - name: Package application
         script: |
-          xcodebuild -exportArchive \
-            -archivePath /tmp/Sora.xcarchive \
-            -exportPath /tmp/macos_export \
-            -exportOptionsPlist /Users/builder/export_options.plist
+          set -x
+          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
+          cd $(dirname "$APP_NAME")
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+            | jq '.[] | select(.common_name | contains("Mac Developer Installer")) | .common_name' \
+            | xargs)
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+          rm -f unsigned.pkg
     artifacts:
-      - /tmp/macos_export/*.pkg
+      - build/macos/**/*.pkg
       - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
@@ -119,5 +130,3 @@ workflows:
         auth: integration
         submit_to_testflight: true
         submit_to_app_store: false
-
-
