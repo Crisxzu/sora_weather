@@ -103,6 +103,7 @@ workflows:
       - name: Build and archive macOS
         script: |
           flutter config --enable-macos-desktop
+          flutter build macos --release
           xcodebuild archive \
             -workspace macos/Runner.xcworkspace \
             -scheme Runner \
