@@ -67,41 +67,55 @@ workflows:
         - pattern: 'v*'
           include: true
     environment:
-      macos_signing:
-        distribution_type: mac_app_store
-        bundle_identifier: com.dazu.sora-weather
       groups:
         - sora
       flutter: "3.32.3"
       xcode: "16.4"
       cocoapods: default
     scripts:
+      - name: Set up keychain
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files com.dazu.sora-weather \
+            --platform MAC_OS \
+            --type MAC_APP_STORE \
+            --create
+      - name: Fetch Mac Installer Distribution certificate
+        script: |
+          app-store-connect certificates list --type MAC_INSTALLER_DISTRIBUTION --save || \
+          app-store-connect certificates create --type MAC_INSTALLER_DISTRIBUTION --save
+      - name: Set up signing certificates
+        script: keychain add-certificates
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
       - name: Generate env file
         script: |
           echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
-      - name: Set up code signing settings on Xcode project
-        script: |
-          xcode-project use-profiles
       - name: Get Flutter packages
-        script: |
-          flutter packages pub get
+        script: flutter pub get
       - name: Install pods
+        script: find . -name "Podfile" -execdir pod install \;
+      - name: Build Flutter macOS
         script: |
-          find . -name "Podfile" -execdir pod install \;
-      - name: Flutter build macOS
-        script: |
+          flutter config --enable-macos-desktop
           flutter build macos --release \
             --build-name=${CM_TAG#v} \
-            --build-number=$(($(app-store-connect get-latest-testflight-build-number --platform=MAC_OS "$MACOS_APP_ID") + 1))
-      - name: Package for Mac App Store
+            --build-number=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1)) \
+      - name: Package application
         script: |
-          APP_PATH=$(find build/macos/Build/Products/Release -name "*.app" | head -1)
-          xcrun productbuild \
-            --component "$APP_PATH" /Applications \
-            --sign "3rd Party Mac Developer Installer: $(keychain list-certificates | grep 'Mac Developer Installer' | awk -F'"' '{print $2}' | head -1)" \
-            build/macos/Sora.pkg
+          set -x
+          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
+          cd $(dirname "$APP_NAME")
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+            | jq '.[] | select(.common_name | contains("Mac Developer Installer")) | .common_name' \
+            | xargs)
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+          rm -f unsigned.pkg
     artifacts:
-      - build/macos/Sora.pkg
+      - build/macos/**/*.pkg
       - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
@@ -114,33 +128,5 @@ workflows:
         auth: integration
         submit_to_testflight: true
         submit_to_app_store: false
-
-  web-workflow:
-    name: Web app workflow
-    max_build_duration: 10
-    environment:
-      flutter: stable
-    scripts:
-      - name: Get Flutter packages
-        script: |
-          flutter packages pub get
-      - name: Flutter analyze
-        script: |
-          flutter analyze
-      - name: Flutter unit tests
-        script: |
-          flutter test
-      - name: Flutter build webapp
-        script: |
-          flutter build web --release
-          cd build/web
-          7z a -r ../web.zip ./*
-    artifacts:
-      - build/web.zip
-      - flutter_drive.log
-    publishing:
-      email:
-        recipients:
-          - user_1@example.com
 
 
