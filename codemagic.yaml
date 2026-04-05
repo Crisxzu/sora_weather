@@ -100,28 +100,24 @@ workflows:
         script: flutter pub get
       - name: Install pods
         script: cd macos && pod install
-      - name: Build Flutter macOS
+      - name: Build and archive macOS
         script: |
           flutter config --enable-macos-desktop
-          flutter build macos --release
-      - name: Package application
+          xcodebuild archive \
+            -workspace macos/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath /tmp/Sora.xcarchive \
+            -destination "generic/platform=macOS" \
+      - name: Export package
         script: |
-          set -x
-          echo "=== Available certificates ==="
-          keychain list-certificates | jq -r '.[].common_name'
-          echo "=============================="
-          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
-          cd $(dirname "$APP_NAME")
-          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
-          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
-          INSTALLER_CERT_NAME=$(keychain list-certificates \
-            | jq -r '.[] | select(.common_name | ascii_downcase | test("installer")) | .common_name' \
-            | head -1)
-          echo "Installer cert: $INSTALLER_CERT_NAME"
-          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
-          rm -f unsigned.pkg
+          xcodebuild -exportArchive \
+            -archivePath /tmp/Sora.xcarchive \
+            -exportPath /tmp/macos_export \
+            -exportOptionsPlist /Users/builder/export_options.plist
     artifacts:
-      - build/macos/**/*.pkg
+      - /tmp/macos_export/*.pkg
+      - /tmp/Sora.xcarchive
       - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
