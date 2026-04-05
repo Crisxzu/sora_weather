@@ -100,25 +100,12 @@ workflows:
         script: flutter pub get
       - name: Install pods
         script: cd macos && pod install
-      - name: Build and archive macOS
+      - name: Build Flutter macOS
         script: |
           flutter config --enable-macos-desktop
           flutter build macos --release
-          xcodebuild archive \
-            -workspace macos/Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -archivePath /tmp/Sora.xcarchive \
-            -destination "generic/platform=macOS" \
-      - name: Export package
-        script: |
-          xcodebuild -exportArchive \
-            -archivePath /tmp/Sora.xcarchive \
-            -exportPath /tmp/macos_export \
-            -exportOptionsPlist /Users/builder/export_options.plist
     artifacts:
-      - /tmp/macos_export/*.pkg
-      - /tmp/Sora.xcarchive
+      - build/macos/Build/Products/Release/*.app
       - /tmp/xcodebuild_logs/*.log
     publishing:
       email:
