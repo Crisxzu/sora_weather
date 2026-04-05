@@ -85,10 +85,6 @@ workflows:
             --platform MAC_OS \
             --type MAC_APP_STORE \
             --create
-      - name: Fetch Mac Installer Distribution certificate
-        script: |
-          app-store-connect certificates list --type MAC_INSTALLER_DISTRIBUTION --save || \
-          app-store-connect certificates create --type MAC_INSTALLER_DISTRIBUTION --save
       - name: Set up signing certificates
         script: keychain add-certificates
       - name: Set up code signing settings on Xcode project
