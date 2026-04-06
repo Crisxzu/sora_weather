@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
@@ -29,7 +27,8 @@ Future main() async {
   var box = await Hive.openBox("appParams");
   await AppLogger.initialize();
   HomeWidget.setAppGroupId('group.fr.dazu.sora-weather');
-  HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
+  await HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
+
   runApp(MyApp());
 }
 

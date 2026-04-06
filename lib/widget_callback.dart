@@ -28,7 +28,7 @@ Future<void> widgetBackgroundCallback(Uri? uri) async {
 
     debugPrint('[WidgetCallback] Fetching data (position: $position, lang: $langIso)');
 
-    AppLogger.initialize();
+    await AppLogger.initialize();
 
     final controller = WeatherDataController();
     final data = await controller.fetchApiWeatherData({

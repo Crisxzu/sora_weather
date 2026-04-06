@@ -91,6 +91,11 @@ class WeatherDataController {
       );
     } catch (e) {
       AppLogger.instance.e('Error saving widget data: $e');
+      await HomeWidget.saveWidgetData<bool>('widget_loading', false);
+      await HomeWidget.updateWidget(
+        androidName: 'WeatherWidgetProvider',
+        iOSName: 'WeatherWidgetProvider',
+      );
     }
   }
 
