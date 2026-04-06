@@ -175,6 +175,12 @@ class Utils {
       return false;
     }
   }
+
+  static bool checkIfMobile() {
+    return !kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS);
+  }
 }
 
 class TempUnit {

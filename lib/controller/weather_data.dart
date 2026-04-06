@@ -58,6 +58,8 @@ class WeatherDataController {
     String? position,
     String langIso = 'en',
   }) async {
+    if (!Utils.checkIfMobile()) return;
+
     try {
       final iconCode = data.current.condition.iconCode;
       final isDay = data.current.isDay;
