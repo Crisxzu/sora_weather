@@ -1,6 +1,9 @@
 import AppIntents
+import OSLog
 import WidgetKit
 import SwiftUI
+
+private let logger = Logger(subsystem: "fr.dazu.sora-weather.WeatherWidgetProvider", category: "RefreshIntent")
 
 private let appGroupId = "group.fr.dazu.sora-weather"
 
@@ -103,49 +106,80 @@ struct RefreshWeatherIntent: AppIntent {
     static var isDiscoverable: Bool = false
 
     func perform() async throws -> some IntentResult {
+        logger.info("perform() started")
         let defaults = UserDefaults(suiteName: appGroupId)
 
-        defaults?.set(true, forKey: "widget_loading")
-        defaults?.set(Date().timeIntervalSince1970, forKey: "widget_loading_start")
-        WidgetCenter.shared.reloadAllTimelines()
-
-        guard let apiLink = defaults?.string(forKey: "widget_api_link"),
-              let apiKey  = defaults?.string(forKey: "widget_api_key") else {
-            defaults?.set(false, forKey: "widget_loading")
-            WidgetCenter.shared.reloadAllTimelines()
+        guard let defaults = defaults else {
+            logger.error("UserDefaults(suiteName:) returned nil — App Group not accessible")
             return .result()
         }
 
-        let position   = defaults?.string(forKey: "widget_last_position")
-        let langIso    = defaults?.string(forKey: "widget_lang_iso")    ?? "en"
-        let unitName   = defaults?.string(forKey: "widget_unit_name")   ?? "celsius"
-        let baseIconURL = defaults?.string(forKey: "widget_base_icon_url") ?? ""
+        defaults.set(true, forKey: "widget_loading")
+        defaults.set(Date().timeIntervalSince1970, forKey: "widget_loading_start")
+        defaults.set(Date().timeIntervalSince1970, forKey: "widget_last_refresh_attempt")
+        WidgetCenter.shared.reloadAllTimelines()
+        logger.info("Loading state set, timeline reload requested")
+
+        guard let apiLink = defaults.string(forKey: "widget_api_link"),
+              let apiKey  = defaults.string(forKey: "widget_api_key") else {
+            logger.error("Missing widget_api_link or widget_api_key in UserDefaults")
+            defaults.set(false, forKey: "widget_loading")
+            WidgetCenter.shared.reloadAllTimelines()
+            return .result()
+        }
+        logger.info("Credentials found, apiLink=\(apiLink, privacy: .private)")
+
+        let position    = defaults.string(forKey: "widget_last_position")
+        let langIso     = defaults.string(forKey: "widget_lang_iso")     ?? "en"
+        let unitName    = defaults.string(forKey: "widget_unit_name")    ?? "celsius"
+        let baseIconURL = defaults.string(forKey: "widget_base_icon_url") ?? ""
         let isFahrenheit = unitName == "fahrenheit"
 
-        var components = URLComponents(string: "\(apiLink)/weather")!
+        let trimmedLink = apiLink.hasSuffix("/") ? String(apiLink.dropLast()) : apiLink
+        guard var components = URLComponents(string: "\(trimmedLink)/weather") else {
+            logger.error("Failed to parse URLComponents from: \(trimmedLink)/weather")
+            defaults.set(false, forKey: "widget_loading")
+            WidgetCenter.shared.reloadAllTimelines()
+            return .result()
+        }
         var queryItems = [URLQueryItem(name: "lang_iso", value: langIso)]
         if let pos = position { queryItems.append(URLQueryItem(name: "position", value: pos)) }
         components.queryItems = queryItems
 
         guard let url = components.url else {
+            logger.error("components.url returned nil")
+            defaults.set(false, forKey: "widget_loading")
+            WidgetCenter.shared.reloadAllTimelines()
+            return .result()
+        }
+        logger.info("Fetching URL: \(url.absoluteString, privacy: .private)")
+
+        var request = URLRequest(url: url)
+        request.setValue("Api-Key \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.timeoutInterval = 30
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+
+        guard let (data, response) = try? await URLSession.shared.data(for: request) else {
+            logger.error("URLSession.data threw an error (network unreachable or timeout)")
+            defaults.set(false, forKey: "widget_loading")
             WidgetCenter.shared.reloadAllTimelines()
             return .result()
         }
 
-        var request = URLRequest(url: url)
-        request.setValue("Api-Key \(apiKey)", forHTTPHeaderField: "Authorization")
-        request.timeoutInterval = 10
+        let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+        logger.info("HTTP response status: \(statusCode)")
 
-        guard let (data, response) = try? await URLSession.shared.data(for: request),
-              (response as? HTTPURLResponse)?.statusCode == 200,
+        guard statusCode == 200,
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let location  = json["location"]  as? [String: Any],
               let current   = json["current"]   as? [String: Any],
               let condition = current["condition"] as? [String: Any] else {
-            defaults?.set(false, forKey: "widget_loading")
+            logger.error("Bad response or JSON parse failure (status: \(statusCode))")
+            defaults.set(false, forKey: "widget_loading")
             WidgetCenter.shared.reloadAllTimelines()
             return .result()
         }
+        logger.info("JSON parsed successfully")
 
         func convert(_ raw: Double) -> Int {
             isFahrenheit ? Int((raw * 1.8) + 32) : Int(raw)
@@ -168,15 +202,16 @@ struct RefreshWeatherIntent: AppIntent {
         }
         _ = await downloadIcon(from: iconURL)
 
-        defaults?.set(city,         forKey: "widget_city")
-        defaults?.set(fmt(tempRaw), forKey: "widget_temp")
-        defaults?.set(condText,     forKey: "widget_condition")
-        defaults?.set(fmt(minRaw),  forKey: "widget_min_temp")
-        defaults?.set(fmt(maxRaw),  forKey: "widget_max_temp")
-        defaults?.set(iconURL,      forKey: "widget_icon_url")
-        defaults?.set(false,        forKey: "widget_loading")
-        defaults?.set(0.0,          forKey: "widget_loading_start")
+        defaults.set(city,         forKey: "widget_city")
+        defaults.set(fmt(tempRaw), forKey: "widget_temp")
+        defaults.set(condText,     forKey: "widget_condition")
+        defaults.set(fmt(minRaw),  forKey: "widget_min_temp")
+        defaults.set(fmt(maxRaw),  forKey: "widget_max_temp")
+        defaults.set(iconURL,      forKey: "widget_icon_url")
+        defaults.set(false,        forKey: "widget_loading")
+        defaults.set(0.0,          forKey: "widget_loading_start")
 
+        logger.info("Data saved successfully: city=\(city), temp=\(fmt(tempRaw))")
         WidgetCenter.shared.reloadAllTimelines()
         return .result()
     }
