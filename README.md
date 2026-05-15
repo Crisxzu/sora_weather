@@ -45,7 +45,7 @@ DEBUG_MODE = 0
 
 ## 📱 Disponibilité
 
-- ✅ **Android** : Disponible via téléchargement APK
+- ✅ **Android** : Disponible via APK et sur le [Play Store](https://play.google.com/store/apps/details?id=fr.dazu.sora_weather) sous le nom **Kumi** (renommage imposé pour des raisons de droits)
 - ✅ **iOS** : Fichier archive disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
 - ✅ **macOS** : Fichier app disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
 - ✅ **Windows** : Exécutable EXE disponible ! Aussi dispo sur [Microsoft Store](https://apps.microsoft.com/detail/9n5bv4lcr3gx)
