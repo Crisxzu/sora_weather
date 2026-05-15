@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
 import 'package:weather_app/providers/location.dart';
+import 'package:weather_app/providers/params.dart';
 
 class LocationsPage extends StatefulWidget {
   const LocationsPage({super.key});
@@ -138,6 +139,10 @@ class _LocationsPageState extends State<LocationsPage> {
                 ),
                 onTap: () {
                   locationProvider.setActive(index);
+                  Provider.of<ParamsProvider>(context, listen: false)
+                      .refreshIndicatorKey
+                      ?.currentState
+                      ?.show();
                   Navigator.pop(context);
                 },
               );
