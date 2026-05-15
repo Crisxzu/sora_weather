@@ -116,6 +116,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get country => 'Country';
+
+  @override
+  String get state => 'State / Region';
+
+  @override
+  String get city => 'City';
+
+  @override
   String get myLocations => 'My locations';
 
   @override

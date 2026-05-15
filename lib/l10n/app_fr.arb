@@ -38,6 +38,9 @@
       "city": { "type": "String" }
     }
   },
+  "country": "Pays",
+  "state": "État / Région",
+  "city": "Ville",
   "myLocations": "Mes villes",
   "addCity": "Ajouter une ville",
   "myPosition": "Ma position",

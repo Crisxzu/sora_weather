@@ -117,6 +117,15 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get country => 'Pays';
+
+  @override
+  String get state => 'État / Région';
+
+  @override
+  String get city => 'Ville';
+
+  @override
   String get myLocations => 'Mes villes';
 
   @override

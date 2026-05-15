@@ -302,6 +302,24 @@ abstract class AppLocalizations {
   /// **'Data provided for {city}, as selected in your locations.'**
   String locationCityMode(String city);
 
+  /// No description provided for @country.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get country;
+
+  /// No description provided for @state.
+  ///
+  /// In en, this message translates to:
+  /// **'State / Region'**
+  String get state;
+
+  /// No description provided for @city.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get city;
+
   /// No description provided for @myLocations.
   ///
   /// In en, this message translates to:
