@@ -68,8 +68,8 @@ class LocationProvider extends ChangeNotifier {
     required String cityName,
     required String countryName,
     String? stateName,
+    String? countryEmoji,
   }) {
-    // Avoid duplicates
     final exists = _locations.any((l) =>
         !l.isGps &&
         l.cityName == cityName &&
@@ -80,6 +80,7 @@ class LocationProvider extends ChangeNotifier {
       cityName: cityName,
       countryName: countryName,
       stateName: stateName,
+      countryEmoji: countryEmoji,
     ));
     _save();
     notifyListeners();

@@ -18,6 +18,25 @@ class _LocationsPageState extends State<LocationsPage> {
   String? _selectedState;
   String? _selectedCity;
 
+  // country_state_city_picker stores country as "🇫🇷    France" — extract emoji prefix
+  String? _extractEmoji(String? countryWithEmoji) {
+    if (countryWithEmoji == null || countryWithEmoji.isEmpty) return null;
+    final runes = countryWithEmoji.runes.toList();
+    if (runes.isEmpty) return null;
+    // Emoji flags are two regional indicator symbols (each is > 0x1F000)
+    if (runes[0] > 0x1F000) {
+      final emojiRunes = runes.takeWhile((r) => r > 0x1F000 || r == 0xFE0F).toList();
+      return String.fromCharCodes(emojiRunes);
+    }
+    return null;
+  }
+
+  // Extract clean country name without emoji prefix and extra spaces
+  String _extractCountryName(String? countryWithEmoji) {
+    if (countryWithEmoji == null) return '';
+    return countryWithEmoji.replaceAll(RegExp(r'[\u{1F000}-\u{1FFFF}]', unicode: true), '').trim();
+  }
+
   void _showAddCitySheet(BuildContext context) {
     _selectedCountry = null;
     _selectedState = null;
@@ -67,8 +86,9 @@ class _LocationsPageState extends State<LocationsPage> {
                         ? () {
                             Provider.of<LocationProvider>(ctx, listen: false).addCity(
                               cityName: _selectedCity!,
-                              countryName: _selectedCountry ?? '',
+                              countryName: _extractCountryName(_selectedCountry),
                               stateName: _selectedState,
+                              countryEmoji: _extractEmoji(_selectedCountry),
                             );
                             Navigator.pop(ctx);
                           }
@@ -105,10 +125,9 @@ class _LocationsPageState extends State<LocationsPage> {
               final isGps = loc.isGps;
 
               return ListTile(
-                leading: Icon(
-                  isGps ? Icons.my_location : Icons.location_city,
-                  color: isActive ? Theme.of(context).colorScheme.primary : null,
-                ),
+                leading: isGps
+                    ? Icon(Icons.my_location, color: isActive ? Theme.of(context).colorScheme.primary : null)
+                    : Text(loc.countryEmoji ?? '🌍', style: const TextStyle(fontSize: 24)),
                 title: Text(
                   isGps ? l10n.myPosition : loc.cityName ?? '',
                   style: textStyle['body']!.copyWith(

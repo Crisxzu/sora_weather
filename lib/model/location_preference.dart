@@ -7,7 +7,7 @@ enum LocationType { gps, city }
 @HiveType(typeId: 1)
 class LocationPreference extends HiveObject {
   @HiveField(0)
-  final String type; // 'gps' or 'city'
+  final String type;
 
   @HiveField(1)
   final String? cityName;
@@ -18,11 +18,15 @@ class LocationPreference extends HiveObject {
   @HiveField(3)
   final String? stateName;
 
+  @HiveField(4)
+  final String? countryEmoji;
+
   LocationPreference({
     required this.type,
     this.cityName,
     this.countryName,
     this.stateName,
+    this.countryEmoji,
   });
 
   bool get isGps => type == 'gps';
@@ -39,11 +43,13 @@ class LocationPreference extends HiveObject {
     required String cityName,
     required String countryName,
     String? stateName,
+    String? countryEmoji,
   }) =>
       LocationPreference(
         type: 'city',
         cityName: cityName,
         countryName: countryName,
         stateName: stateName,
+        countryEmoji: countryEmoji,
       );
 }
