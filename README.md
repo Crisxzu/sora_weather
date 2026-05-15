@@ -62,6 +62,7 @@ Cette application a été construite dans le cadre de ma série de tutoriels ét
 | 03      | On code notre App Météo (Android)                           | https://youtu.be/sOW1gINQxF0 |
 | 04      | Rendre notre App Météo fonctionnelle partout                | https://youtu.be/YSFwwXcVbwI |
 | 05      | On tente de déployer sur Play Store (ça s'est mal passé 😅) | https://youtu.be/ZA40PPwi29I |
+| 06      | On déploie sur l'App Store et le Mac App Store               | https://youtu.be/aD6dlOkEUNI |
 | ...     | ...                                                         | ...                          |
 
 ## ✨ Fonctionnalités
