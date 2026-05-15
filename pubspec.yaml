@@ -67,6 +67,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   envied_generator: ^1.1.1
   build_runner: ^2.4.13
+  hive_generator: ^2.0.1
   msix: ^3.16.9
 
 # For information on the generic Dart part of this file, see the

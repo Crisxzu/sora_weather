@@ -32,6 +32,12 @@
   "closeDialog": "Fermer",
   "goToLocationSettings": "Aller aux Paramètres",
   "credits": "Fait avec ❤️ par Dazu",
+  "locationCityMode": "Données fournies pour {city}, tel que sélectionné dans vos villes.",
+  "@locationCityMode": {
+    "placeholders": {
+      "city": { "type": "String" }
+    }
+  },
   "myLocations": "Mes villes",
   "addCity": "Ajouter une ville",
   "myPosition": "Ma position",

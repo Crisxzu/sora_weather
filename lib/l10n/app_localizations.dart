@@ -296,6 +296,12 @@ abstract class AppLocalizations {
   /// **'Made with ❤️ by Dazu'**
   String get credits;
 
+  /// No description provided for @locationCityMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Data provided for {city}, as selected in your locations.'**
+  String locationCityMode(String city);
+
   /// No description provided for @myLocations.
   ///
   /// In en, this message translates to:

@@ -30,10 +30,16 @@ class _HomeState extends State<Home> {
   Future<WeatherData>? _weatherData;
   ScrollController controller = ScrollController();
 
+  int? _lastActiveIndex;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _loadWeatherData();
+    final locationProvider = Provider.of<LocationProvider>(context);
+    if (locationProvider.isReady && locationProvider.activeIndex != _lastActiveIndex) {
+      _lastActiveIndex = locationProvider.activeIndex;
+      _loadWeatherData();
+    }
   }
 
   Future<void> _loadWeatherData() async {

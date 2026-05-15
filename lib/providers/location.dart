@@ -10,10 +10,12 @@ class LocationProvider extends ChangeNotifier {
   late Box _box;
   final List<LocationPreference> _locations = [LocationPreference.gpsDefault];
   int _activeIndex = 0;
+  bool _isReady = false;
 
   List<LocationPreference> get locations => List.unmodifiable(_locations);
   LocationPreference get activeLocation => _locations[_activeIndex];
   int get activeIndex => _activeIndex;
+  bool get isReady => _isReady;
 
   LocationProvider() {
     _init();
@@ -45,6 +47,7 @@ class LocationProvider extends ChangeNotifier {
     _activeIndex = (_box.get(_activeKey) as int?) ?? 0;
     if (_activeIndex >= _locations.length) _activeIndex = 0;
 
+    _isReady = true;
     _save();
     notifyListeners();
   }

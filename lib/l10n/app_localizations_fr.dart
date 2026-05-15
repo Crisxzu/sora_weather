@@ -112,6 +112,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get credits => 'Fait avec ❤️ par Dazu';
 
   @override
+  String locationCityMode(String city) {
+    return 'Données fournies pour $city, tel que sélectionné dans vos villes.';
+  }
+
+  @override
   String get myLocations => 'Mes villes';
 
   @override
