@@ -48,11 +48,11 @@ class Utils {
         fontWeight: FontWeight.bold
     ),
     'bodyHighlight': GoogleFonts.roboto(
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.bold
     ),
     'body': GoogleFonts.roboto(
-        fontSize: 16
+        fontSize: 14
     )
   };
 
@@ -174,6 +174,12 @@ class Utils {
     } else {
       return false;
     }
+  }
+
+  static bool checkIfMobile() {
+    return !kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS);
   }
 }
 

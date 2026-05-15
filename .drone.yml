@@ -6,6 +6,7 @@ steps:
   - name: prepare-git-tags
     image: alpine/git
     commands:
+      - git fetch --unshallow || true
       - git fetch --tags
 
   - name: prepare-build
@@ -84,6 +85,16 @@ steps:
   #  depends_on:
   #    - prepare-build
 
+  - name: generate-changelog
+    image: orhunp/git-cliff:latest
+    commands:
+      - git-cliff --latest --strip all -o RELEASE_NOTES.md
+      - cat RELEASE_NOTES.md
+    when:
+      event: tag
+    depends_on:
+      - prepare-git-tags
+
   - name: release
     image: plugins/github-release
     settings:
@@ -93,11 +104,13 @@ steps:
         - build/app/outputs/apk/release/app-release.apk
         #- build/app/outputs/bundle/release/app-release.aab
       title: ${DRONE_TAG}
+      note: RELEASE_NOTES.md
       draft: true
     when:
       event: tag
     depends_on:
       - build-android
+      - generate-changelog
 
   - name: deploy-playstore
     image: ruby:3.2.6

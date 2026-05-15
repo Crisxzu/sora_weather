@@ -1,27 +1,33 @@
 import 'package:envied/envied.dart';
+import 'package:flutter/foundation.dart';
 
 part 'env.g.dart';
 
-@Envied(path: '.env')
-abstract class Env {
+@Envied(path: '.env', name: 'DebugEnv')
+@Envied(path: '.env.prod', name: 'ProductionEnv')
+final class Env {
+  factory Env() => _instance;
+
+  static final Env _instance = kReleaseMode ? _ProductionEnv() : _DebugEnv();
+
   @EnviedField(varName: 'WEATHER_API_KEY', obfuscate: true)
-  static String apiKey = _Env.apiKey;
+  final String apiKey = _instance.apiKey;
 
   @EnviedField(varName: 'WEATHER_API_LINK', obfuscate: true)
-  static String apiLink = _Env.apiLink;
+  final String apiLink = _instance.apiLink;
 
   @EnviedField(varName: 'BASE_ICON_URL')
-  static const String baseIconUrl = _Env.baseIconUrl;
+  final String baseIconUrl = _instance.baseIconUrl;
 
   @EnviedField(varName: 'PORTFOLIO_LINK')
-  static const String portfolioLink = _Env.portfolioLink;
+  final String portfolioLink = _instance.portfolioLink;
 
-  @EnviedField(varName: 'DEBUG_MODE')
-  static const String debugMode = _Env.debugMode;
+  @EnviedField(varName: 'DEBUG_MODE', defaultValue: '0')
+  final String debugMode = _instance.debugMode;
 
   @EnviedField(varName: 'DEV_EMAIL')
-  static const String devEmail = _Env.devEmail;
+  final String devEmail = _instance.devEmail;
 
   @EnviedField(varName: 'GITHUB_LINK')
-  static const String githubLink = _Env.githubLink;
+  final String githubLink = _instance.githubLink;
 }

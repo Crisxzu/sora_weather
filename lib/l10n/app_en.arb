@@ -31,5 +31,24 @@
   "locationNotProvided": "Data provided from the position deduced from your IP address, so potentially inaccurate 😓.\nFor better accuracy, please enable location services, give access to the app and reload the page 😉.",
   "closeDialog": "Close",
   "goToLocationSettings": "Go to Settings",
-  "credits": "Made with ❤️ by Dazu"
+  "credits": "Made with ❤️ by Dazu",
+  "locationCityMode": "Data provided for {city}, as selected in your locations.",
+  "@locationCityMode": {
+    "placeholders": {
+      "city": { "type": "String" }
+    }
+  },
+  "country": "Country",
+  "state": "State / Region",
+  "city": "City",
+  "myLocations": "My locations",
+  "addCity": "Add a city",
+  "myPosition": "My position",
+  "myPositionSubtitle": "Determined automatically via GPS",
+  "apiErrorLocationNotFound": "Location not found. Please check the city name or your GPS settings.",
+  "apiErrorAuth": "Authentication error. Please contact the developer.",
+  "apiErrorServiceUnavailable": "Weather service temporarily unavailable. Please try again later.",
+  "apiErrorTooManyRequests": "Too many requests. Please wait a moment before retrying.",
+  "apiErrorServer": "A server error occurred. Please try again later.",
+  "apiErrorDefault": "Unable to retrieve weather data. Please check your Internet connection."
 }

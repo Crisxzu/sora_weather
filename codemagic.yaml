@@ -3,16 +3,26 @@ workflows:
     name: iOS Workflow
     instance_type: mac_mini_m2
     max_build_duration: 120
+    integrations:
+      app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT
+        - $HOME/Library/Caches/CocoaPods
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
     environment:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.dazu.sora-weather
       groups:
         - sora
-      vars:
-        APP_ID: 6748250805 # <-- Put your APP ID here
       flutter: "3.32.3"
-      xcode: "16.4" # <-- set to specific version e.g. 14.3, 15.0 to avoid unexpected updates.
+      xcode: "16.4"
       cocoapods: default
     scripts:
       - name: Generate env file
@@ -22,84 +32,102 @@ workflows:
         script: |
           xcode-project use-profiles
       - name: Get Flutter packages
-        script: |
-          flutter packages pub get
+        script: flutter pub get
       - name: Install pods
+        script: cd ios && pod install
+      - name: Flutter build ipa
         script: |
-          find . -name "Podfile" -execdir pod install \;
-      #- name: Flutter analyze
-      #  script: |
-      #    flutter analyze
-      #- name: Flutter unit tests
-      #  script: |
-      #    flutter test
-      #  ignore_failure: true
-      - name: Flutter build ipa and automatic versioning
-        script: |
-          # See the following link about getting the latest App Store or TestFlight version - https://docs.codemagic.io/knowledge-codemagic/build-versioning/#app-store-or-testflight-latest-build-number
           flutter build ipa --release \
-            --build-name=1.0.0 \
-            --build-number=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1)) \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
-      - flutter_drive.log
     publishing:
-      # See the following link for details about email publishing - https://docs.codemagic.io/publishing-yaml/distribution/#email
       email:
         recipients:
-          - chris@snowsky-dev.com
+          - sora-deployment@snowsky-dev.com
         notify:
-          success: true # To receive a notification when a build succeeds
-          failure: false # To not receive a notification when a build fails
-      #slack:
-      #  # See the following link about how to connect your Slack account - https://docs.codemagic.io/publishing-yaml/distribution/#slack
-      #  channel: "#builds"
-      #  notify_on_build_start: true # To receive a notification when a build starts
-      #  notify:
-      #    success: true # To receive a notification when a build succeeds
-      #    failure: false # To not receive a notification when a build fails
-      #app_store_connect:
-      #  auth: integration
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+#  macos-workflow:
+#    name: macOS Workflow
+#    instance_type: mac_mini_m2
+#    max_build_duration: 120
+#    integrations:
+#      app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
+#    cache:
+#      cache_paths:
+#        - $FLUTTER_ROOT
+#        - $HOME/Library/Caches/CocoaPods
+#    triggering:
+#      events:
+#        - tag
+#      tag_patterns:
+#        - pattern: 'v*'
+#          include: true
+#    environment:
+#      groups:
+#        - sora
+#      flutter: "3.32.3"
+#      xcode: "16.4"
+#      cocoapods: default
+#    scripts:
+#      - name: Set up keychain
+#        script: keychain initialize
+#      - name: Fetch signing files
+#        script: |
+#          app-store-connect fetch-signing-files com.dazu.sora-weather \
+#            --platform MAC_OS \
+#            --type MAC_APP_STORE \
+#            --create
+#      - name: Set up signing certificates
+#        script: keychain add-certificates
+#      - name: Set up code signing settings on Xcode project
+#        script: xcode-project use-profiles
+#      - name: Generate env file
+#        script: |
+#          echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
+#      - name: Get Flutter packages
+#        script: flutter pub get
+#      - name: Install pods
+#        script: cd macos && pod install
+#      - name: Build Flutter macOS
+#        script: |
+#          flutter config --enable-macos-desktop
+#          flutter build macos --release \
+#            --build-name=${CM_TAG#v} \
+#            --build-number=$PROJECT_BUILD_NUMBER
+#      - name: Package application
+#        script: |
+#          set -x
+#          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
+#          cd $(dirname "$APP_NAME")
+#          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+#          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+#          INSTALLER_CERT_NAME=$(keychain list-certificates \
+#            | jq -r '.[] | select(.common_name | ascii_downcase | test("installer")) | .common_name' \
+#            | head -1)
+#          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+#          rm -f unsigned.pkg
+#      - name: Publish to TestFlight
+#        script: |
+#          app-store-connect publish \
+#            --path "$(find $(pwd) -name "*.pkg" -path "*/Release/*" | head -1)" \
+#            --platform MAC_OS \
+#            --max-build-processing-wait 0
+#    artifacts:
+#      - build/macos/Build/Products/Release/*.pkg
+#      - /tmp/xcodebuild_logs/*.log
+#    publishing:
+#      email:
+#        recipients:
+#          - sora-deployment@snowsky-dev.com
+#        notify:
+#          success: true
+#          failure: true
 #
-      #  # Configuration related to TestFlight (optional)
-      #  # Note: This action is performed during post-processing.
-      #  submit_to_testflight: true
-      #  beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
-      #    - group name 1
-      #    - group name 2
-#
-      #  # Configuration related to App Store (optional)
-      #  # Note: This action is performed during post-processing.
-      #  submit_to_app_store: false
-
-  web-workflow:
-    name: Web app workflow
-    max_build_duration: 10
-    environment:
-      flutter: stable
-    scripts:
-      - name: Get Flutter packages
-        script: |
-          flutter packages pub get
-      - name: Flutter analyze
-        script: |
-          flutter analyze
-      - name: Flutter unit tests
-        script: |
-          flutter test
-      - name: Flutter build webapp
-        script: |
-          flutter build web --release
-          cd build/web
-          7z a -r ../web.zip ./*
-    artifacts:
-      - build/web.zip
-      - flutter_drive.log
-    publishing:
-      email:
-        recipients:
-          - user_1@example.com
-
-

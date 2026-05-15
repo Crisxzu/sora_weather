@@ -14,7 +14,7 @@ class WeatherIconsCache {
   WeatherIconsCache._internal();
 
   final Map<String, Image> _memoryCache = {};
-  final String baseIconUrl = Env.baseIconUrl;
+  final String baseIconUrl = Env().baseIconUrl;
 
   Future<Image> getWeatherIcon(String iconCode, {bool isDay = true}) async {
     final String cacheKey = '${iconCode}_${isDay ? 'day' : 'night'}';
