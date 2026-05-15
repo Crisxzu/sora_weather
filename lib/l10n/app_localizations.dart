@@ -295,6 +295,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Made with ❤️ by Dazu'**
   String get credits;
+
+  /// No description provided for @myLocations.
+  ///
+  /// In en, this message translates to:
+  /// **'My locations'**
+  String get myLocations;
+
+  /// No description provided for @addCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a city'**
+  String get addCity;
+
+  /// No description provided for @myPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'My position'**
+  String get myPosition;
+
+  /// No description provided for @myPositionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Determined automatically via GPS'**
+  String get myPositionSubtitle;
+
+  /// No description provided for @apiErrorLocationNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Location not found. Please check the city name or your GPS settings.'**
+  String get apiErrorLocationNotFound;
+
+  /// No description provided for @apiErrorAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication error. Please contact the developer.'**
+  String get apiErrorAuth;
+
+  /// No description provided for @apiErrorServiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather service temporarily unavailable. Please try again later.'**
+  String get apiErrorServiceUnavailable;
+
+  /// No description provided for @apiErrorTooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait a moment before retrying.'**
+  String get apiErrorTooManyRequests;
+
+  /// No description provided for @apiErrorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'A server error occurred. Please try again later.'**
+  String get apiErrorServer;
+
+  /// No description provided for @apiErrorDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to retrieve weather data. Please check your Internet connection.'**
+  String get apiErrorDefault;
 }
 
 class _AppLocalizationsDelegate

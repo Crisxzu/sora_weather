@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/controller/weather_data.dart' show ApiException;
 import 'package:weather_app/model/weather_data.dart';
+import 'package:weather_app/providers/location.dart';
 import 'package:weather_app/providers/params.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/global/error.dart';
@@ -29,11 +31,6 @@ class _HomeState extends State<Home> {
   ScrollController controller = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _loadWeatherData();
@@ -42,10 +39,20 @@ class _HomeState extends State<Home> {
   Future<void> _loadWeatherData() async {
     final weatherDataProvider = Provider.of<WeatherDataProvider>(context, listen: false);
     final paramsProvider = Provider.of<ParamsProvider>(context, listen: false);
+    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
 
     setState(() {
-      _weatherData = weatherDataProvider.getData(paramsProvider.locale!.languageCode, paramsProvider.tempUnit!);
+      _weatherData = weatherDataProvider.getData(
+        paramsProvider.locale!.languageCode,
+        paramsProvider.tempUnit!,
+        locationProvider.activeLocation,
+      );
     });
+  }
+
+  int? _errorStatusCode(Object error) {
+    if (error is ApiException) return error.statusCode;
+    return null;
   }
 
   @override
@@ -101,8 +108,7 @@ class _HomeState extends State<Home> {
                                   }
                                   else if(snapshot.hasError) {
                                     AppLogger.instance.e("Error when fetching weather data: ${snapshot.error}");
-
-                                    return const ErrorMessage(message: null);
+                                    return ErrorMessage(statusCode: _errorStatusCode(snapshot.error!));
                                   }
                                   else {
                                     return const LoadingIndicator();
@@ -124,12 +130,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-
-
-
-
-
-
-
-

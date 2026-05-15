@@ -10,6 +10,15 @@ import 'package:weather_app/model/weather_data.dart';
 
 import '../env/env.dart';
 
+class ApiException implements Exception {
+  final int statusCode;
+  final String message;
+  const ApiException(this.statusCode, this.message);
+
+  @override
+  String toString() => 'ApiException($statusCode): $message';
+}
+
 class WeatherDataController {
   Future<WeatherData> fetchWeatherData(Map<String, String?> params) async {
     params.removeWhere((key, value) => value == null);
@@ -40,10 +49,19 @@ class WeatherDataController {
       );
 
       if(response.statusCode != 200) {
-        throw Exception("Failed to fetch weather data from API. Link: $apiLink. Status code : ${response.statusCode}");
+        String errorMsg = "HTTP ${response.statusCode}";
+        try {
+          final body = json.decode(utf8.decode(response.bodyBytes));
+          if (body['error'] != null) errorMsg = body['error'];
+        } catch (_) {}
+        AppLogger.instance.e("API error: $errorMsg (status ${response.statusCode})");
+        throw ApiException(response.statusCode, errorMsg);
       }
 
       return WeatherData.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    }
+    on ApiException {
+      rethrow;
     }
     catch(e, stackTrace) {
       AppLogger.instance.e("Error in fetchApiWeatherData: $e");
@@ -56,6 +74,7 @@ class WeatherDataController {
     WeatherData data,
     TempUnit tempUnit, {
     String? position,
+    String? city,
     String langIso = 'en',
   }) async {
     if (!Utils.checkIfMobile()) return;
@@ -85,6 +104,9 @@ class WeatherDataController {
       await HomeWidget.saveWidgetData<String>('widget_base_icon_url', Env.baseIconUrl);
       if (position != null) {
         await HomeWidget.saveWidgetData<String>('widget_last_position', position);
+      }
+      if (city != null) {
+        await HomeWidget.saveWidgetData<String>('widget_city_query', city);
       }
       await HomeWidget.saveWidgetData<bool>('widget_loading', false);
       await HomeWidget.updateWidget(

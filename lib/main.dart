@@ -12,12 +12,14 @@ import 'package:provider/single_child_widget.dart';
 import 'package:weather_app/common/app_logger.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/l10n/l10n.dart';
+import 'package:weather_app/providers/location.dart';
 import 'package:weather_app/providers/params.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/home/home.dart';
 import 'package:weather_app/view/home/widgets/link_button.dart';
 import 'package:weather_app/view/home/widgets/position.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
+import 'package:weather_app/view/settings/locations.dart';
 import 'package:weather_app/view/settings/settings.dart';
 
 import 'env/env.dart';
@@ -118,6 +120,9 @@ class MyApp extends StatelessWidget {
   List<SingleChildWidget> getAllProviders() {
     return [
       ChangeNotifierProvider(
+        create: (context) => LocationProvider(),
+      ),
+      ChangeNotifierProvider(
         create: (context) => WeatherDataProvider(),
       ),
       ChangeNotifierProvider(
@@ -190,18 +195,31 @@ class _MainState extends State<Main> {
                   Column(
                     children: [
                       ListTile(
+                        leading: const Icon(Icons.location_city),
+                        title: Text(
+                          AppLocalizations.of(context)!.myLocations,
+                          style: textStyle['bodyHighlight'],
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const LocationsPage()),
+                          );
+                        },
+                      ),
+                      ListTile(
                         leading: const Icon(Icons.settings),
                         title: Text(
                           AppLocalizations.of(context)!.settingsTitle,
                           style: textStyle['bodyHighlight'],
                         ),
                         onTap: () {
-                          setState(() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Settings()),
-                            );
-                          });
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Settings()),
+                          );
                         },
                       ),
                     ],

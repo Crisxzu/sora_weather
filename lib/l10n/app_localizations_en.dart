@@ -109,4 +109,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get credits => 'Made with ❤️ by Dazu';
+
+  @override
+  String get myLocations => 'My locations';
+
+  @override
+  String get addCity => 'Add a city';
+
+  @override
+  String get myPosition => 'My position';
+
+  @override
+  String get myPositionSubtitle => 'Determined automatically via GPS';
+
+  @override
+  String get apiErrorLocationNotFound =>
+      'Location not found. Please check the city name or your GPS settings.';
+
+  @override
+  String get apiErrorAuth =>
+      'Authentication error. Please contact the developer.';
+
+  @override
+  String get apiErrorServiceUnavailable =>
+      'Weather service temporarily unavailable. Please try again later.';
+
+  @override
+  String get apiErrorTooManyRequests =>
+      'Too many requests. Please wait a moment before retrying.';
+
+  @override
+  String get apiErrorServer =>
+      'A server error occurred. Please try again later.';
+
+  @override
+  String get apiErrorDefault =>
+      'Unable to retrieve weather data. Please check your Internet connection.';
 }
