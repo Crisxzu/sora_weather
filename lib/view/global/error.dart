@@ -60,7 +60,7 @@ class ErrorMessage extends StatelessWidget
                 child: TextButton(
                   onPressed: (){},
                   child: LinkButton(
-                    urlStr: Uri.encodeFull("mailto:${Env.devEmail}?subject=App Issue"),
+                    urlStr: Uri.encodeFull("mailto:${Env().devEmail}?subject=App Issue"),
                     child: Text(
                         l10n.mailContact,
                         style: textStyle['bodyHighlight']
@@ -72,7 +72,7 @@ class ErrorMessage extends StatelessWidget
                 child: TextButton(
                   onPressed: (){},
                   child: LinkButton(
-                    urlStr: Env.githubLink,
+                    urlStr: Env().githubLink,
                     child: Text(
                       l10n.github,
                       style: textStyle['bodyHighlight'],

@@ -225,7 +225,7 @@ class _MainState extends State<Main> {
                     ],
                   ),
                   LinkButton(
-                      urlStr: Env.portfolioLink ?? '',
+                      urlStr: Env().portfolioLink ?? '',
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Text(

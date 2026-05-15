@@ -8,7 +8,7 @@ class LocationProvider extends ChangeNotifier {
   static const String _activeKey = 'activeIndex';
 
   late Box _box;
-  final List<LocationPreference> _locations = [];
+  final List<LocationPreference> _locations = [LocationPreference.gpsDefault];
   int _activeIndex = 0;
 
   List<LocationPreference> get locations => List.unmodifiable(_locations);

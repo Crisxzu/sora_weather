@@ -3,60 +3,31 @@ import 'package:flutter/foundation.dart';
 
 part 'env.g.dart';
 
-@Envied(path: '.env', name: 'DebugEnv', obfuscate: true)
-abstract class _DebugEnv {
-  @EnviedField(varName: 'WEATHER_API_KEY')
-  static String apiKey = _DebugEnv.apiKey;
+@Envied(path: '.env', name: 'DebugEnv')
+@Envied(path: '.env.prod', name: 'ProductionEnv')
+final class Env {
+  factory Env() => _instance;
 
-  @EnviedField(varName: 'WEATHER_API_LINK')
-  static String apiLink = _DebugEnv.apiLink;
+  static final Env _instance = kReleaseMode ? _ProductionEnv() : _DebugEnv();
 
-  @EnviedField(varName: 'BASE_ICON_URL', obfuscate: false)
-  static const String baseIconUrl = _DebugEnv.baseIconUrl;
+  @EnviedField(varName: 'WEATHER_API_KEY', obfuscate: true)
+  final String apiKey = _instance.apiKey;
 
-  @EnviedField(varName: 'PORTFOLIO_LINK', obfuscate: false)
-  static const String portfolioLink = _DebugEnv.portfolioLink;
+  @EnviedField(varName: 'WEATHER_API_LINK', obfuscate: true)
+  final String apiLink = _instance.apiLink;
 
-  @EnviedField(varName: 'DEBUG_MODE', obfuscate: false)
-  static const String debugMode = _DebugEnv.debugMode;
+  @EnviedField(varName: 'BASE_ICON_URL')
+  final String baseIconUrl = _instance.baseIconUrl;
 
-  @EnviedField(varName: 'DEV_EMAIL', obfuscate: false)
-  static const String devEmail = _DebugEnv.devEmail;
+  @EnviedField(varName: 'PORTFOLIO_LINK')
+  final String portfolioLink = _instance.portfolioLink;
 
-  @EnviedField(varName: 'GITHUB_LINK', obfuscate: false)
-  static const String githubLink = _DebugEnv.githubLink;
-}
+  @EnviedField(varName: 'DEBUG_MODE', defaultValue: '0')
+  final String debugMode = _instance.debugMode;
 
-@Envied(path: '.env.prod', name: 'ProdEnv', obfuscate: true)
-abstract class _ProdEnv {
-  @EnviedField(varName: 'WEATHER_API_KEY')
-  static String apiKey = _ProdEnv.apiKey;
+  @EnviedField(varName: 'DEV_EMAIL')
+  final String devEmail = _instance.devEmail;
 
-  @EnviedField(varName: 'WEATHER_API_LINK')
-  static String apiLink = _ProdEnv.apiLink;
-
-  @EnviedField(varName: 'BASE_ICON_URL', obfuscate: false)
-  static const String baseIconUrl = _ProdEnv.baseIconUrl;
-
-  @EnviedField(varName: 'PORTFOLIO_LINK', obfuscate: false)
-  static const String portfolioLink = _ProdEnv.portfolioLink;
-
-  @EnviedField(varName: 'DEBUG_MODE', obfuscate: false)
-  static const String debugMode = _ProdEnv.debugMode;
-
-  @EnviedField(varName: 'DEV_EMAIL', obfuscate: false)
-  static const String devEmail = _ProdEnv.devEmail;
-
-  @EnviedField(varName: 'GITHUB_LINK', obfuscate: false)
-  static const String githubLink = _ProdEnv.githubLink;
-}
-
-abstract class Env {
-  static String get apiKey => kReleaseMode ? _ProdEnv.apiKey : _DebugEnv.apiKey;
-  static String get apiLink => kReleaseMode ? _ProdEnv.apiLink : _DebugEnv.apiLink;
-  static String get baseIconUrl => kReleaseMode ? _ProdEnv.baseIconUrl : _DebugEnv.baseIconUrl;
-  static String? get portfolioLink => kReleaseMode ? _ProdEnv.portfolioLink : _DebugEnv.portfolioLink;
-  static String get debugMode => kReleaseMode ? _ProdEnv.debugMode : _DebugEnv.debugMode;
-  static String get devEmail => kReleaseMode ? _ProdEnv.devEmail : _DebugEnv.devEmail;
-  static String get githubLink => kReleaseMode ? _ProdEnv.githubLink : _DebugEnv.githubLink;
+  @EnviedField(varName: 'GITHUB_LINK')
+  final String githubLink = _instance.githubLink;
 }

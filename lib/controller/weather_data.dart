@@ -23,7 +23,7 @@ class WeatherDataController {
   Future<WeatherData> fetchWeatherData(Map<String, String?> params) async {
     params.removeWhere((key, value) => value == null);
 
-    if(Env.debugMode == '1') {
+    if(Env().debugMode == '1') {
       AppLogger.instance.i("USE TEST DATA");
       return fetchTestWeatherData(params);
     }
@@ -40,11 +40,11 @@ class WeatherDataController {
         paramsStr = '?${params.keys.map((key) => "$key=${params[key]}").join('&')}';
       }
 
-      final String apiLink = Uri.encodeFull('${Env.apiLink}/weather$paramsStr');
+      final String apiLink = Uri.encodeFull('${Env().apiLink}/weather$paramsStr');
       final http.Response response = await http.get(
         Uri.parse(apiLink),
         headers: {
-          'Authorization': 'Api-Key ${Env.apiKey}',
+          'Authorization': 'Api-Key ${Env().apiKey}',
         },
       );
 
@@ -88,7 +88,7 @@ class WeatherDataController {
 
       final directory = await getApplicationDocumentsDirectory();
       final iconPath = '${directory.path}/weather_icons/${iconCode}_$dayStr.png';
-      final iconUrl = '${Env.baseIconUrl}/$dayStr/$iconCode.png';
+      final iconUrl = '${Env().baseIconUrl}/$dayStr/$iconCode.png';
 
       await HomeWidget.saveWidgetData<String>('widget_temp', tempUnit.toStr(data.current.temp));
       await HomeWidget.saveWidgetData<String>('widget_city', data.location.name);
@@ -99,9 +99,9 @@ class WeatherDataController {
       await HomeWidget.saveWidgetData<String>('widget_icon_url', iconUrl);
       await HomeWidget.saveWidgetData<String>('widget_lang_iso', langIso);
       await HomeWidget.saveWidgetData<String>('widget_unit_name', tempUnit.name);
-      await HomeWidget.saveWidgetData<String>('widget_api_link', Env.apiLink);
-      await HomeWidget.saveWidgetData<String>('widget_api_key', Env.apiKey);
-      await HomeWidget.saveWidgetData<String>('widget_base_icon_url', Env.baseIconUrl);
+      await HomeWidget.saveWidgetData<String>('widget_api_link', Env().apiLink);
+      await HomeWidget.saveWidgetData<String>('widget_api_key', Env().apiKey);
+      await HomeWidget.saveWidgetData<String>('widget_base_icon_url', Env().baseIconUrl);
       if (position != null) {
         await HomeWidget.saveWidgetData<String>('widget_last_position', position);
       }
