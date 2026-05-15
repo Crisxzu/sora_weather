@@ -76,6 +76,11 @@ Cette application a été construite dans le cadre de ma série de tutoriels ét
 - **Rafraîchissement automatique** : Intervalles de rafraîchissement automatique configurables (5-15 minutes)
 - **Mise en cache des icônes** : Système de mise en cache efficace pour les icônes météo
 - **Belle interface utilisateur** : Interface propre et moderne avec des dégradés personnalisés
+- **Emojis de drapeaux** : Drapeaux pays affichés dans le drawer et la page des localisations
+- **Recherche de ville améliorée** : Sélecteurs pays/région/ville remplacés par un `DropdownSearch` avec recherche intégrée
+- **Widget Android natif** : Rafraîchissement reécrit en Kotlin natif, taille 3×2 cellules
+- **Gestion multi-localisation** : Rechargement automatique de la météo lors du changement de localisation active
+- **Environnement debug/prod automatique** : Sélection automatique via `kReleaseMode` (plus besoin de changer manuellement)
 
 ## 🏗️ Architecture
 
