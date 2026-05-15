@@ -45,7 +45,8 @@ app.*.map.json
 /android/app/release
 
 /.env
-env.g.dart
+/.env.prod
+*.g.dart
 
 /symbols
 

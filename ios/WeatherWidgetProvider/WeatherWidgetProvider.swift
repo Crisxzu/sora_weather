@@ -130,6 +130,7 @@ struct RefreshWeatherIntent: AppIntent {
         logger.info("Credentials found, apiLink=\(apiLink, privacy: .private)")
 
         let position    = defaults.string(forKey: "widget_last_position")
+        let cityQuery   = defaults.string(forKey: "widget_city_query")
         let langIso     = defaults.string(forKey: "widget_lang_iso")     ?? "en"
         let unitName    = defaults.string(forKey: "widget_unit_name")    ?? "celsius"
         let baseIconURL = defaults.string(forKey: "widget_base_icon_url") ?? ""
@@ -143,7 +144,11 @@ struct RefreshWeatherIntent: AppIntent {
             return .result()
         }
         var queryItems = [URLQueryItem(name: "lang_iso", value: langIso)]
-        if let pos = position { queryItems.append(URLQueryItem(name: "position", value: pos)) }
+        if let city = cityQuery {
+            queryItems.append(URLQueryItem(name: "city", value: city))
+        } else if let pos = position {
+            queryItems.append(URLQueryItem(name: "position", value: pos))
+        }
         components.queryItems = queryItems
 
         guard let url = components.url else {
@@ -317,6 +322,6 @@ struct WeatherWidgetProvider: Widget {
         }
         .configurationDisplayName("Sora Weather")
         .description("widget_description")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemMedium])
     }
 }

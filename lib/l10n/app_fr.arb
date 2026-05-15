@@ -31,5 +31,24 @@
   "locationNotProvided": "Données fournies à partir de la position déduite de votre adresse IP, donc potentiellement inexacte 😓.\nPour plus de précision, activez les services de localisation, accorder la permission à l'application et recharger la page 😉.",
   "closeDialog": "Fermer",
   "goToLocationSettings": "Aller aux Paramètres",
-  "credits": "Fait avec ❤️ par Dazu"
+  "credits": "Fait avec ❤️ par Dazu",
+  "locationCityMode": "Données fournies pour {city}, tel que sélectionné dans vos villes.",
+  "@locationCityMode": {
+    "placeholders": {
+      "city": { "type": "String" }
+    }
+  },
+  "country": "Pays",
+  "state": "État / Région",
+  "city": "Ville",
+  "myLocations": "Mes villes",
+  "addCity": "Ajouter une ville",
+  "myPosition": "Ma position",
+  "myPositionSubtitle": "Déterminée automatiquement via le GPS",
+  "apiErrorLocationNotFound": "Localisation introuvable. Vérifiez le nom de la ville ou vos paramètres GPS.",
+  "apiErrorAuth": "Erreur d'authentification. Merci de contacter le développeur.",
+  "apiErrorServiceUnavailable": "Le service météo est temporairement indisponible. Réessayez plus tard.",
+  "apiErrorTooManyRequests": "Trop de requêtes. Attendez un moment avant de réessayer.",
+  "apiErrorServer": "Une erreur serveur est survenue. Réessayez plus tard.",
+  "apiErrorDefault": "Impossible de récupérer les données météo. Vérifiez votre connexion Internet."
 }

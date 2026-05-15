@@ -99,7 +99,7 @@ class _SettingsState extends State<Settings> {
               child: const UpdateTimeSelector()
           ),
           LinkButton(
-            urlStr: Env.githubLink,
+            urlStr: Env().githubLink,
             child: ListTile(
               leading: const Icon(Icons.code),
               title: Text(

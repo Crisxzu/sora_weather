@@ -12,12 +12,14 @@ import 'package:provider/single_child_widget.dart';
 import 'package:weather_app/common/app_logger.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/l10n/l10n.dart';
+import 'package:weather_app/providers/location.dart';
 import 'package:weather_app/providers/params.dart';
 import 'package:weather_app/providers/weather_data.dart';
 import 'package:weather_app/view/home/home.dart';
 import 'package:weather_app/view/home/widgets/link_button.dart';
 import 'package:weather_app/view/home/widgets/position.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
+import 'package:weather_app/view/settings/locations.dart';
 import 'package:weather_app/view/settings/settings.dart';
 
 import 'env/env.dart';
@@ -28,8 +30,10 @@ Future main() async {
   await Hive.initFlutter();
   var box = await Hive.openBox("appParams");
   await AppLogger.initialize();
-  HomeWidget.setAppGroupId('group.fr.dazu.sora-weather');
-  await HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
+  if (Utils.checkIfMobile()) {
+    HomeWidget.setAppGroupId('group.fr.dazu.sora-weather');
+    await HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
+  }
 
   runApp(MyApp());
 }
@@ -116,6 +120,9 @@ class MyApp extends StatelessWidget {
   List<SingleChildWidget> getAllProviders() {
     return [
       ChangeNotifierProvider(
+        create: (context) => LocationProvider(),
+      ),
+      ChangeNotifierProvider(
         create: (context) => WeatherDataProvider(),
       ),
       ChangeNotifierProvider(
@@ -185,27 +192,88 @@ class _MainState extends State<Main> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        title: Text(
-                          AppLocalizations.of(context)!.settingsTitle,
-                          style: textStyle['bodyHighlight'],
-                        ),
-                        onTap: () {
-                          setState(() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Settings()),
+                  Consumer<LocationProvider>(
+                    builder: (context, locationProvider, _) {
+                      final locations = locationProvider.locations;
+                      final preview = locations.take(5).toList();
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.location_city),
+                            title: Text(
+                              AppLocalizations.of(context)!.myLocations,
+                              style: textStyle['bodyHighlight'],
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const LocationsPage()),
+                              );
+                            },
+                          ),
+                          ...preview.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final loc = entry.value;
+                            final isActive = locationProvider.activeIndex == index;
+
+                            return ListTile(
+                              dense: true,
+                              contentPadding: const EdgeInsets.only(left: 32, right: 16),
+                              leading: Stack(
+                                clipBehavior: Clip.none,
+                                alignment: Alignment.center,
+                                children: [
+                                  loc.isGps
+                                      ? const Icon(Icons.my_location, size: 18)
+                                      : Text(loc.countryEmoji ?? '🌍', style: const TextStyle(fontSize: 18)),
+                                  if (isActive)
+                                    Positioned(
+                                      bottom: -4,
+                                      right: -6,
+                                      child: Icon(Icons.check_circle, size: 12, color: Theme.of(context).colorScheme.primary),
+                                    ),
+                                ],
+                              ),
+                              title: Text(
+                                loc.isGps ? AppLocalizations.of(context)!.myPosition : loc.cityName ?? '',
+                                style: textStyle['body']!.copyWith(
+                                  fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                                  color: isActive ? Theme.of(context).colorScheme.primary : null,
+                                ),
+                              ),
+                              onTap: () {
+                                locationProvider.setActive(index);
+                                Provider.of<ParamsProvider>(context, listen: false)
+                                    .refreshIndicatorKey
+                                    ?.currentState
+                                    ?.show();
+                                Navigator.pop(context);
+                              },
                             );
-                          });
-                        },
-                      ),
-                    ],
+                          }),
+                          ListTile(
+                            leading: const Icon(Icons.settings),
+                            title: Text(
+                              AppLocalizations.of(context)!.settingsTitle,
+                              style: textStyle['bodyHighlight'],
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Settings()),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   LinkButton(
-                      urlStr: Env.portfolioLink ?? '',
+                      urlStr: Env().portfolioLink ?? '',
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Text(

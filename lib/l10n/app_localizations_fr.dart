@@ -110,4 +110,54 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get credits => 'Fait avec ❤️ par Dazu';
+
+  @override
+  String locationCityMode(String city) {
+    return 'Données fournies pour $city, tel que sélectionné dans vos villes.';
+  }
+
+  @override
+  String get country => 'Pays';
+
+  @override
+  String get state => 'État / Région';
+
+  @override
+  String get city => 'Ville';
+
+  @override
+  String get myLocations => 'Mes villes';
+
+  @override
+  String get addCity => 'Ajouter une ville';
+
+  @override
+  String get myPosition => 'Ma position';
+
+  @override
+  String get myPositionSubtitle => 'Déterminée automatiquement via le GPS';
+
+  @override
+  String get apiErrorLocationNotFound =>
+      'Localisation introuvable. Vérifiez le nom de la ville ou vos paramètres GPS.';
+
+  @override
+  String get apiErrorAuth =>
+      'Erreur d\'authentification. Merci de contacter le développeur.';
+
+  @override
+  String get apiErrorServiceUnavailable =>
+      'Le service météo est temporairement indisponible. Réessayez plus tard.';
+
+  @override
+  String get apiErrorTooManyRequests =>
+      'Trop de requêtes. Attendez un moment avant de réessayer.';
+
+  @override
+  String get apiErrorServer =>
+      'Une erreur serveur est survenue. Réessayez plus tard.';
+
+  @override
+  String get apiErrorDefault =>
+      'Impossible de récupérer les données météo. Vérifiez votre connexion Internet.';
 }

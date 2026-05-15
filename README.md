@@ -45,7 +45,7 @@ DEBUG_MODE = 0
 
 ## 📱 Disponibilité
 
-- ✅ **Android** : Disponible via téléchargement APK
+- ✅ **Android** : Disponible via APK et sur le [Play Store](https://play.google.com/store/apps/details?id=fr.dazu.sora_weather) sous le nom **Kumi** (renommage imposé pour des raisons de droits)
 - ✅ **iOS** : Fichier archive disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
 - ✅ **macOS** : Fichier app disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
 - ✅ **Windows** : Exécutable EXE disponible ! Aussi dispo sur [Microsoft Store](https://apps.microsoft.com/detail/9n5bv4lcr3gx)
@@ -62,6 +62,7 @@ Cette application a été construite dans le cadre de ma série de tutoriels ét
 | 03      | On code notre App Météo (Android)                           | https://youtu.be/sOW1gINQxF0 |
 | 04      | Rendre notre App Météo fonctionnelle partout                | https://youtu.be/YSFwwXcVbwI |
 | 05      | On tente de déployer sur Play Store (ça s'est mal passé 😅) | https://youtu.be/ZA40PPwi29I |
+| 06      | On déploie sur l'App Store et le Mac App Store               | https://youtu.be/aD6dlOkEUNI |
 | ...     | ...                                                         | ...                          |
 
 ## ✨ Fonctionnalités
@@ -75,6 +76,11 @@ Cette application a été construite dans le cadre de ma série de tutoriels ét
 - **Rafraîchissement automatique** : Intervalles de rafraîchissement automatique configurables (5-15 minutes)
 - **Mise en cache des icônes** : Système de mise en cache efficace pour les icônes météo
 - **Belle interface utilisateur** : Interface propre et moderne avec des dégradés personnalisés
+- **Emojis de drapeaux** : Drapeaux pays affichés dans le drawer et la page des localisations
+- **Recherche de ville améliorée** : Sélecteurs pays/région/ville remplacés par un `DropdownSearch` avec recherche intégrée
+- **Widget Android natif** : Rafraîchissement reécrit en Kotlin natif, taille 3×2 cellules
+- **Gestion multi-localisation** : Rechargement automatique de la météo lors du changement de localisation active
+- **Environnement debug/prod automatique** : Sélection automatique via `kReleaseMode` (plus besoin de changer manuellement)
 
 ## 🏗️ Architecture
 

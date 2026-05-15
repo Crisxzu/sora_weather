@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
-import 'package:weather_app/providers/params.dart';
+import 'package:weather_app/providers/location.dart';
 
 import '../../../common/utils.dart';
 import '../../../providers/weather_data.dart';
@@ -65,43 +65,45 @@ class _PositionViewState extends State<PositionView> with SingleTickerProviderSt
 
   void _handlePositionTap() {
     final weatherProvider = Provider.of<WeatherDataProvider>(context, listen: false);
+    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
     final textStyle = Utils.getTextStyle(MediaQuery.of(context).size.width);
+    final l10n = AppLocalizations.of(context)!;
+    final activeLocation = locationProvider.activeLocation;
+    final isGpsMode = activeLocation.isGps;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final String message;
+        final bool showLocationSettings;
+
+        if (!isGpsMode) {
+          message = l10n.locationCityMode(activeLocation.displayName);
+          showLocationSettings = false;
+        } else if (weatherProvider.userPosition != null) {
+          message = l10n.locationProvided;
+          showLocationSettings = false;
+        } else {
+          message = l10n.locationNotProvided;
+          showLocationSettings = true;
+        }
+
         return AlertDialog(
-          title: Text(
-            style: textStyle['title2'],
-            AppLocalizations.of(context)!.locationDialogTitle
-          ),
-          content: Text(
-              style: textStyle['body'],
-              weatherProvider.userPosition != null
-                  ? AppLocalizations.of(context)!.locationProvided
-                  : AppLocalizations.of(context)!.locationNotProvided
-          ),
+          title: Text(l10n.locationDialogTitle, style: textStyle['title2']),
+          content: Text(message, style: textStyle['body']),
           actions: <Widget>[
             TextButton(
-              child: Text(
-                  style: textStyle['body'],
-                  AppLocalizations.of(context)!.closeDialog
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(l10n.closeDialog, style: textStyle['body']),
             ),
-            TextButton(
-              child: Text(
-                  style: textStyle['body'],
-                  AppLocalizations.of(context)!.goToLocationSettings
+            if (showLocationSettings)
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await Geolocator.openAppSettings();
+                },
+                child: Text(l10n.goToLocationSettings, style: textStyle['body']),
               ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                // Redirect to app settings to set location permission
-                await Geolocator.openAppSettings();
-              },
-            ),
           ],
         );
       },
