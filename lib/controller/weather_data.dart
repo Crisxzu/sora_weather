@@ -105,9 +105,8 @@ class WeatherDataController {
       if (position != null) {
         await HomeWidget.saveWidgetData<String>('widget_last_position', position);
       }
-      if (city != null) {
-        await HomeWidget.saveWidgetData<String>('widget_city_query', city);
-      }
+      // Always write city_query (null clears it when switching back to GPS mode)
+      await HomeWidget.saveWidgetData<String?>('widget_city_query', city);
       await HomeWidget.saveWidgetData<bool>('widget_loading', false);
       await HomeWidget.updateWidget(
         androidName: 'WeatherWidgetProvider',

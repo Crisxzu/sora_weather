@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/widget_background"
-        android:padding="16dp">
+        android:padding="14dp">
 
         <!-- Row 1: city + refresh button -->
         <LinearLayout
@@ -50,13 +50,13 @@
                 android:layout_height="wrap_content"
                 android:text="--°"
                 android:textColor="#FFFFFF"
-                android:textSize="48sp"
+                android:textSize="36sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/widget_icon"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="6dp"
                 android:scaleType="fitCenter" />
 

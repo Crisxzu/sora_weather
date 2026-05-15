@@ -22,22 +22,23 @@ Future<void> widgetBackgroundCallback(Uri? uri) async {
     );
 
     final position = await HomeWidget.getWidgetData<String>('widget_last_position');
+    final cityQuery = await HomeWidget.getWidgetData<String>('widget_city_query');
     final langIso = await HomeWidget.getWidgetData<String>('widget_lang_iso') ?? 'en';
     final unitName = await HomeWidget.getWidgetData<String>('widget_unit_name') ?? 'celsius';
     final tempUnit = Utils.tempUnits[unitName] ?? Utils.tempUnits['celsius']!;
 
-    debugPrint('[WidgetCallback] Fetching data (position: $position, lang: $langIso)');
+    debugPrint('[WidgetCallback] Fetching data (city: $cityQuery, position: $position, lang: $langIso)');
 
     await AppLogger.initialize();
 
     final controller = WeatherDataController();
     final data = await controller.fetchApiWeatherData({
       'lang_iso': langIso,
-      if (position != null) 'position': position,
+      if (cityQuery != null) 'city': cityQuery
+      else if (position != null) 'position': position,
     });
 
-    // saveWidgetData remet widget_loading à false et met à jour le widget
-    await controller.saveWidgetData(data, tempUnit, position: position, langIso: langIso);
+    await controller.saveWidgetData(data, tempUnit, position: position, city: cityQuery, langIso: langIso);
 
     debugPrint('[WidgetCallback] Widget updated successfully');
   } catch (e) {

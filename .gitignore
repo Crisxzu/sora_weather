@@ -46,7 +46,7 @@ app.*.map.json
 
 /.env
 /.env.prod
-env.g.dart
+*.g.dart
 
 /symbols
 
