@@ -122,7 +122,7 @@ msix_config:
   publisher: CN=503149AC-543F-45F5-AFC7-C83370C72E5B
   publisher_display_name: Dazu
   identity_name: Dazu.SoraWeather
-  msix_version: 1.2.1.0
+  msix_version: 1.4.0.0
   logo_path: C:\Users\Chris Kouassi\sora_weather\assets\images\logo.png
   store: true
   languages: en-us, fr-fr
