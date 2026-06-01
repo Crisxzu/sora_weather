@@ -96,6 +96,7 @@ class _LocationsPageState extends State<LocationsPage> {
                         .where((c) => FuzzySearch.matches(c.name, filter))
                         .toList(),
                     itemAsString: (c) => '${c.emoji}  ${c.name}',
+                    filterFn: (_, __) => true,
                     selectedItem: _selectedCountry,
                     decoratorProps: DropDownDecoratorProps(
                       decoration: InputDecoration(labelText: l10n.country),
@@ -122,6 +123,7 @@ class _LocationsPageState extends State<LocationsPage> {
                         .where((s) => FuzzySearch.matches(s.name, filter))
                         .toList(),
                     itemAsString: (s) => s.name,
+                    filterFn: (_, __) => true,
                     selectedItem: _selectedState,
                     decoratorProps: DropDownDecoratorProps(
                       decoration: InputDecoration(labelText: l10n.state),
@@ -145,6 +147,7 @@ class _LocationsPageState extends State<LocationsPage> {
                     items: (filter, _) => cities
                         .where((c) => FuzzySearch.matches(c, filter))
                         .toList(),
+                    filterFn: (_, __) => true,
                     selectedItem: _selectedCity,
                     decoratorProps: DropDownDecoratorProps(
                       decoration: InputDecoration(labelText: l10n.city),
