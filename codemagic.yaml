@@ -18,9 +18,9 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.dazu.sora-weather
+        bundle_identifier: com.dazu.kumi-weather
       groups:
-        - sora
+        - kumi
       flutter: "3.32.3"
       xcode: "16.4"
       cocoapods: default
@@ -45,7 +45,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - sora-deployment@snowsky-dev.com
+          - kumi-deployment@snowsky-dev.com
         notify:
           success: true
           failure: true
@@ -72,7 +72,7 @@ workflows:
 #          include: true
 #    environment:
 #      groups:
-#        - sora
+#        - kumi
 #      flutter: "3.32.3"
 #      xcode: "16.4"
 #      cocoapods: default
@@ -81,7 +81,7 @@ workflows:
 #        script: keychain initialize
 #      - name: Fetch signing files
 #        script: |
-#          app-store-connect fetch-signing-files com.dazu.sora-weather \
+#          app-store-connect fetch-signing-files com.dazu.kumi-weather \
 #            --platform MAC_OS \
 #            --type MAC_APP_STORE \
 #            --create
@@ -126,7 +126,7 @@ workflows:
 #    publishing:
 #      email:
 #        recipients:
-#          - sora-deployment@snowsky-dev.com
+#          - kumi-deployment@snowsky-dev.com
 #        notify:
 #          success: true
 #          failure: true

@@ -4,6 +4,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/common/fuzzy_search.dart';
 import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/l10n/app_localizations.dart';
 import 'package:weather_app/providers/location.dart';
@@ -71,7 +72,8 @@ class _LocationsPageState extends State<LocationsPage> {
           builder: (ctx, setSheetState) {
             final l10n = AppLocalizations.of(ctx)!;
             final states = _selectedCountry?.states ?? [];
-            final cities = _selectedState?.cities ?? [];
+            final cities = _selectedState?.cities ??
+                (_selectedCountry?.states.expand((s) => s.cities).toSet().toList() ?? []);
 
             return Padding(
               padding: EdgeInsets.only(
@@ -91,7 +93,7 @@ class _LocationsPageState extends State<LocationsPage> {
                   DropdownSearch<_CountryData>(
                     compareFn: (a, b) => a.name == b.name,
                     items: (filter, _) => _countries
-                        .where((c) => filter.isEmpty || c.name.toLowerCase().contains(filter.toLowerCase()))
+                        .where((c) => FuzzySearch.matches(c.name, filter))
                         .toList(),
                     itemAsString: (c) => '${c.emoji}  ${c.name}',
                     selectedItem: _selectedCountry,
@@ -117,7 +119,7 @@ class _LocationsPageState extends State<LocationsPage> {
                     compareFn: (a, b) => a.name == b.name,
                     enabled: _selectedCountry != null,
                     items: (filter, _) => states
-                        .where((s) => filter.isEmpty || s.name.toLowerCase().contains(filter.toLowerCase()))
+                        .where((s) => FuzzySearch.matches(s.name, filter))
                         .toList(),
                     itemAsString: (s) => s.name,
                     selectedItem: _selectedState,
@@ -139,9 +141,9 @@ class _LocationsPageState extends State<LocationsPage> {
 
                   // City
                   DropdownSearch<String>(
-                    enabled: _selectedState != null,
+                    enabled: _selectedCountry != null,
                     items: (filter, _) => cities
-                        .where((c) => filter.isEmpty || c.toLowerCase().contains(filter.toLowerCase()))
+                        .where((c) => FuzzySearch.matches(c, filter))
                         .toList(),
                     selectedItem: _selectedCity,
                     decoratorProps: DropDownDecoratorProps(

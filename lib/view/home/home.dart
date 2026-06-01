@@ -1,9 +1,8 @@
-import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/controller/weather_data.dart' show ApiException;
-import 'package:weather_app/model/weather_data.dart';
 import 'package:weather_app/providers/location.dart';
 import 'package:weather_app/providers/params.dart';
 import 'package:weather_app/providers/weather_data.dart';
@@ -14,7 +13,6 @@ import 'package:weather_app/view/home/widgets/daily_forecast.dart';
 import 'package:weather_app/view/home/widgets/footer.dart';
 
 import '../../common/app_logger.dart';
-import '../../common/utils.dart';
 import '../global/gradient_background.dart';
 import 'widgets/hourly_forecast.dart';
 
@@ -27,7 +25,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final appBarHeight = kToolbarHeight;
-  Future<WeatherData>? _weatherData;
   ScrollController controller = ScrollController();
 
   int? _lastActiveIndex;
@@ -42,18 +39,17 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<void> _loadWeatherData() async {
+  void _loadWeatherData() {
     final weatherDataProvider = Provider.of<WeatherDataProvider>(context, listen: false);
     final paramsProvider = Provider.of<ParamsProvider>(context, listen: false);
     final locationProvider = Provider.of<LocationProvider>(context, listen: false);
 
-    setState(() {
-      _weatherData = weatherDataProvider.getData(
-        paramsProvider.locale!.languageCode,
-        paramsProvider.tempUnit!,
-        locationProvider.activeLocation,
-      );
-    });
+    weatherDataProvider.getData(
+      paramsProvider.locale!.languageCode,
+      paramsProvider.tempUnit!,
+      locationProvider.activeLocation,
+      Utils.supportedUpdateTimeLimit[paramsProvider.updateTimeLimit!],
+    );
   }
 
   int? _errorStatusCode(Object error) {
@@ -64,13 +60,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ParamsProvider>(
-      builder: (context, provider, child) {
+      builder: (context, paramsProvider, child) {
         return GradientBackground(
           child: SafeArea(
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return RefreshIndicator(
-                  key: provider.refreshIndicatorKey,
+                  key: paramsProvider.refreshIndicatorKey,
                   color: Utils.white,
                   backgroundColor: Utils.darkBlue,
                   strokeWidth: 4.0,
@@ -92,10 +88,9 @@ class _HomeState extends State<Home> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: FutureBuilder<WeatherData>(
-                                future: _weatherData,
-                                builder: (context, snapshot) {
-                                  if(snapshot.hasData) {
+                              child: Consumer<WeatherDataProvider>(
+                                builder: (context, weatherProvider, _) {
+                                  if (weatherProvider.data != null) {
                                     return Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,20 +98,18 @@ class _HomeState extends State<Home> {
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            CurrentWeatherView(data: snapshot.data!.current),
-                                            HourlyForecastView(data: snapshot.data!.next24h),
-                                            DailyForecastView(data: snapshot.data!.nextDays),
+                                            CurrentWeatherView(data: weatherProvider.data!.current),
+                                            HourlyForecastView(data: weatherProvider.data!.next24h),
+                                            DailyForecastView(data: weatherProvider.data!.nextDays),
                                           ],
                                         ),
-                                        Footer(data: snapshot.data!),
+                                        Footer(data: weatherProvider.data!),
                                       ],
                                     );
-                                  }
-                                  else if(snapshot.hasError) {
-                                    AppLogger.instance.e("Error when fetching weather data: ${snapshot.error}");
-                                    return ErrorMessage(statusCode: _errorStatusCode(snapshot.error!));
-                                  }
-                                  else {
+                                  } else if (weatherProvider.error != null) {
+                                    AppLogger.instance.e("Error when fetching weather data: ${weatherProvider.error}");
+                                    return ErrorMessage(statusCode: _errorStatusCode(weatherProvider.error!));
+                                  } else {
                                     return const LoadingIndicator();
                                   }
                                 },

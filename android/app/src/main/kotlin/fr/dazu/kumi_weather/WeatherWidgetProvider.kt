@@ -1,4 +1,4 @@
-package fr.dazu.sora_weather
+package fr.dazu.kumi_weather
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -33,7 +33,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             val widgetData = HomeWidgetPlugin.getData(context)
 
             val temp = widgetData.getString("widget_temp", "--°") ?: "--°"
-            val city = widgetData.getString("widget_city", "Sora Weather") ?: "Sora Weather"
+            val city = widgetData.getString("widget_city", "Kumi Weather") ?: "Kumi Weather"
             val condition = widgetData.getString("widget_condition", "") ?: ""
             val minTemp = widgetData.getString("widget_min_temp", "--°") ?: "--°"
             val maxTemp = widgetData.getString("widget_max_temp", "--°") ?: "--°"

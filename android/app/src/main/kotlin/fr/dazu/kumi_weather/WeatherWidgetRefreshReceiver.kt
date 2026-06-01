@@ -1,4 +1,4 @@
-package fr.dazu.sora_weather
+package fr.dazu.kumi_weather
 
 import android.appwidget.AppWidgetManager
 import android.content.BroadcastReceiver

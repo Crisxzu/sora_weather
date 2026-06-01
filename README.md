@@ -1,9 +1,9 @@
-# Sora Weather ☀️
+# Kumi Weather ☀️
 
 Une application météo magnifique et riche en fonctionnalités, construite avec Flutter, suivant l'architecture MVC.
 
 <div align="center">
-  <img src="assets/images/logo.png" alt="Logo de Sora Weather" width="180"/>
+  <img src="assets/images/logo.png" alt="Logo de Kumi Weather" width="180"/>
 </div>
 
 Le design de l'application est disponible [ici](https://www.figma.com/design/fMr1nPU6FOMlqOAwUdCog3/Application-M%C3%A9t%C3%A9o?m=auto&t=iZYpI7RJ56kmtNq-1)

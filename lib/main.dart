@@ -28,10 +28,11 @@ import 'env/env.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  var box = await Hive.openBox("appParams");
+  await Hive.openBox("appParams");
+  await Hive.openBox('appWeatherCache');
   await AppLogger.initialize();
   if (Utils.checkIfMobile()) {
-    HomeWidget.setAppGroupId('group.fr.dazu.sora-weather');
+    HomeWidget.setAppGroupId('group.fr.dazu.kumi-weather');
     await HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
   }
 

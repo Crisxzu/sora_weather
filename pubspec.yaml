@@ -118,12 +118,12 @@ flutter:
 
 
 msix_config:
-  display_name: Sora Weather
+  display_name: Kumi Weather
   publisher: CN=503149AC-543F-45F5-AFC7-C83370C72E5B
   publisher_display_name: Dazu
-  identity_name: Dazu.SoraWeather
+  identity_name: Dazu.KumiWeather
   msix_version: 1.4.0.0
-  logo_path: C:\Users\Chris Kouassi\sora_weather\assets\images\logo.png
+  logo_path: C:\Users\Chris Kouassi\kumi_weather\assets\images\logo.png
   store: true
   languages: en-us, fr-fr
   capabilities: "internetClient,location"
