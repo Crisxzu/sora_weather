@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
     final locationProvider = Provider.of<LocationProvider>(context);
     if (locationProvider.isReady && locationProvider.activeIndex != _lastActiveIndex) {
       _lastActiveIndex = locationProvider.activeIndex;
-      _loadWeatherData();
+      WidgetsBinding.instance.addPostFrameCallback((_) => _loadWeatherData());
     }
   }
 
