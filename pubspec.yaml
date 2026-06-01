@@ -87,6 +87,9 @@ flutter:
     - assets/
     - assets/json/
     - assets/images/
+    - assets/geo/
+    - assets/geo/states/
+    - assets/geo/cities/
 
   generate: true
 
