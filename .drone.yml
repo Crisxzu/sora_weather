@@ -118,7 +118,6 @@ steps:
     environment:
       PLAYSTORE_JSON_KEY:
         from_secret: playstore_service_account
-      PLAYSTORE_JSON_KEY_PATH: fastlane/playstore_key.json
       BUNDLE_PATH: /usr/local/bundle
     commands:
       - bundle install --gemfile=android/Gemfile
