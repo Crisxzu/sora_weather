@@ -87,9 +87,11 @@ workflows:
         script: keychain initialize
       - name: Fetch signing files
         script: |
+          echo $CERTIFICATE_PRIVATE_KEY | base64 --decode > /tmp/certificate_private_key.pem
           app-store-connect fetch-signing-files com.dazu.sora-weather \
             --platform MAC_OS \
             --type MAC_APP_STORE \
+            --certificate-key=@file:/tmp/certificate_private_key.pem \
             --create
       - name: Set up signing certificates
         script: keychain add-certificates
