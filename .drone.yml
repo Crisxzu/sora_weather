@@ -103,7 +103,7 @@ steps:
         from_secret: github_token
       files:
         - build/app/outputs/apk/release/app-release.apk
-        #- build/app/outputs/bundle/release/app-release.aab
+        - build/app/outputs/bundle/release/app-release.aab
       title: ${DRONE_TAG}
       note: RELEASE_NOTES.md
       draft: true
