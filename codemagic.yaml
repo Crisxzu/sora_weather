@@ -8,6 +8,7 @@ workflows:
     cache:
       cache_paths:
         - $HOME/Library/Caches/CocoaPods
+        - ios/Pods
     triggering:
       events:
         - tag
@@ -66,6 +67,7 @@ workflows:
     cache:
       cache_paths:
         - $HOME/Library/Caches/CocoaPods
+        - macos/Pods
     triggering:
       events:
         - tag
