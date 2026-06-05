@@ -1,10 +1,32 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:weather_app/model/geo/geo_city.dart';
 import 'package:weather_app/model/geo/geo_country.dart';
 import 'package:weather_app/model/geo/geo_state.dart';
+
+List<GeoCountry> _parseCountries(String raw) =>
+    (jsonDecode(raw) as List)
+        .map((e) => GeoCountry.fromJson(Map<String, dynamic>.from(e as Map)))
+        .toList(growable: false);
+
+List<GeoState> _parseStates(_ParseStatesArgs args) =>
+    (jsonDecode(args.raw) as List)
+        .map((e) => GeoState.fromJson(Map<String, dynamic>.from(e as Map), countryIso2: args.iso2))
+        .toList(growable: false);
+
+List<GeoCity> _parseCities(String raw) =>
+    (jsonDecode(raw) as List)
+        .map((e) => GeoCity.fromJson(Map<String, dynamic>.from(e as Map)))
+        .toList(growable: false);
+
+class _ParseStatesArgs {
+  const _ParseStatesArgs(this.raw, this.iso2);
+  final String raw;
+  final String iso2;
+}
 
 class GeoRepository {
   GeoRepository({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
@@ -22,9 +44,7 @@ class GeoRepository {
   Future<List<GeoCountry>> countries() async {
     if (_countries != null) return _countries!;
     final raw = await _bundle.loadString('assets/geo/countries.json');
-    _countries = (jsonDecode(raw) as List)
-        .map((e) => GeoCountry.fromJson(Map<String, dynamic>.from(e as Map)))
-        .toList(growable: false);
+    _countries = await compute(_parseCountries, raw);
     return _countries!;
   }
 
@@ -35,9 +55,7 @@ class GeoRepository {
     return _statesInflight.putIfAbsent(key, () async {
       try {
         final raw = await _bundle.loadString('assets/geo/states/$key.json');
-        final list = (jsonDecode(raw) as List)
-            .map((e) => GeoState.fromJson(Map<String, dynamic>.from(e as Map), countryIso2: key))
-            .toList(growable: false);
+        final list = await compute(_parseStates, _ParseStatesArgs(raw, key));
         _statesCache[key] = list;
         return list;
       } catch (_) {
@@ -56,9 +74,7 @@ class GeoRepository {
     return _citiesInflight.putIfAbsent(key, () async {
       try {
         final raw = await _bundle.loadString('assets/geo/cities/$key.json');
-        final list = (jsonDecode(raw) as List)
-            .map((e) => GeoCity.fromJson(Map<String, dynamic>.from(e as Map)))
-            .toList(growable: false);
+        final list = await compute(_parseCities, raw);
         _citiesCache[key] = list;
         return list;
       } catch (_) {
