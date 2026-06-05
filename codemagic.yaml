@@ -91,7 +91,7 @@ workflows:
           app-store-connect fetch-signing-files com.dazu.sora-weather \
             --platform MAC_OS \
             --type MAC_APP_STORE \
-            --certificate-key=@file:/tmp/certificate_private_key.pem \
+            --certificate-key="$(cat /tmp/certificate_private_key.pem)" \
             --create
       - name: Set up signing certificates
         script: keychain add-certificates
