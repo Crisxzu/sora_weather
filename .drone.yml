@@ -10,7 +10,7 @@ steps:
       - git fetch --tags
 
   - name: prepare-build
-    image: ghcr.io/crisxzu/flutter-ci:latest
+    image: ghcr.io/crisxzu/flutter-ci:3.32.3
     depends_on:
       - prepare-git-tags
     environment:
@@ -55,7 +55,7 @@ steps:
         path: /root/.pub-cache
 
   - name: build-android
-    image: ghcr.io/crisxzu/flutter-ci:latest
+    image: ghcr.io/crisxzu/flutter-ci:3.32.3
     environment:
       GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=512m -Dorg.gradle.workers.max=2 -Dorg.gradle.daemon=false"
     resources:
