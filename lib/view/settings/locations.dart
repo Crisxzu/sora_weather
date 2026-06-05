@@ -36,7 +36,7 @@ class _LocationsPageState extends State<LocationsPage> {
     if (mounted) setState(() => _countries = countries);
   }
 
-  void _showAddCitySheet(BuildContext context) {
+  void _showAddCityDialog(BuildContext context) {
     _selectedCountry = null;
     _selectedState = null;
     _selectedCity = null;
@@ -44,175 +44,189 @@ class _LocationsPageState extends State<LocationsPage> {
 
     final locale = Provider.of<ParamsProvider>(context, listen: false).locale?.languageCode ?? 'en';
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
       builder: (ctx) {
         return StatefulBuilder(
-          builder: (ctx, setSheetState) {
+          builder: (ctx, setDialogState) {
             final l10n = AppLocalizations.of(ctx)!;
 
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 24,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(l10n.addCity, style: Theme.of(ctx).textTheme.titleLarge),
-                  const SizedBox(height: 16),
-
-                  // Country
-                  DropdownSearch<GeoCountry>(
-                    compareFn: (a, b) => a.iso2 == b.iso2,
-                    filterFn: (_, __) => true,
-                    items: (filter, _) => _countries
-                        .where((c) => FuzzySearch.matches(c.localizedName(locale), filter) ||
-                            FuzzySearch.matches(c.name, filter))
-                        .toList(),
-                    itemAsString: (c) => '${c.emoji}  ${c.localizedName(locale)}',
-                    selectedItem: _selectedCountry,
-                    decoratorProps: DropDownDecoratorProps(
-                      decoration: InputDecoration(labelText: l10n.country),
-                    ),
-                    popupProps: const PopupProps.menu(
-                      showSearchBox: true,
-                      searchFieldProps: TextFieldProps(
-                        decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
-                      ),
-                    ),
-                    onChanged: (val) => setSheetState(() {
-                      _selectedCountry = val;
-                      _selectedState = null;
-                      _selectedCity = null;
-                      _selectedCityState = null;
-                    }),
+            return Dialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 480),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    left: 24,
+                    right: 24,
+                    top: 24,
+                    bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
                   ),
-                  const SizedBox(height: 12),
-
-                  // State
-                  DropdownSearch<GeoState>(
-                    compareFn: (a, b) => a.id == b.id,
-                    filterFn: (_, __) => true,
-                    enabled: _selectedCountry != null,
-                    items: (filter, _) async {
-                      if (_selectedCountry == null) return [];
-                      final states = await GeoRepository.instance.statesOf(_selectedCountry!.iso2);
-                      return states
-                          .where((s) => FuzzySearch.matches(s.localizedName(locale), filter) ||
-                              FuzzySearch.matches(s.name, filter))
-                          .toList();
-                    },
-                    itemAsString: (s) => s.localizedName(locale),
-                    selectedItem: _selectedState,
-                    decoratorProps: DropDownDecoratorProps(
-                      decoration: InputDecoration(labelText: l10n.state),
-                    ),
-                    popupProps: const PopupProps.menu(
-                      showSearchBox: true,
-                      searchFieldProps: TextFieldProps(
-                        decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(l10n.addCity, style: Theme.of(ctx).textTheme.titleLarge),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.pop(ctx),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                        ],
                       ),
-                    ),
-                    onChanged: (val) => setSheetState(() {
-                      _selectedState = val;
-                      _selectedCity = null;
-                      _selectedCityState = null;
-                    }),
-                  ),
-                  const SizedBox(height: 12),
+                      const SizedBox(height: 16),
 
-                  // City
-                  DropdownSearch<GeoCity>(
-                    compareFn: (a, b) => a.id == b.id,
-                    filterFn: (_, __) => true,
-                    enabled: _selectedCountry != null,
-                    items: (filter, _) async {
-                      if (_selectedCountry == null) return [];
-                      if (_selectedState != null) {
-                        // Cities from selected state only
-                        final cities = await GeoRepository.instance.citiesOf(_selectedCountry!.iso2);
-                        return cities
-                            .where((c) => c.stateId == _selectedState!.id &&
+                      // Country
+                      DropdownSearch<GeoCountry>(
+                        compareFn: (a, b) => a.iso2 == b.iso2,
+                        filterFn: (_, __) => true,
+                        items: (filter, _) => _countries
+                            .where((c) =>
+                                FuzzySearch.matches(c.localizedName(locale), filter) ||
                                 FuzzySearch.matches(c.name, filter))
-                            .toList();
-                      } else {
-                        // Search across all cities of the country
-                        if (filter.isEmpty) return [];
-                        final results = await GeoRepository.instance.searchCities(
-                          iso2: _selectedCountry!.iso2,
-                          query: filter,
-                        );
-                        return results.map((r) => r.city).toList();
-                      }
-                    },
-                    itemAsString: (c) => c.name,
-                    selectedItem: _selectedCity,
-                    decoratorProps: DropDownDecoratorProps(
-                      decoration: InputDecoration(labelText: l10n.city),
-                    ),
-                    popupProps: PopupProps.menu(
-                      showSearchBox: true,
-                      searchFieldProps: const TextFieldProps(
-                        decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
-                      ),
-                      emptyBuilder: _selectedState == null
-                          ? (ctx, filter) => Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Text(
-                                    filter.isEmpty ? l10n.typeToSearch : l10n.noResults,
-                                    style: Theme.of(ctx).textTheme.bodyMedium,
-                                  ),
-                                ),
-                              )
-                          : null,
-                    ),
-                    onChanged: (val) async {
-                      if (val == null) {
-                        setSheetState(() {
+                            .toList(),
+                        itemAsString: (c) => '${c.emoji}  ${c.localizedName(locale)}',
+                        selectedItem: _selectedCountry,
+                        decoratorProps: DropDownDecoratorProps(
+                          decoration: InputDecoration(labelText: l10n.country),
+                        ),
+                        popupProps: const PopupProps.menu(
+                          showSearchBox: true,
+                          searchFieldProps: TextFieldProps(
+                            decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
+                          ),
+                        ),
+                        onChanged: (val) => setDialogState(() {
+                          _selectedCountry = val;
+                          _selectedState = null;
                           _selectedCity = null;
                           _selectedCityState = null;
-                        });
-                        return;
-                      }
-                      // Resolve the state for this city
-                      GeoState? cityState = _selectedState;
-                      if (cityState == null && _selectedCountry != null) {
-                        final states = await GeoRepository.instance.statesOf(_selectedCountry!.iso2);
-                        cityState = states.where((s) => s.id == val.stateId).firstOrNull;
-                      }
-                      setSheetState(() {
-                        _selectedCity = val;
-                        _selectedCityState = cityState;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
+                        }),
+                      ),
+                      const SizedBox(height: 12),
 
-                  ElevatedButton(
-                    onPressed: _selectedCity != null
-                        ? () {
-                            Provider.of<LocationProvider>(ctx, listen: false).addCity(
-                              cityName: _selectedCity!.name,
-                              countryName: _selectedCountry?.name ?? '',
-                              stateName: _selectedCityState?.name,
-                              countryEmoji: _selectedCountry?.emoji,
-                              countryIso2: _selectedCountry?.iso2,
+                      // State
+                      DropdownSearch<GeoState>(
+                        compareFn: (a, b) => a.id == b.id,
+                        filterFn: (_, __) => true,
+                        enabled: _selectedCountry != null,
+                        items: (filter, _) async {
+                          if (_selectedCountry == null) return [];
+                          final states = await GeoRepository.instance.statesOf(_selectedCountry!.iso2);
+                          return states
+                              .where((s) =>
+                                  FuzzySearch.matches(s.localizedName(locale), filter) ||
+                                  FuzzySearch.matches(s.name, filter))
+                              .toList();
+                        },
+                        itemAsString: (s) => s.localizedName(locale),
+                        selectedItem: _selectedState,
+                        decoratorProps: DropDownDecoratorProps(
+                          decoration: InputDecoration(labelText: l10n.state),
+                        ),
+                        popupProps: const PopupProps.menu(
+                          showSearchBox: true,
+                          searchFieldProps: TextFieldProps(
+                            decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
+                          ),
+                        ),
+                        onChanged: (val) => setDialogState(() {
+                          _selectedState = val;
+                          _selectedCity = null;
+                          _selectedCityState = null;
+                        }),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // City
+                      DropdownSearch<GeoCity>(
+                        compareFn: (a, b) => a.id == b.id,
+                        filterFn: (_, __) => true,
+                        enabled: _selectedCountry != null,
+                        items: (filter, _) async {
+                          if (_selectedCountry == null) return [];
+                          if (_selectedState != null) {
+                            final cities = await GeoRepository.instance.citiesOf(_selectedCountry!.iso2);
+                            return cities
+                                .where((c) =>
+                                    c.stateId == _selectedState!.id &&
+                                    FuzzySearch.matches(c.name, filter))
+                                .toList();
+                          } else {
+                            if (filter.isEmpty) return [];
+                            final results = await GeoRepository.instance.searchCities(
+                              iso2: _selectedCountry!.iso2,
+                              query: filter,
                             );
-                            Navigator.pop(ctx);
+                            return results.map((r) => r.city).toList();
                           }
-                        : null,
-                    child: Text(l10n.addCity),
+                        },
+                        itemAsString: (c) => c.name,
+                        selectedItem: _selectedCity,
+                        decoratorProps: DropDownDecoratorProps(
+                          decoration: InputDecoration(labelText: l10n.city),
+                        ),
+                        popupProps: PopupProps.menu(
+                          showSearchBox: true,
+                          searchFieldProps: const TextFieldProps(
+                            decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
+                          ),
+                          emptyBuilder: _selectedState == null
+                              ? (ctx, filter) => Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Text(
+                                        filter.isEmpty ? l10n.typeToSearch : l10n.noResults,
+                                        style: Theme.of(ctx).textTheme.bodyMedium,
+                                      ),
+                                    ),
+                                  )
+                              : null,
+                        ),
+                        onChanged: (val) async {
+                          if (val == null) {
+                            setDialogState(() {
+                              _selectedCity = null;
+                              _selectedCityState = null;
+                            });
+                            return;
+                          }
+                          GeoState? cityState = _selectedState;
+                          if (cityState == null && _selectedCountry != null) {
+                            final states = await GeoRepository.instance.statesOf(_selectedCountry!.iso2);
+                            cityState = states.where((s) => s.id == val.stateId).firstOrNull;
+                          }
+                          setDialogState(() {
+                            _selectedCity = val;
+                            _selectedCityState = cityState;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      ElevatedButton(
+                        onPressed: _selectedCity != null
+                            ? () {
+                                Provider.of<LocationProvider>(ctx, listen: false).addCity(
+                                  cityName: _selectedCity!.name,
+                                  countryName: _selectedCountry?.name ?? '',
+                                  stateName: _selectedCityState?.name,
+                                  countryEmoji: _selectedCountry?.emoji,
+                                  countryIso2: _selectedCountry?.iso2,
+                                );
+                                Navigator.pop(ctx);
+                              }
+                            : null,
+                        child: Text(l10n.addCity),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           },
@@ -287,7 +301,7 @@ class _LocationsPageState extends State<LocationsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddCitySheet(context),
+        onPressed: () => _showAddCityDialog(context),
         child: const Icon(Icons.add),
       ),
     );
