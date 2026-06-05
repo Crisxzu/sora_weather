@@ -1,13 +1,26 @@
 class FuzzySearch {
+  static const _accents = 'àáâãäåæçèéêëìíîïðñòóôõöùúûüýÿ';
+  static const _plain   = 'aaaaaaeceeeeiiiidnoooooouuuuyy';
+
+  static String _normalize(String s) {
+    final buf = StringBuffer();
+    for (final ch in s.toLowerCase().runes) {
+      final c = String.fromCharCode(ch);
+      final i = _accents.indexOf(c);
+      buf.write(i >= 0 ? _plain[i] : c);
+    }
+    return buf.toString();
+  }
+
   static bool matches(String candidate, String query, {double threshold = 0.3}) {
     if (query.isEmpty) return true;
-    final q = query.toLowerCase();
-    final c = candidate.toLowerCase();
+    final q = _normalize(query);
+    final c = _normalize(candidate);
 
     if (c.contains(q)) return true;
     if (q.length <= 3) return c.startsWith(q) || c.contains(q);
 
-    // Test against each word of the candidate so "unitd" matches "United Kingdom"
+    // Test against each word so "unitd" matches "United Kingdom"
     final words = c.split(RegExp(r'\s+'));
     for (final word in words) {
       if (word.contains(q)) return true;

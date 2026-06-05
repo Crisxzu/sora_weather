@@ -21,12 +21,16 @@ class LocationPreference extends HiveObject {
   @HiveField(4)
   final String? countryEmoji;
 
+  @HiveField(5)
+  final String? countryIso2;
+
   LocationPreference({
     required this.type,
     this.cityName,
     this.countryName,
     this.stateName,
     this.countryEmoji,
+    this.countryIso2,
   });
 
   bool get isGps => type == 'gps';
@@ -44,6 +48,7 @@ class LocationPreference extends HiveObject {
     required String countryName,
     String? stateName,
     String? countryEmoji,
+    String? countryIso2,
   }) =>
       LocationPreference(
         type: 'city',
@@ -51,5 +56,6 @@ class LocationPreference extends HiveObject {
         countryName: countryName,
         stateName: stateName,
         countryEmoji: countryEmoji,
+        countryIso2: countryIso2,
       );
 }

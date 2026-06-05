@@ -50,5 +50,7 @@
   "apiErrorServiceUnavailable": "Le service météo est temporairement indisponible. Réessayez plus tard.",
   "apiErrorTooManyRequests": "Trop de requêtes. Attendez un moment avant de réessayer.",
   "apiErrorServer": "Une erreur serveur est survenue. Réessayez plus tard.",
-  "apiErrorDefault": "Impossible de récupérer les données météo. Vérifiez votre connexion Internet."
+  "apiErrorDefault": "Impossible de récupérer les données météo. Vérifiez votre connexion Internet.",
+  "typeToSearch": "Tapez pour rechercher...",
+  "noResults": "Aucun résultat trouvé."
 }

@@ -69,6 +69,7 @@ class LocationProvider extends ChangeNotifier {
     required String countryName,
     String? stateName,
     String? countryEmoji,
+    String? countryIso2,
   }) {
     final exists = _locations.any((l) =>
         !l.isGps &&
@@ -81,6 +82,7 @@ class LocationProvider extends ChangeNotifier {
       countryName: countryName,
       stateName: stateName,
       countryEmoji: countryEmoji,
+      countryIso2: countryIso2,
     ));
     _save();
     notifyListeners();

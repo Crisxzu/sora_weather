@@ -32,7 +32,7 @@ class WeatherDataProvider extends ChangeNotifier {
 
     final String cacheKey = activeLocation.isGps
         ? 'gps_${userPosition?.latitude.toStringAsFixed(2)}_${userPosition?.longitude.toStringAsFixed(2)}'
-        : 'city_${activeLocation.cityName?.toLowerCase()}';
+        : 'city_${activeLocation.cityName?.toLowerCase()}_${activeLocation.countryIso2?.toLowerCase()}';
 
     final cached = _cache.getIfValid(cacheKey, updateLimitMinutes);
     if (cached != null) {
@@ -54,6 +54,9 @@ class WeatherDataProvider extends ChangeNotifier {
         }
       } else {
         params['city'] = activeLocation.cityName;
+        if (activeLocation.countryIso2 != null) {
+          params['country_code'] = activeLocation.countryIso2;
+        }
       }
 
       _data = await _controller.fetchWeatherData(params);

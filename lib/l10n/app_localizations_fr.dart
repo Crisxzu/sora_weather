@@ -160,4 +160,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get apiErrorDefault =>
       'Impossible de récupérer les données météo. Vérifiez votre connexion Internet.';
+
+  @override
+  String get typeToSearch => 'Tapez pour rechercher...';
+
+  @override
+  String get noResults => 'Aucun résultat trouvé.';
 }

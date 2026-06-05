@@ -50,5 +50,7 @@
   "apiErrorServiceUnavailable": "Weather service temporarily unavailable. Please try again later.",
   "apiErrorTooManyRequests": "Too many requests. Please wait a moment before retrying.",
   "apiErrorServer": "A server error occurred. Please try again later.",
-  "apiErrorDefault": "Unable to retrieve weather data. Please check your Internet connection."
+  "apiErrorDefault": "Unable to retrieve weather data. Please check your Internet connection.",
+  "typeToSearch": "Type to search...",
+  "noResults": "No results found."
 }

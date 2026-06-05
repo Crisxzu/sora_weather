@@ -158,11 +158,22 @@ class _LocationsPageState extends State<LocationsPage> {
                     decoratorProps: DropDownDecoratorProps(
                       decoration: InputDecoration(labelText: l10n.city),
                     ),
-                    popupProps: const PopupProps.menu(
+                    popupProps: PopupProps.menu(
                       showSearchBox: true,
-                      searchFieldProps: TextFieldProps(
+                      searchFieldProps: const TextFieldProps(
                         decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
                       ),
+                      emptyBuilder: _selectedState == null
+                          ? (ctx, filter) => Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Text(
+                                    filter.isEmpty ? l10n.typeToSearch : l10n.noResults,
+                                    style: Theme.of(ctx).textTheme.bodyMedium,
+                                  ),
+                                ),
+                              )
+                          : null,
                     ),
                     onChanged: (val) async {
                       if (val == null) {
@@ -194,6 +205,7 @@ class _LocationsPageState extends State<LocationsPage> {
                               countryName: _selectedCountry?.name ?? '',
                               stateName: _selectedCityState?.name,
                               countryEmoji: _selectedCountry?.emoji,
+                              countryIso2: _selectedCountry?.iso2,
                             );
                             Navigator.pop(ctx);
                           }

@@ -159,4 +159,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get apiErrorDefault =>
       'Unable to retrieve weather data. Please check your Internet connection.';
+
+  @override
+  String get typeToSearch => 'Type to search...';
+
+  @override
+  String get noResults => 'No results found.';
 }
