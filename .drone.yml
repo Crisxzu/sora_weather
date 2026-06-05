@@ -72,15 +72,46 @@ steps:
       - name: gradle-cache
         path: /root/.gradle
 
-  #- name: build-web
-  #  image: ghcr.io/cirruslabs/flutter:3.35.2
-  #  commands:
-  #    # Clean et get des dépendances
-  #    - flutter clean
-  #    - flutter pub get
-  #    - flutter build web
-  #  depends_on:
-  #    - prepare-build
+  - name: build-web
+    image: plugins/docker
+    settings:
+      repo: ghcr.io/crisxzu/kumi-weather-web
+      registry: ghcr.io
+      username: crisxzu
+      password:
+        from_secret: github_token
+      tags:
+        - ${DRONE_TAG}
+        - latest
+      build_args_from_env:
+        - ENV_FILE
+    environment:
+      ENV_FILE:
+        from_secret: env_file
+    depends_on:
+      - prepare-build
+    when:
+      event: tag
+
+  - name: deploy-web
+    image: curlimages/curl:latest
+    commands:
+      - |
+        curl -sf -X POST "https://$DOKPLOY_HOST/api/application.deploy" \
+          -H "x-api-key: $DOKPLOY_API_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d "{\"applicationId\": \"$DOKPLOY_APP_ID\"}"
+    environment:
+      DOKPLOY_HOST:
+        from_secret: dokploy_host
+      DOKPLOY_API_TOKEN:
+        from_secret: dokploy_api_token
+      DOKPLOY_APP_ID:
+        from_secret: dokploy_app_id
+    depends_on:
+      - build-web
+    when:
+      event: tag
 
   - name: generate-changelog
     image: orhunp/git-cliff:latest
