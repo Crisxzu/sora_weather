@@ -71,7 +71,7 @@ workflows:
         - pattern: 'v*'
           include: true
     environment:
-      macos_signing:
+      mac_signing:
         distribution_type: app_store
         bundle_identifier: com.dazu.kumi-weather
       groups:
