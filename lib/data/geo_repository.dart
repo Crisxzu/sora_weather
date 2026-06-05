@@ -111,13 +111,15 @@ class GeoRepository {
       if (results.length >= limit * 2) break;
     }
 
+    // Pre-compute lowercased names once — avoids O(N log N) allocations in comparator
+    final lower = {for (final r in results) r.city.id: r.city.name.toLowerCase()};
     results.sort((a, b) {
-      final aN = a.city.name.toLowerCase();
-      final bN = b.city.name.toLowerCase();
+      final aN = lower[a.city.id]!;
+      final bN = lower[b.city.id]!;
       final aP = aN.startsWith(q);
       final bP = bN.startsWith(q);
       if (aP != bP) return aP ? -1 : 1;
-      return a.city.name.compareTo(b.city.name);
+      return aN.compareTo(bN);
     });
 
     return results.length > limit ? results.sublist(0, limit) : results;
