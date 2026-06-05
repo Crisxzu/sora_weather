@@ -46,6 +46,10 @@ steps:
       # Décodage du fichier contenant les variables environnement
       - echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
       - ls -l lib/env
+
+      # Génération des fichiers de code
+      - flutter pub get
+      - dart run build_runner build --delete-conflicting-outputs
     volumes:
       - name: pub-cache
         path: /root/.pub-cache

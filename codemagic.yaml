@@ -32,6 +32,8 @@ workflows:
           xcode-project use-profiles
       - name: Get Flutter packages
         script: flutter pub get
+      - name: Generate code
+        script: dart run build_runner build --delete-conflicting-outputs
       - name: Install pods
         script: cd ios && pod install
       - name: Flutter build ipa
@@ -94,6 +96,8 @@ workflows:
           echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
       - name: Get Flutter packages
         script: flutter pub get
+      - name: Generate code
+        script: dart run build_runner build --delete-conflicting-outputs
       - name: Install pods
         script: cd macos && pod install
       - name: Build Flutter macOS
