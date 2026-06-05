@@ -116,19 +116,24 @@ workflows:
         script: |
           set -x
           APP_PATH=$(find "$PWD" -name "*.app" -path "*/Release/*" | head -1)
-          APP_DIR=$(dirname "$APP_PATH")
+          echo "Found app: $APP_PATH"
+          RELEASE_DIR=$(dirname "$APP_PATH")
           APP_BASE=$(basename "$APP_PATH" .app)
-          PKG_PATH="$APP_DIR/$APP_BASE.pkg"
-          UNSIGNED_PKG="$APP_DIR/unsigned.pkg"
+          UNSIGNED_PKG="$RELEASE_DIR/unsigned.pkg"
+          PKG_PATH="$RELEASE_DIR/$APP_BASE.pkg"
           xcrun productbuild --component "$APP_PATH" /Applications/ "$UNSIGNED_PKG"
           INSTALLER_CERT_NAME=$(keychain list-certificates \
             | jq -r '.[] | select(.common_name | test("3rd Party Mac Developer Installer")) | .common_name' \
             | head -1)
+          echo "Using cert: $INSTALLER_CERT_NAME"
           xcrun productsign --sign "$INSTALLER_CERT_NAME" "$UNSIGNED_PKG" "$PKG_PATH"
           rm -f "$UNSIGNED_PKG"
-          echo "PKG_PATH=$PKG_PATH" >> $CM_ENV
+          echo "Generated pkg: $PKG_PATH"
+          ls -la "$RELEASE_DIR"
       - name: Publish to TestFlight
         script: |
+          PKG_PATH=$(find "$PWD/build/macos/Build/Products/Release" -name "*.pkg" | head -1)
+          echo "Publishing: $PKG_PATH"
           app-store-connect publish \
             --path "$PKG_PATH" \
             --platform MAC_OS \
