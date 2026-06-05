@@ -1,5 +1,7 @@
+import 'package:weather_app/common/fuzzy_search.dart';
+
 class GeoState {
-  const GeoState({
+  GeoState({
     required this.id,
     required this.name,
     required this.countryIso2,
@@ -24,6 +26,8 @@ class GeoState {
   final String? iso2;
   final String? type;
   final Map<String, String> translations;
+
+  late final String normalizedName = FuzzySearch.normalize(name);
 
   String localizedName(String languageCode) =>
       translations[languageCode] ?? translations[languageCode.split('-').first] ?? name;

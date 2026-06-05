@@ -85,11 +85,15 @@ class _LocationsPageState extends State<LocationsPage> {
                       DropdownSearch<GeoCountry>(
                         compareFn: (a, b) => a.iso2 == b.iso2,
                         filterFn: (_, __) => true,
-                        items: (filter, _) => _countries
-                            .where((c) =>
-                                FuzzySearch.matches(c.localizedName(locale), filter) ||
-                                FuzzySearch.matches(c.name, filter))
-                            .toList(),
+                        items: (filter, _) {
+                          if (filter.isEmpty) return _countries;
+                          final q = FuzzySearch.normalize(filter);
+                          return _countries
+                              .where((c) =>
+                                  FuzzySearch.matchesNormalized(FuzzySearch.normalize(c.localizedName(locale)), q) ||
+                                  FuzzySearch.matchesNormalized(c.normalizedName, q))
+                              .toList();
+                        },
                         itemAsString: (c) => '${c.emoji}  ${c.localizedName(locale)}',
                         selectedItem: _selectedCountry,
                         decoratorProps: DropDownDecoratorProps(
@@ -118,10 +122,12 @@ class _LocationsPageState extends State<LocationsPage> {
                         items: (filter, _) async {
                           if (_selectedCountry == null) return [];
                           final states = await GeoRepository.instance.statesOf(_selectedCountry!.iso2);
+                          if (filter.isEmpty) return states;
+                          final q = FuzzySearch.normalize(filter);
                           return states
                               .where((s) =>
-                                  FuzzySearch.matches(s.localizedName(locale), filter) ||
-                                  FuzzySearch.matches(s.name, filter))
+                                  FuzzySearch.matchesNormalized(FuzzySearch.normalize(s.localizedName(locale)), q) ||
+                                  FuzzySearch.matchesNormalized(s.normalizedName, q))
                               .toList();
                         },
                         itemAsString: (s) => s.localizedName(locale),
@@ -151,11 +157,13 @@ class _LocationsPageState extends State<LocationsPage> {
                         items: (filter, _) async {
                           if (_selectedCountry == null) return [];
                           if (_selectedState != null) {
+                            if (filter.isEmpty) return [];
                             final cities = await GeoRepository.instance.citiesOf(_selectedCountry!.iso2);
+                            final q = FuzzySearch.normalize(filter);
                             return cities
                                 .where((c) =>
                                     c.stateId == _selectedState!.id &&
-                                    FuzzySearch.matches(c.name, filter))
+                                    FuzzySearch.matchesNormalized(c.normalizedName, q))
                                 .toList();
                           } else {
                             if (filter.isEmpty) return [];

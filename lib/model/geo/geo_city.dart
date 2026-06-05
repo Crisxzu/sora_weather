@@ -1,5 +1,7 @@
+import 'package:weather_app/common/fuzzy_search.dart';
+
 class GeoCity {
-  const GeoCity({
+  GeoCity({
     required this.id,
     required this.name,
     required this.stateId,
@@ -14,6 +16,8 @@ class GeoCity {
   final int id;
   final String name;
   final int stateId;
+
+  late final String normalizedName = FuzzySearch.normalize(name);
 
   @override
   bool operator ==(Object other) => other is GeoCity && other.id == id;

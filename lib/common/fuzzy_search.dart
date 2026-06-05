@@ -2,20 +2,31 @@ class FuzzySearch {
   static const _accents = 'àáâãäåæçèéêëìíîïðñòóôõöùúûüýÿ';
   static const _plain   = 'aaaaaaeceeeeiiiidnoooooouuuuyy';
 
-  static String _normalize(String s) {
+  // O(1) accent lookup built once at class load
+  static final Map<int, int> _accentMap = () {
+    final accentRunes = _accents.runes.toList();
+    final plainRunes  = _plain.runes.toList();
+    return { for (var i = 0; i < accentRunes.length; i++) accentRunes[i]: plainRunes[i] };
+  }();
+
+  static String normalize(String s) {
     final buf = StringBuffer();
-    for (final ch in s.toLowerCase().runes) {
-      final c = String.fromCharCode(ch);
-      final i = _accents.indexOf(c);
-      buf.write(i >= 0 ? _plain[i] : c);
+    for (final cp in s.toLowerCase().runes) {
+      buf.writeCharCode(_accentMap[cp] ?? cp);
     }
     return buf.toString();
   }
 
+  /// Normalizes [query] once, then tests [candidate] against it.
   static bool matches(String candidate, String query, {double threshold = 0.3}) {
     if (query.isEmpty) return true;
-    final q = _normalize(query);
-    final c = _normalize(candidate);
+    return matchesNormalized(normalize(candidate), normalize(query), threshold: threshold);
+  }
+
+  /// Use this when the normalized query is already known (avoid re-normalizing per candidate).
+  static bool matchesNormalized(String normalizedCandidate, String normalizedQuery, {double threshold = 0.3}) {
+    final q = normalizedQuery;
+    final c = normalizedCandidate;
 
     if (c.contains(q)) return true;
     if (q.length <= 3) return c.startsWith(q) || c.contains(q);
