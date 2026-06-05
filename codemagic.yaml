@@ -22,7 +22,7 @@ workflows:
       groups:
         - kumi
       flutter: "3.32.3"
-      xcode: "16.4"
+      xcode: "26.0"
       cocoapods: default
     scripts:
       - name: Set up code signing settings on Xcode project
@@ -80,7 +80,7 @@ workflows:
       groups:
         - kumi
       flutter: "3.32.3"
-      xcode: "16.4"
+      xcode: "26.0"
       cocoapods: default
     scripts:
       - name: Set up keychain
