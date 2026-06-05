@@ -71,9 +71,6 @@ workflows:
         - pattern: 'v*'
           include: true
     environment:
-      mac_signing:
-        distribution_type: app_store
-        bundle_identifier: com.dazu.kumi-weather
       groups:
         - kumi
       flutter: "3.32.3"
