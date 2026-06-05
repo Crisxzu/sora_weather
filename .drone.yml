@@ -94,6 +94,7 @@ steps:
       event: tag
     depends_on:
       - prepare-git-tags
+      - build-android
 
   - name: release
     image: plugins/github-release
@@ -148,7 +149,6 @@ trigger:
     - tag
   branch:
     - main
-    - dev
 
 ---
 kind: secret
