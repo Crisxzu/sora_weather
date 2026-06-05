@@ -47,9 +47,9 @@ steps:
       - echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
       - ls -l lib/env
 
-      # Génération des fichiers de code
+      # Génération des fichiers de code (hive uniquement, envied exclu car env.g.dart déjà injecté)
       - flutter pub get
-      - dart run build_runner build --delete-conflicting-outputs
+      - dart run build_runner build --build-filter="lib/model/**" --delete-conflicting-outputs
     volumes:
       - name: pub-cache
         path: /root/.pub-cache
