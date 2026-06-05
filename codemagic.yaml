@@ -115,19 +115,22 @@ workflows:
       - name: Package application
         script: |
           set -x
-          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
-          cd $(dirname "$APP_NAME")
-          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
-          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          APP_PATH=$(find "$PWD" -name "*.app" -path "*/Release/*" | head -1)
+          APP_DIR=$(dirname "$APP_PATH")
+          APP_BASE=$(basename "$APP_PATH" .app)
+          PKG_PATH="$APP_DIR/$APP_BASE.pkg"
+          UNSIGNED_PKG="$APP_DIR/unsigned.pkg"
+          xcrun productbuild --component "$APP_PATH" /Applications/ "$UNSIGNED_PKG"
           INSTALLER_CERT_NAME=$(keychain list-certificates \
             | jq -r '.[] | select(.common_name | test("3rd Party Mac Developer Installer")) | .common_name' \
             | head -1)
-          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
-          rm -f unsigned.pkg
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" "$UNSIGNED_PKG" "$PKG_PATH"
+          rm -f "$UNSIGNED_PKG"
+          echo "PKG_PATH=$PKG_PATH" >> $CM_ENV
       - name: Publish to TestFlight
         script: |
           app-store-connect publish \
-            --path "$(find $(pwd) -name "*.pkg" -path "*/Release/*" | head -1)" \
+            --path "$PKG_PATH" \
             --platform MAC_OS \
             --max-build-processing-wait 0
     artifacts:
