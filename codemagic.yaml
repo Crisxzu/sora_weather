@@ -18,7 +18,7 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.dazu.kumi-weather
+        bundle_identifier: com.dazu.sora-weather
       groups:
         - kumi
       flutter: "3.32.3"
@@ -87,7 +87,7 @@ workflows:
         script: keychain initialize
       - name: Fetch signing files
         script: |
-          app-store-connect fetch-signing-files com.dazu.kumi-weather \
+          app-store-connect fetch-signing-files com.dazu.sora-weather \
             --platform MAC_OS \
             --type MAC_APP_STORE \
             --create

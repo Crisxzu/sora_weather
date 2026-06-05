@@ -3,9 +3,9 @@ import OSLog
 import WidgetKit
 import SwiftUI
 
-private let logger = Logger(subsystem: "fr.dazu.kumi-weather.WeatherWidgetProvider", category: "RefreshIntent")
+private let logger = Logger(subsystem: "fr.dazu.sora-weather.WeatherWidgetProvider", category: "RefreshIntent")
 
-private let appGroupId = "group.fr.dazu.kumi-weather"
+private let appGroupId = "group.fr.dazu.sora-weather"
 
 // MARK: - Data Model
 

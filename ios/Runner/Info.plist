@@ -20,7 +20,7 @@
 		<string>fr</string>
 	</array>
 	<key>CFBundleName</key>
-	<string>kumi_weather</string>
+	<string>sora_weather</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
