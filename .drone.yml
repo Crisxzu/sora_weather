@@ -43,13 +43,13 @@ steps:
       - echo "Checking keystore:"
       - ls -l android/app/upload-keystore.jks
 
-      # Décodage du fichier contenant les variables environnement
+      # Génération des fichiers de code (hive uniquement, envied exclu)
+      - flutter pub get
+      - dart run build_runner build --build-filter="lib/model/**"
+
+      # Décodage du fichier env (après build_runner pour ne pas être écrasé)
       - echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
       - ls -l lib/env
-
-      # Génération des fichiers de code (hive uniquement, envied exclu car env.g.dart déjà injecté)
-      - flutter pub get
-      - dart run build_runner build --build-filter="lib/model/**" --delete-conflicting-outputs
     volumes:
       - name: pub-cache
         path: /root/.pub-cache
