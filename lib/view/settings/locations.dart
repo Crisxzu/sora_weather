@@ -90,8 +90,8 @@ class _LocationsPageState extends State<LocationsPage> {
                           final q = FuzzySearch.normalize(filter);
                           return _countries
                               .where((c) =>
-                                  FuzzySearch.matchesNormalized(FuzzySearch.normalize(c.localizedName(locale)), q) ||
-                                  FuzzySearch.matchesNormalized(c.normalizedName, q))
+                                  FuzzySearch.matchesNormalized(c.normalizedName, q) ||
+                                  FuzzySearch.matchesNormalized(FuzzySearch.normalize(c.localizedName(locale)), q))
                               .toList();
                         },
                         itemAsString: (c) => '${c.emoji}  ${c.localizedName(locale)}',
@@ -101,6 +101,7 @@ class _LocationsPageState extends State<LocationsPage> {
                         ),
                         popupProps: const PopupProps.menu(
                           showSearchBox: true,
+                          searchDelay: Duration(milliseconds: 200),
                           searchFieldProps: TextFieldProps(
                             decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
                           ),
@@ -126,8 +127,8 @@ class _LocationsPageState extends State<LocationsPage> {
                           final q = FuzzySearch.normalize(filter);
                           return states
                               .where((s) =>
-                                  FuzzySearch.matchesNormalized(FuzzySearch.normalize(s.localizedName(locale)), q) ||
-                                  FuzzySearch.matchesNormalized(s.normalizedName, q))
+                                  FuzzySearch.matchesNormalized(s.normalizedName, q) ||
+                                  FuzzySearch.matchesNormalized(FuzzySearch.normalize(s.localizedName(locale)), q))
                               .toList();
                         },
                         itemAsString: (s) => s.localizedName(locale),
@@ -137,6 +138,7 @@ class _LocationsPageState extends State<LocationsPage> {
                         ),
                         popupProps: const PopupProps.menu(
                           showSearchBox: true,
+                          searchDelay: Duration(milliseconds: 200),
                           searchFieldProps: TextFieldProps(
                             decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
                           ),
@@ -181,6 +183,7 @@ class _LocationsPageState extends State<LocationsPage> {
                         ),
                         popupProps: PopupProps.menu(
                           showSearchBox: true,
+                          searchDelay: const Duration(milliseconds: 200),
                           searchFieldProps: const TextFieldProps(
                             decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
                           ),
