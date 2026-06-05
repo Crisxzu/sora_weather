@@ -59,11 +59,8 @@ steps:
         memory: 4096MiB
         cpu: 2
     commands:
-      # Vérification de Java
       - java -version
       - echo $JAVA_HOME
-      # Clean et get des dépendances
-      - flutter clean
       - flutter pub get
       - flutter build appbundle --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
       - flutter build apk --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
