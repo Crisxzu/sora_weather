@@ -7,7 +7,6 @@ workflows:
       app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
     cache:
       cache_paths:
-        - $FLUTTER_ROOT
         - $HOME/Library/Caches/CocoaPods
     triggering:
       events:
@@ -38,6 +37,8 @@ workflows:
       - name: Flutter build ipa
         script: |
           flutter build ipa --release \
+            --build-name=${CM_TAG#v} \
+            --build-number=$PROJECT_BUILD_NUMBER \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
@@ -54,80 +55,85 @@ workflows:
         submit_to_testflight: true
         submit_to_app_store: false
 
-#  macos-workflow:
-#    name: macOS Workflow
-#    instance_type: mac_mini_m2
-#    max_build_duration: 120
-#    integrations:
-#      app_store_connect: Codemagic # <-- nom de l'intégration dans Codemagic UI
-#    cache:
-#      cache_paths:
-#        - $FLUTTER_ROOT
-#        - $HOME/Library/Caches/CocoaPods
-#    triggering:
-#      events:
-#        - tag
-#      tag_patterns:
-#        - pattern: 'v*'
-#          include: true
-#    environment:
-#      groups:
-#        - kumi
-#      flutter: "3.32.3"
-#      xcode: "16.4"
-#      cocoapods: default
-#    scripts:
-#      - name: Set up keychain
-#        script: keychain initialize
-#      - name: Fetch signing files
-#        script: |
-#          app-store-connect fetch-signing-files com.dazu.kumi-weather \
-#            --platform MAC_OS \
-#            --type MAC_APP_STORE \
-#            --create
-#      - name: Set up signing certificates
-#        script: keychain add-certificates
-#      - name: Set up code signing settings on Xcode project
-#        script: xcode-project use-profiles
-#      - name: Generate env file
-#        script: |
-#          echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
-#      - name: Get Flutter packages
-#        script: flutter pub get
-#      - name: Install pods
-#        script: cd macos && pod install
-#      - name: Build Flutter macOS
-#        script: |
-#          flutter config --enable-macos-desktop
-#          flutter build macos --release \
-#            --build-name=${CM_TAG#v} \
-#            --build-number=$PROJECT_BUILD_NUMBER
-#      - name: Package application
-#        script: |
-#          set -x
-#          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
-#          cd $(dirname "$APP_NAME")
-#          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
-#          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
-#          INSTALLER_CERT_NAME=$(keychain list-certificates \
-#            | jq -r '.[] | select(.common_name | ascii_downcase | test("installer")) | .common_name' \
-#            | head -1)
-#          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
-#          rm -f unsigned.pkg
-#      - name: Publish to TestFlight
-#        script: |
-#          app-store-connect publish \
-#            --path "$(find $(pwd) -name "*.pkg" -path "*/Release/*" | head -1)" \
-#            --platform MAC_OS \
-#            --max-build-processing-wait 0
-#    artifacts:
-#      - build/macos/Build/Products/Release/*.pkg
-#      - /tmp/xcodebuild_logs/*.log
-#    publishing:
-#      email:
-#        recipients:
-#          - kumi-deployment@snowsky-dev.com
-#        notify:
-#          success: true
-#          failure: true
-#
+  macos-workflow:
+    name: macOS Workflow
+    instance_type: mac_mini_m2
+    max_build_duration: 120
+    integrations:
+      app_store_connect: Codemagic
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
+    environment:
+      macos_signing:
+        distribution_type: app_store
+        bundle_identifier: com.dazu.kumi-weather
+      groups:
+        - kumi
+      flutter: "3.32.3"
+      xcode: "16.4"
+      cocoapods: default
+    scripts:
+      - name: Set up keychain
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files com.dazu.kumi-weather \
+            --platform MAC_OS \
+            --type MAC_APP_STORE \
+            --create
+      - name: Set up signing certificates
+        script: keychain add-certificates
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Generate env file
+        script: |
+          echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Install pods
+        script: cd macos && pod install
+      - name: Build Flutter macOS
+        script: |
+          flutter config --enable-macos-desktop
+          flutter build macos --release \
+            --build-name=${CM_TAG#v} \
+            --build-number=$PROJECT_BUILD_NUMBER
+      - name: Package application
+        script: |
+          set -x
+          APP_NAME=$(find $(pwd) -name "*.app" -path "*/Release/*" | head -1)
+          cd $(dirname "$APP_NAME")
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+            | jq -r '.[] | select(.common_name | test("3rd Party Mac Developer Installer")) | .common_name' \
+            | head -1)
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+          rm -f unsigned.pkg
+      - name: Publish to TestFlight
+        script: |
+          app-store-connect publish \
+            --path "$(find $(pwd) -name "*.pkg" -path "*/Release/*" | head -1)" \
+            --platform MAC_OS \
+            --max-build-processing-wait 0
+    artifacts:
+      - build/macos/Build/Products/Release/*.pkg
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      email:
+        recipients:
+          - kumi-deployment@snowsky-dev.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
