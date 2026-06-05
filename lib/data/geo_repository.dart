@@ -37,7 +37,9 @@ class GeoRepository {
 
   List<GeoCountry>? _countries;
   final Map<String, List<GeoState>> _statesCache = {};
+  // LinkedHashMap preserves insertion order — keys.first is always the oldest entry
   final Map<String, List<GeoCity>> _citiesCache = {};
+  static const _maxCachedCityCountries = 3;
   final Map<String, Future<List<GeoState>>> _statesInflight = {};
   final Map<String, Future<List<GeoCity>>> _citiesInflight = {};
 
@@ -70,11 +72,19 @@ class GeoRepository {
   Future<List<GeoCity>> citiesOf(String iso2) {
     final key = iso2.toUpperCase();
     final cached = _citiesCache[key];
-    if (cached != null) return Future.value(cached);
+    if (cached != null) {
+      // Refresh LRU order: move to end
+      _citiesCache.remove(key);
+      _citiesCache[key] = cached;
+      return Future.value(cached);
+    }
     return _citiesInflight.putIfAbsent(key, () async {
       try {
         final raw = await _bundle.loadString('assets/geo/cities/$key.json');
         final list = await compute(_parseCities, raw);
+        if (_citiesCache.length >= _maxCachedCityCountries) {
+          _citiesCache.remove(_citiesCache.keys.first);
+        }
         _citiesCache[key] = list;
         return list;
       } catch (_) {
