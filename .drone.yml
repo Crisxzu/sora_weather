@@ -23,8 +23,11 @@ steps:
     environment:
       ENV_FILE:
         from_secret: env_file
+    # 'custom' = build déclenché manuellement (New Build dans l'UI) pour tester.
     when:
-      event: tag
+      event:
+        - tag
+        - custom
 
   - name: deploy-web
     image: curlimages/curl:latest
@@ -44,13 +47,14 @@ steps:
     depends_on:
       - build-web
     when:
-      event: tag
+      event:
+        - tag
+        - custom
 
 trigger:
   event:
     - tag
-  branch:
-    - main
+    - custom
 
 ---
 kind: secret
