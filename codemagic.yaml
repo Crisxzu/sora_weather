@@ -53,6 +53,13 @@ workflows:
             --obfuscate --split-debug-info=./debug/
       - name: Create GitHub release (draft) with changelog + artifacts
         script: |
+          set -e
+          # Ce step n'a de sens que sur un build déclenché par tag. Sur un build
+          # manuel (CM_TAG vide), on skip proprement sans faire échouer le build.
+          if [ -z "$CM_TAG" ]; then
+            echo "No CM_TAG (manual build) — skipping GitHub release."
+            exit 0
+          fi
           # git-cliff génère les notes depuis les commits conventionnels (cliff.toml).
           curl -sSL https://github.com/orhun/git-cliff/releases/download/v2.6.1/git-cliff-2.6.1-x86_64-apple-darwin.tar.gz \
             | tar xz -C /tmp
@@ -62,12 +69,16 @@ workflows:
           export GH_TOKEN="$GITHUB_TOKEN"
           AAB=$(find build -name "*.aab" | head -1)
           APK=$(find build -name "*.apk" | head -1)
-          gh release create "$CM_TAG" "$AAB" "$APK" \
-            --draft \
-            --title "$CM_TAG" \
-            --notes-file RELEASE_NOTES.md \
-            --repo "$CM_REPO_SLUG" || \
-          gh release upload "$CM_TAG" "$AAB" "$APK" --clobber --repo "$CM_REPO_SLUG"
+          # Crée la release si elle n'existe pas, sinon met à jour ses artefacts.
+          if gh release view "$CM_TAG" --repo "$CM_REPO_SLUG" >/dev/null 2>&1; then
+            gh release upload "$CM_TAG" "$AAB" "$APK" --clobber --repo "$CM_REPO_SLUG"
+          else
+            gh release create "$CM_TAG" "$AAB" "$APK" \
+              --draft \
+              --title "$CM_TAG" \
+              --notes-file RELEASE_NOTES.md \
+              --repo "$CM_REPO_SLUG"
+          fi
     artifacts:
       - build/**/outputs/bundle/**/*.aab
       - build/**/outputs/apk/**/*.apk
