@@ -106,7 +106,7 @@ def main():
     parser.add_argument("--input", default=None, help="Local countries+states+cities.json")
     args = parser.parse_args()
 
-    print("=== Kumi Weather — Geo Data Sync ===\n")
+    print("=== Sora Weather — Geo Data Sync ===\n")
 
     # --- Load combined data ---
     if args.input:

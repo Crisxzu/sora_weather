@@ -423,7 +423,7 @@ struct WeatherWidgetView: View {
 
     private var emptyState: some View {
         VStack(spacing: 6) {
-            Text("Kumi Weather")
+            Text("Sora Weather")
                 .font(.system(size: 16, weight: .bold))
                 .foregroundColor(.white)
             Text("widget_empty_message")
@@ -458,7 +458,7 @@ struct WeatherWidgetProvider: Widget {
                     )
                 }
         }
-        .configurationDisplayName("Kumi Weather")
+        .configurationDisplayName("Sora Weather")
         .description("widget_description")
         .supportedFamilies([.systemMedium])
     }

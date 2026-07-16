@@ -64,3 +64,5 @@ CLAUDE.md
 
 # FVM Version Cache
 .fvm/
+# Android build artifacts
+android/build/

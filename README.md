@@ -1,9 +1,9 @@
-# Kumi Weather ☀️
+# Sora Weather ☀️
 
 Une application météo magnifique et riche en fonctionnalités, construite avec Flutter, suivant l'architecture MVC.
 
 <div align="center">
-  <img src="assets/images/logo.png" alt="Logo de Kumi Weather" width="180"/>
+  <img src="assets/images/logo.png" alt="Logo de Sora Weather" width="180"/>
 </div>
 
 Le design de l'application est disponible [ici](https://www.figma.com/design/fMr1nPU6FOMlqOAwUdCog3/Application-M%C3%A9t%C3%A9o?m=auto&t=iZYpI7RJ56kmtNq-1)
@@ -45,7 +45,7 @@ DEBUG_MODE = 0
 
 ## 📱 Disponibilité
 
-- ✅ **Android** : Disponible via APK et sur le [Play Store](https://play.google.com/store/apps/details?id=fr.dazu.sora_weather) sous le nom **Kumi** (renommage imposé pour des raisons de droits)
+- ✅ **Android** : Disponible via APK et sur le [Play Store](https://play.google.com/store/apps/details?id=fr.dazu.sora_weather)
 - ✅ **iOS** : Fichier archive disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
 - ✅ **macOS** : Fichier app disponible et sur [App Store](https://apps.apple.com/app/sora/id6748250805)
 - ✅ **Windows** : Exécutable EXE disponible ! Aussi dispo sur [Microsoft Store](https://apps.microsoft.com/detail/9n5bv4lcr3gx)
