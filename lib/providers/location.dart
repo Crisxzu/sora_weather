@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:weather_app/common/app_logger.dart';
+import 'package:weather_app/common/utils.dart';
 import 'package:weather_app/model/location_preference.dart';
 
 class LocationProvider extends ChangeNotifier {
@@ -55,6 +59,36 @@ class LocationProvider extends ChangeNotifier {
   void _save() {
     _box.put('locations', _locations.toList());
     _box.put(_activeKey, _activeIndex);
+    _syncToWidget();
+  }
+
+  /// Exporte la liste des positions + l'index actif vers le stockage partagé du
+  /// widget, pour que le refresh natif (Kotlin/Swift) puisse cycler entre les
+  /// positions sans réveiller Flutter. Sérialisé en JSON sous `widget_locations`.
+  Future<void> _syncToWidget() async {
+    if (!Utils.checkIfMobile()) return;
+    try {
+      final serialized = _locations
+          .map((l) => {
+                'type': l.type,
+                // `name` = libellé court affiché sur le widget
+                'name': l.isGps ? 'GPS' : (l.cityName ?? ''),
+                // `city` = requête envoyée à l'API en mode ville
+                'city': l.isGps ? null : l.cityName,
+                'country': l.countryIso2,
+                'display': l.displayName,
+              })
+          .toList();
+      await HomeWidget.saveWidgetData<String>(
+          'widget_locations', jsonEncode(serialized));
+      await HomeWidget.saveWidgetData<int>('widget_active_index', _activeIndex);
+      await HomeWidget.updateWidget(
+        androidName: 'WeatherWidgetProvider',
+        iOSName: 'WeatherWidgetProvider',
+      );
+    } catch (e) {
+      AppLogger.instance.e('Error syncing locations to widget: $e');
+    }
   }
 
   void setActive(int index) {

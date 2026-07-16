@@ -67,6 +67,7 @@ class WeatherDataProvider extends ChangeNotifier {
         tempUnit,
         position: params['position'],
         city: params['city'],
+        countryCode: params['country_code'],
         langIso: languageCode,
       );
     } catch (e, stackTrace) {

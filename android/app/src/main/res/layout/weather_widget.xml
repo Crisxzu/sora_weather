@@ -9,14 +9,25 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/widget_background"
-        android:padding="14dp">
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
-        <!-- Row 1: city + refresh button -->
+        <!-- Row 1: prev/city/next + refresh button -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/widget_prev_btn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/ic_widget_chevron_left"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/widget_city"
@@ -24,19 +35,31 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="--"
-                android:textColor="#CCFFFFFF"
-                android:textSize="15sp" />
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <ImageView
+                android:id="@+id/widget_next_btn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="2dp"
+                android:src="@drawable/ic_widget_chevron_right"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/widget_refresh_btn"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="6dp"
                 android:src="@drawable/ic_widget_refresh"
-                android:padding="2dp" />
+                android:background="@drawable/widget_icon_button_bg"
+                android:padding="5dp" />
 
         </LinearLayout>
 
-        <!-- Row 2: temperature + icon -->
+        <!-- Row 2: big temperature + weather icon -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -46,17 +69,19 @@
 
             <TextView
                 android:id="@+id/widget_temp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="--°"
                 android:textColor="#FFFFFF"
-                android:textSize="44sp"
-                android:textStyle="bold" />
+                android:textSize="48sp"
+                android:textStyle="bold"
+                android:includeFontPadding="false" />
 
             <ImageView
                 android:id="@+id/widget_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_marginStart="6dp"
                 android:scaleType="fitCenter" />
 
@@ -67,7 +92,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
 
             <TextView
                 android:id="@+id/widget_condition"
@@ -75,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=""
-                android:textColor="#99FFFFFF"
+                android:textColor="#DDFFFFFF"
                 android:textSize="13sp"
                 android:maxLines="1"
                 android:ellipsize="end" />
@@ -89,6 +115,38 @@
                 android:textSize="13sp" />
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Overlay "vide" : affiché tant que l'app n'a pas encore écrit de données.
+         Invite l'utilisateur à ouvrir l'app. -->
+    <LinearLayout
+        android:id="@+id/widget_empty_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/widget_empty_title"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/widget_empty_message"
+            android:textColor="#CCFFFFFF"
+            android:textSize="13sp"
+            android:gravity="center" />
 
     </LinearLayout>
 

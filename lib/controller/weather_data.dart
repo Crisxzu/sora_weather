@@ -75,6 +75,7 @@ class WeatherDataController {
     TempUnit tempUnit, {
     String? position,
     String? city,
+    String? countryCode,
     String langIso = 'en',
   }) async {
     if (!Utils.checkIfMobile()) return;
@@ -107,6 +108,8 @@ class WeatherDataController {
       }
       // Always write city_query (null clears it when switching back to GPS mode)
       await HomeWidget.saveWidgetData<String?>('widget_city_query', city);
+      // country_code de la ville active, pour que le refresh natif désambiguïse
+      await HomeWidget.saveWidgetData<String?>('widget_active_country', countryCode);
       await HomeWidget.saveWidgetData<bool>('widget_loading', false);
       await HomeWidget.updateWidget(
         androidName: 'WeatherWidgetProvider',

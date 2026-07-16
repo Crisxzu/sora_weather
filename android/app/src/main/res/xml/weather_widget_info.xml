@@ -8,6 +8,7 @@
     android:targetCellHeight="2"
     android:updatePeriodMillis="1800000"
     android:previewImage="@mipmap/launcher_icon"
+    android:previewLayout="@layout/weather_widget"
     android:initialLayout="@layout/weather_widget"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />
