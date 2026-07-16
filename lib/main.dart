@@ -32,7 +32,7 @@ Future main() async {
   await Hive.openBox('appWeatherCache');
   await AppLogger.initialize();
   if (Utils.checkIfMobile()) {
-    HomeWidget.setAppGroupId('group.fr.dazu.kumi-weather');
+    HomeWidget.setAppGroupId('group.fr.dazu.sora-weather');
     await HomeWidget.registerInteractivityCallback(widgetBackgroundCallback);
   }
 
