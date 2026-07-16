@@ -15,9 +15,9 @@ steps:
       username: crisxzu
       password:
         from_secret: github_token
-      tags:
-        - ${DRONE_TAG}
-        - latest
+      # auto_tag génère le tag depuis le git ref (le tag si build par tag) + latest.
+      # Évite un tag vide sur les builds 'custom' où DRONE_TAG n'existe pas.
+      auto_tag: true
       build_args_from_env:
         - ENV_FILE
     environment:
