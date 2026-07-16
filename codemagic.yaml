@@ -108,12 +108,14 @@ workflows:
       cache_paths:
         - $HOME/Library/Caches/CocoaPods
         - ios/Pods
-    triggering:
-      events:
-        - tag
-      tag_patterns:
-        - pattern: 'v*'
-          include: true
+    # Déclenchement désactivé temporairement (abonnement Apple Developer expiré →
+    # publication TestFlight impossible). Réactiver en décommentant `triggering`.
+    # triggering:
+    #   events:
+    #     - tag
+    #   tag_patterns:
+    #     - pattern: 'v*'
+    #       include: true
     environment:
       ios_signing:
         distribution_type: app_store
@@ -169,12 +171,14 @@ workflows:
       cache_paths:
         - $HOME/Library/Caches/CocoaPods
         - macos/Pods
-    triggering:
-      events:
-        - tag
-      tag_patterns:
-        - pattern: 'v*'
-          include: true
+    # Déclenchement désactivé temporairement (abonnement Apple Developer expiré +
+    # signing macOS à stabiliser). Réactiver en décommentant `triggering`.
+    # triggering:
+    #   events:
+    #     - tag
+    #   tag_patterns:
+    #     - pattern: 'v*'
+    #       include: true
     environment:
       groups:
         - kumi
