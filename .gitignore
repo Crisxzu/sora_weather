@@ -53,6 +53,7 @@ app.*.map.json
 /symbols
 
 android/upload-keystore.jks
+android/key.properties
 
 *64.txt
 

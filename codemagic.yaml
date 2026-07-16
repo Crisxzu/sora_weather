@@ -1,4 +1,93 @@
 workflows:
+  android-workflow:
+    name: Android Workflow
+    instance_type: mac_mini_m2
+    max_build_duration: 120
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
+    environment:
+      groups:
+        - kumi
+      # Référence à l'Android keystore configuré dans Codemagic UI
+      # (Code signing identities > Android keystores, reference name: sora_keystore).
+      # Codemagic injecte alors CM_KEYSTORE_PATH / CM_KEYSTORE_PASSWORD /
+      # CM_KEY_ALIAS / CM_KEY_PASSWORD dans l'environnement.
+      android_signing:
+        - sora_keystore
+      flutter: "3.32.3"
+      # Java 17 requis par le build Android (cf docker/Dockerfile.ci)
+      java: 17
+    scripts:
+      - name: Set up key.properties
+        script: |
+          # Codemagic expose le keystore via CM_KEYSTORE_PATH et les mots de passe.
+          cat > android/key.properties <<EOF
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyPassword=$CM_KEY_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          storeFile=$CM_KEYSTORE_PATH
+          EOF
+          echo "key.properties written (storeFile=$CM_KEYSTORE_PATH)"
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Generate code
+        script: dart run build_runner build --build-filter="lib/model/**"
+      - name: Generate env file
+        script: |
+          echo $ENV_FILE | base64 --decode > lib/env/env.g.dart
+      - name: Build AAB + APK (obfuscated)
+        script: |
+          BUILD_NAME=$(grep "^version:" pubspec.yaml | sed 's/version: //;s/+.*//')
+          BUILD_NUMBER=$(grep "^version:" pubspec.yaml | sed 's/.*+//')
+          flutter build appbundle --release \
+            --build-name=$BUILD_NAME \
+            --build-number=$BUILD_NUMBER \
+            --obfuscate --split-debug-info=./debug/
+          flutter build apk --release \
+            --build-name=$BUILD_NAME \
+            --build-number=$BUILD_NUMBER \
+            --obfuscate --split-debug-info=./debug/
+      - name: Create GitHub release (draft) with changelog + artifacts
+        script: |
+          # git-cliff génère les notes depuis les commits conventionnels (cliff.toml).
+          curl -sSL https://github.com/orhun/git-cliff/releases/download/v2.6.1/git-cliff-2.6.1-x86_64-apple-darwin.tar.gz \
+            | tar xz -C /tmp
+          CLIFF=/tmp/git-cliff-2.6.1/git-cliff
+          "$CLIFF" --latest --strip all -o RELEASE_NOTES.md || echo "Sora Weather $CM_TAG" > RELEASE_NOTES.md
+          # gh est préinstallé sur les machines Codemagic ; GH_TOKEN vient du groupe env.
+          export GH_TOKEN="$GITHUB_TOKEN"
+          AAB=$(find build -name "*.aab" | head -1)
+          APK=$(find build -name "*.apk" | head -1)
+          gh release create "$CM_TAG" "$AAB" "$APK" \
+            --draft \
+            --title "$CM_TAG" \
+            --notes-file RELEASE_NOTES.md \
+            --repo "$CM_REPO_SLUG" || \
+          gh release upload "$CM_TAG" "$AAB" "$APK" --clobber --repo "$CM_REPO_SLUG"
+    artifacts:
+      - build/**/outputs/bundle/**/*.aab
+      - build/**/outputs/apk/**/*.apk
+      - build/**/mapping.txt
+    publishing:
+      email:
+        recipients:
+          - sora-deployment@snowsky-dev.com
+        notify:
+          success: true
+          failure: true
+      # Publication Play Store native Codemagic (remplace Fastlane).
+      # Requiert la variable secrète GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+      # (contenu du JSON service account) dans le groupe d'env Codemagic.
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: true
+        changes_not_sent_for_review: true
+
   ios-workflow:
     name: iOS Workflow
     instance_type: mac_mini_m2
@@ -51,7 +140,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - kumi-deployment@snowsky-dev.com
+          - sora-deployment@snowsky-dev.com
         notify:
           success: true
           failure: true
@@ -144,7 +233,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - kumi-deployment@snowsky-dev.com
+          - sora-deployment@snowsky-dev.com
         notify:
           success: true
           failure: true
