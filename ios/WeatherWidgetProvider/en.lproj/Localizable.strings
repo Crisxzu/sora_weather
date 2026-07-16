@@ -6,3 +6,15 @@
 
 /* Placeholder condition text */
 "widget_placeholder_condition" = "Sunny";
+
+/* Empty state — app never opened */
+"widget_empty_message" = "Open the app to load the weather";
+
+/* Configurable widget — intent title */
+"widget_configuration_title" = "Weather Location";
+
+/* Configurable widget — intent description */
+"widget_configuration_description" = "Choose which saved location to display.";
+
+/* Configurable widget — location parameter label */
+"widget_configuration_location" = "Location";

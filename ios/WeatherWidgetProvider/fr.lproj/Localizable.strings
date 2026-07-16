@@ -6,3 +6,15 @@
 
 /* Placeholder condition text */
 "widget_placeholder_condition" = "Ensoleillé";
+
+/* Empty state — app never opened */
+"widget_empty_message" = "Ouvrez l'app pour charger la météo";
+
+/* Configurable widget — intent title */
+"widget_configuration_title" = "Emplacement météo";
+
+/* Configurable widget — intent description */
+"widget_configuration_description" = "Choisissez l'emplacement enregistré à afficher.";
+
+/* Configurable widget — location parameter label */
+"widget_configuration_location" = "Emplacement";
