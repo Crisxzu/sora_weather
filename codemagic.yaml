@@ -18,7 +18,7 @@ workflows:
       # CM_KEY_ALIAS / CM_KEY_PASSWORD dans l'environnement.
       android_signing:
         - sora_keystore
-      flutter: "3.32.3"
+      flutter: "3.41.6"
       # Java 17 requis par le build Android (cf docker/Dockerfile.ci)
       java: 17
     scripts:
@@ -110,7 +110,7 @@ workflows:
         bundle_identifier: com.dazu.sora-weather
       groups:
         - kumi
-      flutter: "3.32.3"
+      flutter: "3.41.6"
       xcode: "26.0"
       cocoapods: default
     scripts:
@@ -168,7 +168,7 @@ workflows:
     environment:
       groups:
         - kumi
-      flutter: "3.32.3"
+      flutter: "3.41.6"
       xcode: "26.0"
       cocoapods: default
     scripts:
