@@ -32,45 +32,26 @@ private func loadSavedLocations() -> [SavedLocation] {
     return decoded
 }
 
-// MARK: - App Entity + Query (configurable widget picker)
+// MARK: - Location options (dynamic dropdown)
 
-/// Une entrée sélectionnable dans le menu déroulant du widget. `id` = index dans
-/// `widget_locations` (stable tant que la liste ne change pas d'ordre).
-struct LocationEntity: AppEntity {
-    let id: Int
-    let display: String
+/// Fournit dynamiquement la liste des positions au picker du widget configurable.
+/// On utilise des String (le `display` de chaque position) plutôt qu'une AppEntity :
+/// c'est le pattern qui peuple de façon fiable une liste déroulante dans la config
+/// d'un widget, et l'ensemble est petit.
+struct LocationOptionsProvider: DynamicOptionsProvider {
+    func results() async throws -> [String] {
+        loadSavedLocations().map { $0.display }
+    }
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Location"
-    static var defaultQuery = LocationQuery()
-
-    var displayRepresentation: DisplayRepresentation {
-        DisplayRepresentation(title: "\(display)")
+    func defaultResult() async -> String? {
+        loadSavedLocations().first?.display
     }
 }
 
-struct LocationQuery: EntityQuery {
-    /// Résout les entités sélectionnées (par id) — appelé par le système pour
-    /// réafficher le choix courant.
-    func entities(for identifiers: [Int]) async throws -> [LocationEntity] {
-        let all = suggestedEntitiesList()
-        return identifiers.compactMap { id in all.first { $0.id == id } }
-    }
-
-    /// Liste proposée dans le menu déroulant.
-    func suggestedEntities() async throws -> [LocationEntity] {
-        suggestedEntitiesList()
-    }
-
-    /// Choix par défaut = première entrée (GPS).
-    func defaultResult() async -> LocationEntity? {
-        suggestedEntitiesList().first
-    }
-
-    private func suggestedEntitiesList() -> [LocationEntity] {
-        loadSavedLocations().enumerated().map { index, loc in
-            LocationEntity(id: index, display: loc.display)
-        }
-    }
+/// Retrouve l'index d'une position à partir de son `display` (ce que porte la config).
+private func indexForDisplay(_ display: String?) -> Int? {
+    guard let display = display else { return nil }
+    return loadSavedLocations().firstIndex { $0.display == display }
 }
 
 // MARK: - Widget configuration intent
@@ -79,8 +60,8 @@ struct WeatherConfigurationIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "widget_configuration_title"
     static var description = IntentDescription("widget_configuration_description")
 
-    @Parameter(title: "widget_configuration_location")
-    var location: LocationEntity?
+    @Parameter(title: "widget_configuration_location", optionsProvider: LocationOptionsProvider())
+    var location: String?
 }
 
 // MARK: - Data Model
@@ -263,7 +244,7 @@ struct WeatherTimelineProvider: AppIntentTimelineProvider {
                                 loadingStartDate: nil, selectedIndex: nil, isEmpty: true)
         }
 
-        let selectedIndex = configuration.location?.id
+        let selectedIndex = indexForDisplay(configuration.location)
         let isLoading = defaults?.bool(forKey: "widget_loading") ?? false
         let loadingStartInterval = defaults?.double(forKey: "widget_loading_start") ?? 0
         let loadingStartDate: Date? = loadingStartInterval > 0
