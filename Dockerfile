@@ -7,7 +7,7 @@ ARG ENV_FILE
 RUN echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
 
 RUN flutter pub get && \
-    flutter build web --release --dart-define=CI=true
+    flutter build web --release
 
 FROM nginx:alpine
 

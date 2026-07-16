@@ -36,7 +36,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=flutter-3.32.3-java17
+            type=raw,value=flutter-3.41.6-java17
             type=raw,value=latest
 
       - name: Build and push

@@ -1,4 +1,4 @@
-FROM ghcr.io/cirruslabs/flutter:3.32.3
+FROM ghcr.io/cirruslabs/flutter:3.41.6
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends openjdk-17-jdk \

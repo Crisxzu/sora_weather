@@ -1,85 +1,16 @@
 kind: pipeline
 type: docker
-name: flutter-release
+name: web-release
+
+# Ce pipeline ne gère QUE le déploiement Web (build image Docker → GHCR → Dokploy).
+# Android / iOS / macOS / Windows sont gérés par Codemagic (codemagic.yaml).
+# Docker n'étant pas disponible sur les runners macOS Codemagic, le web reste ici.
 
 steps:
-  - name: prepare-git-tags
-    image: alpine/git
-    commands:
-      - git fetch --unshallow || true
-      - git fetch --tags
-
-  - name: prepare-build
-    image: ghcr.io/crisxzu/flutter-ci:3.32.3
-    depends_on:
-      - prepare-git-tags
-    environment:
-      KEY_PASSWORD:
-        from_secret: key_password
-      STORE_PASSWORD:
-        from_secret: store_password
-      KEYSTORE:
-        from_secret: keystore_file
-      ENV_FILE:
-        from_secret: env_file
-    commands:
-      # Création des fichiers de signature avec vérification des secrets
-      - echo "Checking if secrets are present..."
-      - if [ -z "$KEY_PASSWORD" ]; then echo "KEY_PASSWORD is missing" && exit 1; fi
-      - if [ -z "$STORE_PASSWORD" ]; then echo "STORE_PASSWORD is missing" && exit 1; fi
-      - if [ -z "$KEYSTORE" ]; then echo "KEYSTORE is missing" && exit 1; fi
-      - if [ -z "$ENV_FILE" ]; then echo "ENV_FILE is missing" && exit 1; fi
-
-      # Création du key.properties avec le bon format
-      - printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=upload\nstoreFile=upload-keystore.jks\n' "$STORE_PASSWORD" "$KEY_PASSWORD" > android/key.properties
-
-      # Décodage du keystore
-      - echo "$KEYSTORE" | base64 -d > android/app/upload-keystore.jks
-
-      # Vérification des fichiers
-      - echo "Verifying files..."
-      - echo "key.properties content (excluding passwords):"
-      - grep "storeFile" android/key.properties
-      - echo "Checking keystore:"
-      - ls -l android/app/upload-keystore.jks
-
-      # Génération des fichiers de code (hive uniquement, envied exclu)
-      - flutter pub get
-      - dart run build_runner build --build-filter="lib/model/**"
-
-      # Décodage du fichier env (après build_runner pour ne pas être écrasé)
-      - echo "$ENV_FILE" | base64 -d > lib/env/env.g.dart
-      - ls -l lib/env
-    volumes:
-      - name: pub-cache
-        path: /root/.pub-cache
-
-  - name: build-android
-    image: ghcr.io/crisxzu/flutter-ci:3.32.3
-    environment:
-      GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=512m -Dorg.gradle.workers.max=2 -Dorg.gradle.daemon=false"
-    resources:
-      limits:
-        memory: 4096MiB
-        cpu: 2
-    commands:
-      - java -version
-      - echo $JAVA_HOME
-      - flutter pub get
-      - flutter build appbundle --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
-      - flutter build apk --release --dart-define=CI=true --obfuscate --split-debug-info=./debug/ || exit 1
-    depends_on:
-      - prepare-build
-    volumes:
-      - name: pub-cache
-        path: /root/.pub-cache
-      - name: gradle-cache
-        path: /root/.gradle
-
   - name: build-web
     image: plugins/docker
     settings:
-      repo: ghcr.io/crisxzu/kumi-weather-web
+      repo: ghcr.io/crisxzu/sora-weather-web
       registry: ghcr.io
       username: crisxzu
       password:
@@ -92,8 +23,6 @@ steps:
     environment:
       ENV_FILE:
         from_secret: env_file
-    depends_on:
-      - prepare-build
     when:
       event: tag
 
@@ -116,64 +45,6 @@ steps:
       - build-web
     when:
       event: tag
-
-  - name: generate-changelog
-    image: orhunp/git-cliff:latest
-    commands:
-      - git-cliff --latest --strip all -o RELEASE_NOTES.md
-      - cat RELEASE_NOTES.md
-    when:
-      event: tag
-    depends_on:
-      - prepare-git-tags
-      - build-android
-
-  - name: release
-    image: plugins/github-release
-    settings:
-      api_key:
-        from_secret: github_token
-      files:
-        - build/app/outputs/apk/release/app-release.apk
-        - build/app/outputs/bundle/release/app-release.aab
-      title: ${DRONE_TAG}
-      note: RELEASE_NOTES.md
-      draft: true
-    when:
-      event: tag
-    depends_on:
-      - build-android
-      - generate-changelog
-
-  - name: deploy-playstore
-    image: ruby:3.2.6
-    environment:
-      PLAYSTORE_JSON_KEY:
-        from_secret: playstore_service_account
-      BUNDLE_PATH: /usr/local/bundle
-    commands:
-      - bundle install --gemfile=android/Gemfile
-      - echo "$PLAYSTORE_JSON_KEY" | base64 -d > android/fastlane/playstore_key.json
-      - cd android
-      - bundle exec fastlane deploy
-    depends_on:
-      - build-android
-    when:
-      event: tag
-    volumes:
-      - name: bundle-cache
-        path: /usr/local/bundle
-
-volumes:
-  - name: gradle-cache
-    host:
-      path: /var/cache/drone/gradle
-  - name: pub-cache
-    host:
-      path: /var/cache/drone/pub
-  - name: bundle-cache
-    host:
-      path: /var/cache/drone/bundle
 
 trigger:
   event:
