@@ -7,7 +7,8 @@ name: web-release
 # Docker n'étant pas disponible sur les runners macOS Codemagic, le web reste ici.
 
 steps:
-  - name: build-web
+  # Build par TAG (release) : image taguée avec la version + latest.
+  - name: build-web-tag
     image: plugins/docker
     settings:
       repo: ghcr.io/crisxzu/sora-weather-web
@@ -15,18 +16,37 @@ steps:
       username: crisxzu
       password:
         from_secret: github_token
-      # auto_tag génère le tag depuis le git ref (le tag si build par tag) + latest.
-      # Évite un tag vide sur les builds 'custom' où DRONE_TAG n'existe pas.
-      auto_tag: true
+      tags:
+        - ${DRONE_TAG}
+        - latest
       build_args_from_env:
         - ENV_FILE
     environment:
       ENV_FILE:
         from_secret: env_file
-    # 'custom' = build déclenché manuellement (New Build dans l'UI) pour tester.
     when:
       event:
         - tag
+
+  # Build MANUEL (custom, New Build dans l'UI) pour tester : juste latest,
+  # car DRONE_TAG n'existe pas sur un build custom.
+  - name: build-web-custom
+    image: plugins/docker
+    settings:
+      repo: ghcr.io/crisxzu/sora-weather-web
+      registry: ghcr.io
+      username: crisxzu
+      password:
+        from_secret: github_token
+      tags:
+        - latest
+      build_args_from_env:
+        - ENV_FILE
+    environment:
+      ENV_FILE:
+        from_secret: env_file
+    when:
+      event:
         - custom
 
   - name: deploy-web
@@ -45,7 +65,8 @@ steps:
       DOKPLOY_APP_ID:
         from_secret: dokploy_app_id
     depends_on:
-      - build-web
+      - build-web-tag
+      - build-web-custom
     when:
       event:
         - tag
